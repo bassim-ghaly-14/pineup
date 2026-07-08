@@ -7,6 +7,13 @@ import { SocketProvider } from "@/components/providers/socket-provider";
 import { ApiProvider } from "./components/providers/api-provider";
 import { AppRouterCacheProvider }
 from "@mui/material-nextjs/v16-appRouter";
+export const metadata = {
+  title: "PineUp",
+  desciption: "",
+  icons: {
+    icon: "/app/assets/favicon.png"
+  },
+};
 export default function RootLayout({
   children,
 }: {
