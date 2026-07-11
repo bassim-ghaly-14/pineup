@@ -1,17 +1,20 @@
 "use client";
 
-import { Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/features/auth/hooks/use-auth";
 
-export default function ProfilePage() {
-  const {
-    data,
-  } = useAuth();
+export default function ProfileRedirectPage() {
+  const router = useRouter();
+  const { data } = useAuth();
 
-  return (
-    <Typography>
-      {data?.name}
-    </Typography>
-  );
+  useEffect(() => {
+    const id = data?.user?._id;
+    if (id) {
+      router.replace(`/profile/${id}`);
+    }
+  }, [data, router]);
+
+  return null;
 }

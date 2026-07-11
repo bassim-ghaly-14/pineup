@@ -6,7 +6,6 @@ import { useReplies } from "../hooks/use-replies";
 import { ReplyCard } from "./reply-card";
 import { CreateReply } from "./create-reply";
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -19,7 +18,7 @@ import {
 
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+// import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import ReplyRoundedIcon from "@mui/icons-material/ReplyRounded";
 
@@ -31,6 +30,7 @@ import { useLikeComment } from "../hooks/use-like-comment";
 import { useDeleteComment } from "../hooks/use-delete-comment";
 
 import { formatDate } from "@/utils/format-date";
+import { UserAvatar } from "@/components/common/user-avatar";
 
 type Props = {
   postId: string;
@@ -105,33 +105,27 @@ export function CommentCard({
           <Stack
             direction="row"
             spacing={2}
-            alignItems="flex-start"
+            sx={{ alignItems: "flex-start" }}
           >
 
-            <Avatar
-              src={
-                comment.commentCreator.photo
-              }
+            <UserAvatar
+              src={comment.commentCreator.photo}
+              userId={comment.commentCreator._id}
             >
-              {
-                comment.commentCreator.name?.[0]
-              }
-            </Avatar>
-
+              {comment.commentCreator.name?.[0]}
+            </UserAvatar>
 
             <Box sx={{ flex: 1 }}>
 
               <Stack
                 direction="row"
-                justifyContent="space-between"
+                sx={{ justifyContent: "space-between" }}
               >
 
                 <Box>
 
-                  <Typography fontWeight={700}>
-                    {
-                      comment.commentCreator.name
-                    }
+                  <Typography sx={{ fontWeight: 700 }}>
+                    {comment.commentCreator.name}
                   </Typography>
 
 
@@ -200,10 +194,12 @@ export function CommentCard({
                 }}
               >
 
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
 
                   <IconButton
                     size="small"
@@ -236,12 +232,12 @@ export function CommentCard({
                     }
                   </Typography>
 
-                </Stack>
+                </Box>
 
                 <Stack
                   direction="row"
                   spacing={0.5}
-                  alignItems="center"
+                  sx={{ alignItems: "center" }}
                 >
                   <IconButton
                     size="small"
@@ -269,9 +265,9 @@ export function CommentCard({
 
                 <Stack
                   direction="row"
-                  alignItems="center"
                   sx={{
                     cursor: "pointer",
+                    alignItems: "center",
                   }}
                   onClick={() =>
                     setshowReplyBox(
@@ -284,7 +280,7 @@ export function CommentCard({
 
                   <Typography
                     variant="caption"
-                    ml={0.5}
+                    sx={{ ml: 0.5 }}
                   >
                     Reply
                   </Typography>

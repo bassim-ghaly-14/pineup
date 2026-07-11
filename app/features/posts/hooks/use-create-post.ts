@@ -5,27 +5,82 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { queryKeys } from "@/constants/query-keys";
+import { toast } from "sonner";
 
 import { postsService } from "../services/posts.service";
+import { addPostToCache } from "../utils/update-post-cache";
+
+import { queryKeys } from "@/constants/query-keys";
 
 export function useCreatePost() {
+
   const queryClient =
     useQueryClient();
 
+
   return useMutation({
-    mutationFn: postsService.create,
 
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.feed(),
-      });
+    mutationFn:
+      postsService.create,
 
-      await queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.all,
-      });
+
+    onSuccess: (response) => {
+
+      const post =
+        response?.post;
+
+
+      if (!post) {
+        return;
+      }
+
+
+      const auth =
+        queryClient.getQueryData<any>(
+          queryKeys.auth.profile()
+        );
+
+
+      const normalizedPost = {
+        ...post,
+
+        user:
+          auth?.user ?? post.user,
+
+        likesCount:
+          0,
+
+        commentsCount:
+          0,
+
+        sharesCount:
+          0,
+
+        isShare:
+          false,
+
+        sharedPost:
+          null,
+      };
+
+
+      addPostToCache(
+        queryClient,
+        normalizedPost
+      );
+
+
+      toast.success(
+        "Post published successfully."
+      );
     },
+
+
+    onError: () => {
+      toast.error(
+        "Failed to publish post."
+      );
+    },
+
   });
 }

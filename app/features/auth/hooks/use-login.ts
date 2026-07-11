@@ -16,6 +16,9 @@ import { authService } from "../services/auth.service";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
 import { ROUTES } from "@/constants/routes";
 import { queryKeys } from "@/constants/query-keys";
+import {
+  saveAccount,
+} from "../utils/account-storage";
 
 type ApiError = {
   message?: string;
@@ -43,29 +46,52 @@ export function useLogin() {
 
     mutationFn: authService.login,
 
-    onSuccess: (data) => {
-      console.log("LOGIN RESPONSE:", data);
-      localStorage.setItem(
-        STORAGE_KEYS.TOKEN,
-        data.token
-      );
-      console.log("TOKEN AFTER SAVE:",localStorage.getItem(STORAGE_KEYS.TOKEN)
-  )
-      document.cookie = `pineup_token=${data.token}; Path=/; Max-Age=2592000; SameSite=Lax;`;
+onSuccess: (data) => {
 
-      queryClient.setQueryData(
-        queryKeys.auth.profile(),
-        data.user
-      );
+saveAccount({
+  token: data.token,
+  user: data.user,
+});
 
-      toast.success(
-        `Welcome back, ${data.user.name}!`
-      );
+localStorage.setItem(
+  STORAGE_KEYS.TOKEN,
+  data.token
+);
 
-      router.replace(
-        ROUTES.FEED
-      );
-    },
+localStorage.setItem(
+  STORAGE_KEYS.USER,
+  JSON.stringify(data.user)
+);
+
+  document.cookie =
+    `pineup_token=${data.token}; Path=/; Max-Age=2592000; SameSite=Lax;`;
+
+
+  window.dispatchEvent(
+    new Event("auth-change")
+  );
+
+
+  queryClient.clear();
+
+
+  queryClient.setQueryData(
+    queryKeys.auth.profile(),
+    {
+      user: data.user,
+    }
+  );
+
+
+  toast.success(
+    `Welcome back, ${data.user.name}!`
+  );
+
+
+  router.replace(
+    ROUTES.FEED
+  );
+},
 
     onError: (error) => {
       toast.error(

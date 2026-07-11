@@ -33,7 +33,6 @@ export function CommentsDialog({
 }: Props) {
   const { data, isLoading } =
     useComments(postId);
-    console.log("COMMENTS:", data);
   const [editingComment, setEditingComment] =
   useState<Comment | null>(null);
 
@@ -60,16 +59,12 @@ export function CommentsDialog({
 
       <DialogContent dividers>
         {isLoading ? (
-          <Stack
-            alignItems="center"
-            justifyContent="center"
-            py={4}
-          >
+          <Stack sx={{ alignItems: "center", justifyContent: "center", py: 4 }}>
             <CircularProgress />
           </Stack>
         ) : data?.length ? (
           <Stack spacing={2}>
-            {data.map((comment) => (
+            {data.map((comment: Comment) => (
               <CommentCard
                 key={comment._id}
                 postId={postId}

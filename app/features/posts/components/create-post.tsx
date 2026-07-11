@@ -7,14 +7,20 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 import { useCreatePost } from "../hooks/use-create-post";
+import { useAuth } from "@/features/auth/hooks/use-auth";
+import { UserAvatar } from "@/components/common/user-avatar";
+
 
 export function CreatePost() {
   const [body, setBody] = useState("");
@@ -25,6 +31,9 @@ export function CreatePost() {
 
   const mutation =
     useCreatePost();
+
+  const {data} = useAuth();
+  const user = data?.user;
 
   const preview =
     image
@@ -42,8 +51,7 @@ export function CreatePost() {
   const submit = () => {
     if (!body.trim() && !image) return;
 
-    const formData =
-      new FormData();
+    const formData = new FormData();
 
     if (body.trim()) {
       formData.append(
@@ -58,9 +66,7 @@ export function CreatePost() {
         image
       );
     }
-    console.log(
-  localStorage.getItem("pineup-token")
-);
+
     mutation.mutate(formData, {
       onSuccess: () => {
         setBody("");
@@ -77,29 +83,69 @@ export function CreatePost() {
     <Card
       elevation={0}
       sx={{
-        borderRadius: 1,
+        borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
+        overflow: "hidden",
+        transition: ".25s",
+        "&:hover": {
+          borderColor: "primary.main",
+          boxShadow:
+            "0 10px 30px rgba(0,0,0,.08)",
+        },
       }}
     >
-      <CardContent>
-        <Stack spacing={2}>
-          <TextField
-            multiline
-            minRows={3}
-            placeholder="What's happening?"
-            value={body}
-            onChange={(e) =>
-              setBody(
-                e.target.value
-              )
-            }
-          />
+      <CardContent sx={{ p: 3 }}>
+        <Stack spacing={2.5}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ alignItems: "flex-start" }}
+          >
+            <UserAvatar
+              src={user?.photo}
+              sx={{
+                width: 50,
+                height: 50,
+              }}
+            >
+              {user?.name?.[0]}
+            </UserAvatar>
+
+            <Box sx={{ flex: 1 }}>
+              <Typography
+                sx={{ mb: .5, fontWeight: 700 }}
+              >
+                {user?.name}
+              </Typography>
+
+              <TextField
+                fullWidth
+                multiline
+                minRows={3}
+                placeholder="Share something with your network..."
+                value={body}
+                onChange={(e) =>
+                  setBody(
+                    e.target.value
+                  )
+                }
+                variant="standard"
+                sx={{
+                  "& .MuiInput-root:before, & .MuiInput-root:after, & .MuiInput-underline:before, & .MuiInput-underline:after": {
+                    borderBottom: "none",
+                  },
+                }}
+              />
+            </Box>
+          </Stack>
 
           {preview && (
             <Box
               sx={{
                 position: "relative",
+                overflow: "hidden",
+                borderRadius: 3,
               }}
             >
               <Box
@@ -108,29 +154,36 @@ export function CreatePost() {
                 alt="preview"
                 sx={{
                   width: "100%",
-                  maxHeight: 350,
+                  maxHeight: 420,
                   objectFit: "cover",
-                  borderRadius: 1,
                 }}
               />
 
               <Button
-                size="small"
                 onClick={() => {
                   setImage(null);
 
                   if (inputRef.current) {
-                    inputRef.current.value = "";
+                    inputRef.current.value =
+                      "";
                   }
                 }}
                 sx={{
                   position: "absolute",
-                  top: 8,
-                  right: 8,
-                  minWidth: 36,
-                  width: 36,
-                  height: 36,
-                  p: 0,
+                  top: 12,
+                  right: 12,
+                  minWidth: 40,
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  bgcolor:
+                    "rgba(0,0,0,.55)",
+                  color: "#fff",
+
+                  "&:hover": {
+                    bgcolor:
+                      "rgba(0,0,0,.75)",
+                  },
                 }}
               >
                 <CloseRoundedIcon />
@@ -139,8 +192,8 @@ export function CreatePost() {
           )}
 
           <input
-            ref={inputRef}
             hidden
+            ref={inputRef}
             type="file"
             accept="image/*"
             onChange={(e) => {
@@ -153,10 +206,13 @@ export function CreatePost() {
             }}
           />
 
-          <Stack
+          <Divider />
+
+          <Box
             sx={{
-              direction: "row",
+              display: "flex",
               justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <Button
@@ -166,23 +222,32 @@ export function CreatePost() {
               onClick={() =>
                 inputRef.current?.click()
               }
+              sx={{
+                borderRadius: 99,
+                px: 2.5,
+              }}
             >
-              Photo
+              Add Photo
             </Button>
 
             <Button
               variant="contained"
-              onClick={submit}
+              endIcon={<SendRoundedIcon />}
               disabled={
                 mutation.isPending ||
                 (!body.trim() && !image)
               }
+              onClick={submit}
+              sx={{
+                borderRadius: 99,
+                px: 3.5,
+              }}
             >
               {mutation.isPending
                 ? "Publishing..."
                 : "Publish"}
             </Button>
-          </Stack>
+          </Box>
         </Stack>
       </CardContent>
     </Card>

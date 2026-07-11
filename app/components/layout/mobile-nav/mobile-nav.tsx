@@ -10,6 +10,8 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import { useState } from "react";
+import { CreatePostDialog } from "@/features/posts/components/create-post-dialog";
 
 const items = [
   {
@@ -42,6 +44,8 @@ const items = [
 
 export function MobileNav() {
   const pathname = usePathname();
+  const [createOpen, setCreateOpen] =
+    useState(false);
 
   return (
     <Box
@@ -93,33 +97,45 @@ export function MobileNav() {
           const active = pathname === item.href;
 
           return (
-            <Box
-              key={item.href}
-              component={Link}
-              href={item.href}
-              sx={{
-                textDecoration: "none",
+  <Box
+  key={item.label}
+  component={item.primary ? "button" : Link}
+  {...(!item.primary && {
+    href: item.href,
+  })}
+  onClick={() => {
+    if (item.primary) {
+      setCreateOpen(true);
+    }
+  }}
+  sx={{
+    textDecoration: "none",
 
-                color: active
-                  ? "primary.main"
-                  : "text.secondary",
+    border: "none",
+    background: "transparent",
+    padding: 0,
+    cursor: "pointer",
 
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+    color: active
+      ? "primary.main"
+      : "text.secondary",
 
-                minWidth: 60,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
 
-                transition:
-                  "color .25s, transform .25s",
+    minWidth: 60,
 
-                "&:hover": {
-                  color: "primary.main",
-                  transform: "translateY(-2px)",
-                },
-              }}
-            >
+    transition:
+      "color .25s, transform .25s",
+
+    "&:hover": {
+      color: "primary.main",
+      transform: "translateY(-2px)",
+    },
+  }}
+>
               <Box
                 sx={(theme) => ({
                   width: item.primary ? 52 : 38,
@@ -166,6 +182,10 @@ export function MobileNav() {
           );
         })}
       </Stack>
+      <CreatePostDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+      />
     </Box>
   );
 }

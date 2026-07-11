@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Avatar,
   Card,
   CardContent,
   Typography,
@@ -10,6 +9,7 @@ import {
 } from "@mui/material";
 
 import { User } from "../types/user.types";
+import { UserAvatar } from "@/components/common/user-avatar";
 
 type Props = {
   user: User;
@@ -29,7 +29,7 @@ export function UserCard({
           spacing={2}
           sx={{ alignItems: "center" }}
         >
-          <Avatar
+          <UserAvatar
             src={user.photo}
           />
 

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import {
 import { Comment } from "../types/comment.types";
 
 import { formatDate } from "@/utils/format-date";
+import { UserAvatar } from "@/components/common/user-avatar";
 
 type Props = {
   reply: Comment;
@@ -35,25 +35,26 @@ export function ReplyCard({
           spacing={2}
         >
 
-          <Avatar
-            src={
-              reply.commentCreator.photo
-            }
-          >
-            {
-              reply.commentCreator.name?.[0]
-            }
-          </Avatar>
-
+        <UserAvatar
+          userId={
+            reply.commentCreator._id
+          }
+          src={
+            reply.commentCreator.photo
+          }
+        >
+          {
+            reply.commentCreator.name?.[0]
+          }
+        </UserAvatar>
 
           <Box>
 
-            <Typography fontWeight={700}>
+            <Typography sx={{ fontWeight: 700 }}>
               {
                 reply.commentCreator.name
               }
             </Typography>
-
 
             <Typography
               variant="caption"

@@ -9,13 +9,7 @@ export function useBookmarks() {
   return useQuery({
     queryKey:
       queryKeys.users.bookmarks(),
-
     queryFn:
       usersService.getBookmarks,
-
-    select: (data) =>
-      Array.isArray(data)
-        ? data.filter(Boolean)
-        : [],
   });
 }

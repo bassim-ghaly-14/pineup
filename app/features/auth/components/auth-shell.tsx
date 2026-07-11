@@ -17,6 +17,8 @@ type Props = {
 
   subtitle: string;
 
+  isAddAccount?: boolean;
+
   footerText: string;
 
   footerLinkText: string;
@@ -28,6 +30,7 @@ export function AuthShell({
   children,
   title,
   subtitle,
+  isAddAccount,
   footerText,
   footerLinkText,
   footerLink,
@@ -203,7 +206,35 @@ export function AuthShell({
                 {subtitle}
               </Typography>
             </Box>
+{isAddAccount && (
+  <Box
+    sx={{
+      p: 2,
+      borderRadius: 3,
+      border: "1px solid",
+      borderColor: "primary.main",
+      bgcolor: "rgba(212,166,58,.08)",
+    }}
+  >
+    <Typography
+      sx={{
+        fontWeight: 700,
+        color: "primary.main",
+        mb: .5,
+      }}
+    >
+      Adding another account
+    </Typography>
 
+    <Typography
+      variant="body2"
+      color="text.secondary"
+    >
+      Your current account will remain signed in and
+      available from the account switcher.
+    </Typography>
+  </Box>
+)}
             {children}
 
             <Typography sx={{textAlign:"center", color:"text.secondary"}}

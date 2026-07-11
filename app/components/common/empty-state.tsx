@@ -1,25 +1,61 @@
 "use client";
 
 import {
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
 
+import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
+
 type Props = {
   title: string;
+  description?: string;
 };
 
 export function EmptyState({
   title,
+  description,
 }: Props) {
   return (
-    <Stack sx={{alignItems:"center", py:8}}
+    <Paper
+      elevation={0}
+      sx={{
+        p: 6,
+        borderRadius: 5,
+        border: "1px solid",
+        borderColor: "divider",
+        bgcolor: "background.paper",
+      }}
     >
-      <Typography
-        color="text.secondary"
+      <Stack
+        spacing={2}
+        sx={{ alignItems: "center" }}
       >
-        {title}
-      </Typography>
-    </Stack>
+        <InboxRoundedIcon
+          sx={{
+            fontSize: 60,
+            color: "primary.main",
+          }}
+        />
+
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: 700, color: "common.white" }}
+        >
+          {title}
+        </Typography>
+
+        {description && (
+          <Typography
+            color="text.secondary"
+            align="center"
+            sx={{ maxWidth: 420 }}
+          >
+            {description}
+          </Typography>
+        )}
+      </Stack>
+    </Paper>
   );
 }

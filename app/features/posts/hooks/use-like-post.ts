@@ -1,25 +1,35 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+
 import { postsService } from "../services/posts.service";
-import { queryKeys } from "@/constants/query-keys";
+import { updatePostInCache } from "../utils/update-post-cache";
 
 export function useLikePost() {
-  const queryClient = useQueryClient();
+  const queryClient =
+    useQueryClient();
 
   return useMutation({
-    mutationFn: postsService.like,
+    mutationFn:
+      postsService.like,
 
-    onSuccess: (_, postId) => {
-      // update feed only
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.posts.feed(),
-      });
+    onSuccess: (response) => {
+      const post =
+        response?.post;
 
-      // optional: single post cache
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.posts.single(postId),
-      });
+      if (!post) {
+        return;
+      }
+
+      updatePostInCache(
+        queryClient,
+        post._id,
+        () => post,
+        post.user?._id
+      );
     },
   });
 }

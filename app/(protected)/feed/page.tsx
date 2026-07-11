@@ -4,19 +4,17 @@ import { Box } from "@mui/material";
 
 import { CreatePost } from "@/features/posts/components/create-post";
 import { FeedList } from "@/features/posts/components/feed-list";
+import { useFeed } from "@/features/posts/hooks/use-feed";
 
-import { useInfiniteFeed } from "@/features/posts/hooks/use-infinite-feed";
+// import { useInfiniteFeed } from "@/features/posts/hooks/use-infinite-feed";
 
 export default function FeedPage() {
   const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteFeed();
-
-  const posts =
-    data?.pages?.flat() ?? [];
+    data: posts = [],
+    // fetchNextPage,
+    // hasNextPage,
+    // isFetchingNextPage,
+  } = useFeed();
 
   return (
     <Box
@@ -30,9 +28,9 @@ export default function FeedPage() {
 
       <FeedList
         posts={posts}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
+        // fetchNextPage={fetchNextPage}
+        // hasNextPage={hasNextPage}
+        // isFetchingNextPage={isFetchingNextPage}
       />
     </Box>
   );

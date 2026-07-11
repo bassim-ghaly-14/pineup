@@ -90,8 +90,10 @@ export function CreateComment({
           formData,
         },
         {
-          onSuccess: () => {
+          onSuccess: (res) => {
             reset();
+          },
+          onError: (err) => {
           },
         }
       );
@@ -147,8 +149,32 @@ export function CreateComment({
             e.target.value
           )
         }
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            color: "white",
+            backgroundColor:
+              "rgba(255,255,255,.05)",
+            borderRadius: 3,
+            "& fieldset": {
+              borderColor:
+                "rgba(255,255,255,.18)",
+            },
+            "&:hover fieldset": {
+              borderColor:
+                "rgba(255,255,255,.35)",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor:
+                "primary.main",
+            },
+          },
+          "& .MuiInputBase-input::placeholder": {
+            color:
+              "rgba(255,255,255,.55)",
+            opacity: 1,
+          },
+        }}
       />
-
 
       {image && (
         <Box
@@ -183,7 +209,7 @@ export function CreateComment({
 
       <Stack
         direction="row"
-        justifyContent="space-between"
+        sx={{ justifyContent: "space-between" }}
       >
         <Button
           startIcon={

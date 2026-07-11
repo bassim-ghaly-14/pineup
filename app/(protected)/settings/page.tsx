@@ -1,64 +1,25 @@
 "use client";
 
-import {
-  Stack,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
-import { useState } from "react";
-
-import { useChangePassword } from "@/features/auth/hooks/use-change-password";
+import { ProfilePhotoCard } from "@/features/auth/components/profile-photo-card";
+import { ChangePasswordCard } from "@/features/auth/components/change-password-card";
 
 export default function SettingsPage() {
-  const mutation =
-    useChangePassword();
-
-  const [
-    currentPassword,
-    setCurrentPassword,
-  ] = useState("");
-
-  const [
-    newPassword,
-    setNewPassword,
-  ] = useState("");
-
   return (
-    <Stack spacing={2}>
-      <TextField
-        label="Current Password"
-        value={
-          currentPassword
-        }
-        onChange={(e) =>
-          setCurrentPassword(
-            e.target.value
-          )
-        }
-      />
-
-      <TextField
-        label="New Password"
-        value={newPassword}
-        onChange={(e) =>
-          setNewPassword(
-            e.target.value
-          )
-        }
-      />
-
-      <Button
-        variant="contained"
-        onClick={() =>
-          mutation.mutate({
-            currentPassword,
-            newPassword,
-          })
-        }
+    <Stack spacing={3}>
+      <Typography
+        variant="h4"
+        sx={{
+          fontWeight: 800,
+        }}
       >
-        Change Password
-      </Button>
+        Settings
+      </Typography>
+
+      <ProfilePhotoCard />
+
+      <ChangePasswordCard />
     </Stack>
   );
 }

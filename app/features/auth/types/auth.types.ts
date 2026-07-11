@@ -1,4 +1,4 @@
-export type Gender = "male" | "female";
+export type Gender = string | "male" | "female";
 
 export interface LoginDto {
   email: string;
@@ -33,35 +33,35 @@ export interface UploadPhotoResponse {
   photo: string;
 }
 
-export interface AuthUser {
+export interface User {
   _id: string;
-
   name: string;
   username: string;
   email: string;
-
-  gender: Gender;
-  dateOfBirth: string;
-
   photo?: string;
-  coverPhoto?: string;
-
-  bio?: string;
-
-  followersCount: number;
-  followingCount: number;
-
+  cover?: string;
+  dateOfBirth: string;
+  gender?: Gender;
+  bookmarks: string[];
+  followers: string[];
+  following: string[];
+  followersCount?: number;
+  followingCount?: number;
+  bookmarksCount?: number;
   createdAt: string;
-  updatedAt: string;
+  id:string;
 }
 
 export interface AuthResponse {
   message?: string;
   token: string;
-  user: AuthUser;
+  user: User;
 }
 
 export interface ApiResponse<T> {
   message: string;
   data: T;
+}
+export interface ProfileResponse {
+  user: User;
 }

@@ -49,6 +49,7 @@ export function ConfirmDialog({
     >
       <DialogTitle>
         <Typography
+          component="span"
           variant="h6"
           sx={{
             fontWeight: 700,

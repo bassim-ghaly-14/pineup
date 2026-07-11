@@ -10,8 +10,8 @@ export function useFeed() {
   return useQuery({
     queryKey: queryKeys.posts.feed(),
 
-    queryFn: postsService.getFeed,
+    queryFn: () => postsService.getFeed(),
 
-    select: (data) => data ?? [],
+    select: (data) => data.posts ?? [],
   });
 }

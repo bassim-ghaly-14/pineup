@@ -4,7 +4,7 @@ import { API_ENDPOINTS } from "@/services/api/endpoints";
 
 import type {
   AuthResponse,
-  AuthUser,
+  ProfileResponse,
   ChangePasswordDto,
   LoginDto,
   RegisterDto,
@@ -48,9 +48,9 @@ export const authService = {
 
   async getProfile(
     signal?: AbortSignal
-  ): Promise<AuthUser> {
+  ): Promise<ProfileResponse> {
     const { data } = await api.get<
-      ApiResponse<AuthUser>
+      ApiResponse<ProfileResponse>
     >(
       API_ENDPOINTS.AUTH.PROFILE,
       {
@@ -63,13 +63,19 @@ export const authService = {
 
   async changePassword(
     payload: ChangePasswordDto
-  ): Promise<unknown> {
+  ): Promise<AuthResponse> {
+try {
     const { data } = await api.patch(
       API_ENDPOINTS.AUTH.CHANGE_PASSWORD,
-      payload
+      {
+        password: payload.currentPassword,
+        newPassword: payload.newPassword,
+      }
     );
-
     return unwrap(data);
+  } catch (error:any) {
+  throw error;
+}
   },
 
   async uploadPhoto(
@@ -77,9 +83,9 @@ export const authService = {
     onUploadProgress?: (
       progress: number
     ) => void
-  ): Promise<AuthUser> {
-    const { data } = await api.post<
-      ApiResponse<AuthUser>
+  ): Promise<ProfileResponse> {
+    const { data } = await api.put<
+      ApiResponse<ProfileResponse>
     >(
       API_ENDPOINTS.AUTH.UPLOAD_PHOTO,
       formData,

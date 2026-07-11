@@ -6,28 +6,44 @@ import { useRouter } from "next/navigation";
 
 import { useAuth } from "./use-auth";
 
+
 export function useAuthGuard() {
+
   const router = useRouter();
 
+
   const {
-    isAuthenticated,
     data: user,
     isLoading,
+    token,
   } = useAuth();
 
+
+
   useEffect(() => {
-    if (!isLoading && isAuthenticated && !user) {
+
+    if (!token) return;
+
+    if (isLoading) return;
+
+
+    if (!user) {
       router.replace("/login");
     }
+
+
   }, [
+    token,
     user,
     isLoading,
     router,
-    isAuthenticated,
   ]);
+
+
 
   return {
     user,
     isLoading,
   };
+
 }

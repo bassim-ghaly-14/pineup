@@ -1,11 +1,35 @@
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
 
-export default function LoginPage() {
+type Props = {
+  searchParams: Promise<{
+    addAccount?: string;
+  }>;
+};
+
+export default async function LoginPage({
+  searchParams,
+}: Props) {
+  const params = await searchParams;
+
+  const isAddAccount =
+    params.addAccount === "true";
+
   return (
     <AuthShell
-      title="Welcome Back"
-      subtitle="Sign in to continue your PineUp journey."
+      title={
+        isAddAccount
+          ? "Add another account"
+          : "Welcome Back"
+      }
+      subtitle={
+        isAddAccount
+          ? "Sign in to add another PineUp account without removing your current one."
+          : "Sign in to continue your PineUp journey."
+      }
+      isAddAccount={
+        isAddAccount
+      }
       footerText="Don't have an account?"
       footerLinkText="Create one"
       footerLink="/register"

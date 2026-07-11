@@ -12,7 +12,6 @@ export const commentsService = {
         },
       }
     );
-    console.log("RAW COMMENTS:", res?.data);
     return res.data?.data?.comments ?? [];
   },
 
@@ -20,10 +19,7 @@ export const commentsService = {
     postId: string,
     formData: FormData
   ) {
-    console.log("CREATE COMMENT:", postId);
     for (const [key, value] of formData.entries()) {
-
-    console.log("FORM DATA:", key, value);
 
   } try {
     const res = await api.post(
@@ -32,10 +28,6 @@ export const commentsService = {
     );
     return res.data?.data ?? null;
     } catch (error: any) {
-    console.log(
-      "CREATE COMMENT ERROR:",
-      error.response?.data
-    );
     throw error;
   }
   },
@@ -94,7 +86,6 @@ export const commentsService = {
         commentId
       )
     );
-    console.log("RAW REPLIES:", res?.data);
     return res.data?.data?.replies ?? [];
   },
 

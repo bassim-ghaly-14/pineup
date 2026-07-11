@@ -5,27 +5,50 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { queryKeys } from "@/constants/query-keys";
+import { toast } from "sonner";
 
 import { postsService } from "../services/posts.service";
+import { removePostFromCache } from "../utils/update-post-cache";
+
 
 export function useDeletePost() {
-  const queryClient =
-    useQueryClient();
+  const queryClient = useQueryClient();
+
 
   return useMutation({
-    mutationFn: postsService.remove,
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.all,
-      });
+    mutationFn: async (id: string) => {
+      await postsService.remove(id);
 
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.feed(),
-      });
+      return id;
     },
+
+
+    onSuccess: (postId) => {
+
+      removePostFromCache(
+        queryClient,
+        postId
+      );
+
+      toast.success(
+        "Post deleted successfully."
+      );
+    },
+
+
+    onError: (error) => {
+
+      console.error(
+        "Delete post error:",
+        error
+      );
+
+
+      toast.error(
+        "Failed to delete post."
+      );
+    },
+
   });
 }

@@ -6,8 +6,7 @@ import {
 } from "@tanstack/react-query";
 
 import { postsService } from "../services/posts.service";
-
-import { queryKeys } from "@/constants/query-keys";
+import { updatePostInCache } from "../utils/update-post-cache";
 
 export function useBookmarkPost() {
   const queryClient =
@@ -18,27 +17,29 @@ export function useBookmarkPost() {
       postsService.bookmark,
 
     onSuccess: (
-      _,
+      response,
       postId
     ) => {
 
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.feed(),
-      });
+      const bookmarked =
+        response?.bookmarked ??
+        response?.bookmarked;
 
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.single(
-            postId
-          ),
-      });
+      if (
+        typeof bookmarked !== "boolean"
+      ) {
+        return;
+      }
 
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.users.bookmarks(),
-      });
 
+      updatePostInCache(
+        queryClient,
+        postId,
+        (post) => ({
+          ...post,
+          bookmarked,
+        })
+      );
     },
   });
 }

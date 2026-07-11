@@ -34,6 +34,8 @@ export const queryKeys = {
     all: ["users"] as const,
     profile: (id: string) =>
       ["users", "profile", id] as const,
+    posts: (id: string) =>
+      ["users", "posts", id] as const,
     suggestions: () =>
       ["users", "suggestions"] as const,
     bookmarks: () =>

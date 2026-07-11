@@ -12,8 +12,6 @@ import {
 } from "@mui/material";
 
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-// import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import { NotificationBell } from "@/features/notifications/components/notification-bell";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 
@@ -24,7 +22,11 @@ import { PremiumIconButton } from "@/components/common/icon-button";
 
 import { UserMenu } from "@/components/layout/user-menu/user-menu";
 
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
+import { NotificationsDropdown } from "@/features/notifications/components/notifications-dropdown";
+
 import { useAuth } from "@/features/auth/hooks/use-auth";
+import { CreatePostDialog } from "@/features/posts/components/create-post-dialog";
 import { useAppTheme } from "@/components/providers/theme-provider";
 
 export function Navbar() {
@@ -35,6 +37,15 @@ export function Navbar() {
 
   const [anchorEl, setAnchorEl] =
     useState<HTMLElement | null>(null);
+
+  const [
+    notificationAnchorEl,
+    setNotificationAnchorEl,
+  ] = useState<HTMLElement | null>(
+    null
+  );
+  const [createOpen, setCreateOpen] =
+    useState(false);
 
   return (
     <>
@@ -99,18 +110,19 @@ export function Navbar() {
               alignItems: "center",
             }}
           >
-            <Button
-              variant="contained"
-              startIcon={<AddRoundedIcon />}
-              sx={{
-                display: {
-                  xs: "none",
-                  md: "inline-flex",
-                },
-              }}
-            >
-              Create
-            </Button>
+<Button
+  variant="contained"
+  startIcon={<AddRoundedIcon />}
+  onClick={() => setCreateOpen(true)}
+  sx={{
+    display: {
+      xs: "none",
+      md: "inline-flex",
+    },
+  }}
+>
+  Create
+</Button>
 
             <PremiumIconButton
               onClick={toggleTheme}
@@ -123,8 +135,13 @@ export function Navbar() {
               )}
             </PremiumIconButton>
 
-            <PremiumIconButton>
-              {/* <NotificationsRoundedIcon /> */}
+            <PremiumIconButton
+              onClick={(e) =>
+                setNotificationAnchorEl(
+                  e.currentTarget
+                )
+              }
+            >
               <NotificationBell />
             </PremiumIconButton>
 
@@ -139,8 +156,8 @@ export function Navbar() {
               }}
             >
               <UserAvatar
-                src={data?.photo}
-                alt={data?.name}
+                src={data?.user?.photo}
+                alt={data?.user?.name}
               />
             </Box>
           </Stack>
@@ -153,6 +170,21 @@ export function Navbar() {
           setAnchorEl(null)
         }
       />
+
+      <NotificationsDropdown
+        anchorEl={
+          notificationAnchorEl
+        }
+        onClose={() =>
+          setNotificationAnchorEl(
+            null
+          )
+        }
+      />
+<CreatePostDialog
+  open={createOpen}
+  onClose={() => setCreateOpen(false)}
+/>
     </>
   );
 }

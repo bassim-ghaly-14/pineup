@@ -1,84 +1,144 @@
 "use client";
 
-import { IconButton, Stack, Tooltip } from "@mui/material";
+import {
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import ShareIcon from "@mui/icons-material/Share";
+import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
+import RepeatRoundedIcon from "@mui/icons-material/RepeatRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 
 import { useLikePost } from "../hooks/use-like-post";
 import { useBookmarkPost } from "../hooks/use-bookmark-post";
-import { useSharePost } from "../hooks/use-share-post";
+import { useRepostPost } from "../hooks/use-repost-post";
 
 type Props = {
   postId: string;
   isLiked?: boolean;
+  likesCount?: number;
   isBookmarked?: boolean;
   commentsCount?: number;
+  sharesCount?: number;
   onCommentsClick?: () => void;
 };
 
 export function PostActions({
   postId,
   isLiked = false,
+  likesCount = 0,
   isBookmarked = false,
   commentsCount = 0,
+  sharesCount = 0,
   onCommentsClick,
 }: Props) {
   const likePost = useLikePost();
   const bookmarkPost = useBookmarkPost();
-  const sharePost = useSharePost();
+  const repostPost = useRepostPost();
+
+  const iconStyle = {
+    borderRadius: 3,
+    transition: ".25s",
+    "&:hover": {
+      bgcolor: "action.hover",
+      transform: "scale(1.08)",
+    },
+  };
+
+  const countStyle = {
+    minWidth: 18,
+    fontWeight: 600,
+    color: "text.secondary",
+    textAlign: "center",
+  };
 
   return (
-    <Stack direction="row" spacing={1}>
-      <Tooltip title="Like">
-        <IconButton
-          disabled={likePost.isPending}
-          onClick={() => likePost.mutate(postId)}
-          color={isLiked ? "error" : "default"}
-        >
-          {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
-      </Tooltip>
+    <Stack
+      direction="row"
+      sx={{
+        mt: 1,
+        pt: 1.5,
+        borderTop: "1px solid",
+        borderColor: "divider",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+          <Tooltip title="Like">
+            <IconButton
+              sx={iconStyle}
+              disabled={likePost.isPending}
+              onClick={() => likePost.mutate(postId)}
+              color={isLiked ? "error" : "default"}
+            >
+              {isLiked ? (
+                <FavoriteRoundedIcon />
+              ) : (
+                <FavoriteBorderRoundedIcon />
+              )}
+            </IconButton>
+          </Tooltip>
 
-      <Stack direction="row" alignItems="center" spacing={0.5}>
-        <Tooltip title="Comments">
-          <IconButton onClick={onCommentsClick}>
-            <ChatBubbleOutlineRoundedIcon />
+          <Typography variant="body2" sx={countStyle}>
+            {likesCount}
+          </Typography>
+        </Stack>
+
+        <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+          <Tooltip title="Comments">
+            <IconButton
+              sx={iconStyle}
+              onClick={onCommentsClick}
+            >
+              <ChatBubbleOutlineRoundedIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Typography variant="body2" sx={countStyle}>
+            {commentsCount}
+          </Typography>
+        </Stack>
+      </Stack>
+
+      <Stack direction="row" spacing={2}>
+        <Tooltip title="Save">
+          <IconButton
+            sx={iconStyle}
+            disabled={bookmarkPost.isPending}
+            onClick={() => bookmarkPost.mutate(postId)}
+            color={isBookmarked ? "primary" : "default"}
+          >
+            {isBookmarked ? (
+              <BookmarkRoundedIcon />
+            ) : (
+              <BookmarkBorderRoundedIcon />
+            )}
           </IconButton>
         </Tooltip>
 
-        <span
-          style={{
-            fontSize: 12,
-            color: "#777",
-          }}
-        >
-          {commentsCount}
-        </span>
+        <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+          <Tooltip title="Repost">
+            <IconButton
+              sx={iconStyle}
+              disabled={repostPost.isPending}
+              onClick={() => repostPost.mutate(postId)}
+            >
+              <RepeatRoundedIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Typography variant="body2" sx={countStyle}>
+            {sharesCount}
+          </Typography>
+        </Stack>
       </Stack>
-
-      <Tooltip title="Bookmark">
-        <IconButton
-          disabled={bookmarkPost.isPending}
-          onClick={() => bookmarkPost.mutate(postId)}
-          color={isBookmarked ? "primary" : "default"}
-        >
-          {isBookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip title="Share">
-        <IconButton
-          disabled={sharePost.isPending}
-          onClick={() => sharePost.mutate(postId)}
-          >
-            <ShareIcon />
-        </IconButton>
-      </Tooltip>
     </Stack>
   );
 }

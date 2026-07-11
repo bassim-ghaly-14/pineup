@@ -15,7 +15,8 @@ export function useInfiniteFeed() {
       postsService.getFeed({
         page: pageParam,
         limit: 10,
-        only: "following",
+        // only: "following",
+        // only: "public"
       }),
 
     getNextPageParam: (lastPage) => {

@@ -1,7 +1,11 @@
-import { EmptyState } from "@/components/common/empty-state";
+import { AppState } from "@/components/common/app-state";
 
 export default function NotFound() {
   return (
-    <EmptyState title="Page Not Found" />
+    <AppState
+      type="404"
+      title="Page Not Found"
+      description="The page you are looking for doesn't exist or was moved."
+    />
   );
 }
