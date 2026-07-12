@@ -133,10 +133,25 @@ export function pineUpTheme(
         styleOverrides: {
           root: {
             borderRadius: 16,
-
             background: dark
               ? "rgba(255,255,255,.03)"
               : "rgba(0,0,0,.03)",
+              "& .MuiOutlinedInput-notchedOutline": {
+  borderColor: dark
+    ? "rgba(255,255,255,.12)"
+    : "rgba(17,24,39,.18)",
+},
+
+"&:hover .MuiOutlinedInput-notchedOutline": {
+  borderColor: dark
+    ? "rgba(255,255,255,.25)"
+    : "rgba(17,24,39,.35)",
+},
+
+"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+  borderColor: "#D4A63A",
+  borderWidth: 2,
+},
           },
         },
       },

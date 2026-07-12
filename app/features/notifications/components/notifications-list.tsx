@@ -7,6 +7,7 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
+  Stack,
 } from "@mui/material";
 
 import { useRouter } from "next/navigation";
@@ -14,7 +15,8 @@ import { toast } from "sonner";
 import { Loader } from "@/components/common/loader";
 import { useNotifications } from "../hooks/use-notifications";
 import { useMarkRead } from "../hooks/use-mark-read";
-
+import { VerifiedBadge } from "@/components/common/verified-badge";
+import { isVerified } from "@/utils/is-verified";
 import {
   getNotificationBody,
   getNotificationTitle,
@@ -66,7 +68,7 @@ export function NotificationList() {
 
       switch (item.type) {
 
-        case "follow":
+        case "follow_user":
           router.push(
             ROUTES.PROFILE_BY_ID(
               item.actor._id
@@ -85,17 +87,25 @@ export function NotificationList() {
 
             return;
           }
+if (!item.entityId) return;
 
-          if (
-            item.entityType === "post" &&
-            item.entityId
-          ) {
-            router.push(
-              ROUTES.POST(
-                item.entityId
-              )
-            );
-          }
+if (item.entityType === "post") {
+  const postUrl = ROUTES.POST(item.entityId);
+
+  const isCommentNotification =
+    item.type === "comment_post";
+
+  const commentId =
+    item.entity?.topComment?._id;
+
+  router.push(
+    isCommentNotification && commentId
+      ? `${postUrl}?comment=${commentId}`
+      : postUrl
+  );
+
+  return;
+}
 
           return;
       }
@@ -117,6 +127,10 @@ export function NotificationList() {
             getNotificationTitle(item);
           const body =
             getNotificationBody(item);
+          const action = title.replace(
+  `${item.actor?.name ?? "Someone"} `,
+  ""
+);
           const isUnavailable =
             item.entity?.unavailable === true;
 
@@ -174,7 +188,35 @@ export function NotificationList() {
                 />
 
                 <ListItemText
-                  primary={title}
+                  primary={
+  <Stack
+    direction="row"
+    spacing={0.5}
+    sx={{ alignItems: "center", flexWrap:"wrap" }}
+  >
+    <Typography
+      component="span"
+      sx={{
+        fontWeight: item.isRead ? 500 : 700,
+      }}
+    >
+      {item.actor?.name ?? "Someone"}
+    </Typography>
+
+    {isVerified(item.actor?._id) && (
+      <VerifiedBadge size={16} />
+    )}
+
+    <Typography
+      component="span"
+      sx={{
+        fontWeight: item.isRead ? 500 : 700,
+      }}
+    >
+      {action}
+    </Typography>
+  </Stack>
+}
                   secondary={
                     <Box
                       sx={{
@@ -219,7 +261,7 @@ export function NotificationList() {
                         }}
                       >
                       {isUnavailable
-                        ? "Post unavilable"
+                        ? "Post unavailable"
                         : "Tap to view →"
                       }
                       </Typography>

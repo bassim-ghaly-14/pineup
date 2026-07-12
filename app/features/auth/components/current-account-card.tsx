@@ -1,14 +1,17 @@
 "use client";
 
 import {
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
+  Box,
+  Chip,
+  Stack,
+  Typography,
 } from "@mui/material";
 
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 
 import { useRouter } from "next/navigation";
+
+import { UserAvatar } from "@/components/common/user-avatar";
 
 import {
   STORAGE_KEYS,
@@ -17,20 +20,18 @@ import {
 import {
   ROUTES,
 } from "@/constants/routes";
-import { UserAvatar } from "@/components/common/user-avatar";
-
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
 
 type Props = {
   onClose: () => void;
 };
-
 
 export function CurrentAccountCard({
   onClose,
 }: Props) {
 
   const router = useRouter();
-
 
   const user =
     typeof window !== "undefined"
@@ -41,11 +42,9 @@ export function CurrentAccountCard({
         )
       : null;
 
-
   if (!user) {
     return null;
   }
-
 
   const openProfile = () => {
 
@@ -63,117 +62,147 @@ export function CurrentAccountCard({
 
   };
 
-
   return (
 
-    <MenuItem
-
-      onClick={
-        openProfile
-      }
-
-
+    <Box
+      onClick={openProfile}
       sx={{
-
         mx: 1,
-
-        mt: 1,
-
         mb: 1,
-
-
+        p: 2,
         borderRadius: 3,
 
-
+        cursor: "pointer",
         background:
-          "linear-gradient(135deg, rgba(212,166,58,.16), transparent)",
-
+          "linear-gradient(135deg, rgba(212,166,58,.18) 0%, rgba(212,166,58,.05) 45%, rgba(255,255,255,.02) 100%)",
 
         border:
-          "1px solid rgba(212,166,58,.25)",
-
+          "1px solid rgba(212,166,58,.22)",
 
         transition:
           ".25s ease",
 
-
         "&:hover": {
+          transform: "translateY(-3px)",
+          borderColor: "primary.main",
+          boxShadow:
+            "0 18px 40px rgba(212,166,58,.22)",
 
-          transform:
-            "translateX(4px)",
-
-          background:
-            "linear-gradient(135deg, rgba(212,166,58,.25), transparent)",
-
+          "& .current-arrow": {
+            transform: "translateX(5px)",
+            color: "primary.main",
+          },
         },
-
       }}
-
     >
 
-      <ListItemIcon>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          alignItems: "center",
+        }}
+      >
 
         <UserAvatar
-
-          src={
-            user.photo
-          }
-
+          src={user.photo}
           sx={{
-
-            width:44,
-
-            height:44,
-
-
-            border:
-              "2px solid",
-
-
+            width: 60,
+            height: 60,
+            border: "3px solid",
             borderColor:
               "primary.main",
-
+            boxShadow:
+              "0 0 0 4px rgba(212,166,58,.12)",
+            fontSize: 22,
+            fontWeight: 800,
           }}
-
         >
-
-          {
-            user.name?.[0]
-          }
-
+          {user.name?.[0]}
         </UserAvatar>
 
-      </ListItemIcon>
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
 
+<Stack
+  direction="row"
+  spacing={1}
+  sx={{
+    alignItems: "center",
+  }}
+>
+  <Stack
+    direction="row"
+    spacing={0.5}
+    sx={{ alignItems: "center" }}
+  >
+    <Typography
+      noWrap
+      sx={{
+        fontWeight: 800,
+        fontSize: 17,
+      }}
+    >
+      {user.name}
+    </Typography>
 
+    {isVerified(user._id ?? user.id) && (
+      <VerifiedBadge size={18} />
+    )}
+  </Stack>
 
-      <ListItemText
+  <Chip
+    label="Current"
+    size="small"
+    sx={{
+      height: 22,
+      px: .5,
+      bgcolor: "rgba(212,166,58,.16)",
+      color: "primary.main",
+      border: "1px solid rgba(212,166,58,.28)",
+      fontSize: 11,
+      fontWeight: 800,
+    }}
+  />
+</Stack>
 
-        primary={
-          user.name
-        }
+          <Typography
+            noWrap
+            variant="body2"
+            color="text.secondary"
+          >
+            @{user.username}
+            <Typography
+              variant="caption"
+              sx={{
+                display: "block",
+                mt: .25,
+                color: "text.disabled",
+              }}
+            >
+              View your profile
+            </Typography>
+          </Typography>
 
+        </Box>
 
-        secondary={
-          `@${user.username}`
-        }
+        <ArrowForwardRoundedIcon
+          className="current-arrow"
+          sx={{
+            color: "text.secondary",
+            transition: ".25s",
+            fontSize: 22,
+          }}
+        />
 
-      />
+      </Stack>
 
-
-      <ArrowForwardRoundedIcon
-
-        fontSize="small"
-
-        sx={{
-          color:
-            "text.secondary",
-        }}
-
-      />
-
-
-    </MenuItem>
+    </Box>
 
   );
+
 }

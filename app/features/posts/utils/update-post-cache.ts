@@ -63,6 +63,36 @@ export function updatePostInCache(
   updater: Updater,
   userId?: string
 ) {
+  let ownerId = userId;
+
+
+  const singlePost =
+    queryClient.getQueryData<Post>(
+      queryKeys.posts.single(postId)
+    );
+
+
+  if (!ownerId && singlePost?.user?._id) {
+    ownerId = singlePost.user._id;
+  }
+
+
+
+  const feedPost =
+    queryClient
+      .getQueryData<FeedResponse>(
+        queryKeys.posts.feed()
+      )
+      ?.posts.find(
+        (post) =>
+          post._id === postId
+      );
+
+
+  if (!ownerId && feedPost?.user?._id) {
+    ownerId = feedPost.user._id;
+  }
+
 
 
   queryClient.setQueryData<Post>(
@@ -74,11 +104,15 @@ export function updatePostInCache(
   );
 
 
+const feed =
+  queryClient.getQueryData<FeedResponse>(
+    queryKeys.posts.feed()
+  );
+
 
   queryClient.setQueryData<FeedResponse>(
     queryKeys.posts.feed(),
     (old) => {
-
       if (!old) return old;
 
 
@@ -100,7 +134,29 @@ export function updatePostInCache(
     }
   );
 
+queryClient.setQueryData(
+  queryKeys.posts.explore(),
+  (old: any) => {
+    if (!old?.pages) return old;
 
+    return {
+      ...old,
+      pages: old.pages.map((page: any) => ({
+        ...page,
+        posts: updatePosts(
+          page.posts,
+          postId,
+          updater
+        ),
+      })),
+      posts: updatePosts(
+        old.posts ?? [],
+        postId,
+        updater
+      ),
+    };
+  }
+);
 
   queryClient.setQueryData<Post[]>(
     queryKeys.users.bookmarks(),
@@ -116,10 +172,10 @@ export function updatePostInCache(
 
 
 
-  if (userId) {
+  if (ownerId) {
 
     queryClient.setQueryData<Post[]>(
-      queryKeys.users.posts(userId),
+      queryKeys.users.posts(ownerId),
       (old) =>
         old
           ? updatePosts(
@@ -168,6 +224,34 @@ export function addPostToCache(
       };
     }
   );
+queryClient.setQueryData(
+  queryKeys.posts.explore(),
+  (old: any) => {
+    if (!old?.pages?.length) return old;
+
+    return {
+      ...old,
+      pages: [
+        {
+          ...old.pages[0],
+          posts: [post, ...old.pages[0].posts],
+        },
+        ...old.pages.slice(1),
+      ],
+      posts: [post, ...(old.posts ?? [])],
+    };
+  }
+);
+  if (post.user?._id) {
+  queryClient.setQueryData<Post[]>(
+    queryKeys.users.posts(post.user._id),
+    (old) => {
+      if (!old) return old;
+
+      return [post, ...old];
+    }
+  );
+}
 }
 
 /**
@@ -195,6 +279,27 @@ export function removePostFromCache(
       };
     }
   );
+queryClient.setQueryData(
+  queryKeys.posts.explore(),
+  (old: any) => {
+    if (!old?.pages) return old;
+
+    return {
+      ...old,
+      pages: old.pages.map((page: any) => ({
+        ...page,
+        posts: removePosts(
+          page.posts,
+          postId
+        ),
+      })),
+      posts: removePosts(
+        old.posts ?? [],
+        postId
+      ),
+    };
+  }
+);
 
   queryClient.setQueryData<Post[]>(
     queryKeys.users.bookmarks(),

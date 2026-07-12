@@ -13,7 +13,7 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: queryKeys.notifications.unread(),
     queryFn: notificationsService.unreadCount,
-    enabled: !!token,
+    // enabled: !!token,
     refetchInterval: 30000,
   });
 }

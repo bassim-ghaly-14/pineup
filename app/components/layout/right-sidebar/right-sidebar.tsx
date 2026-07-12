@@ -9,62 +9,52 @@ import {
 } from "@mui/material";
 
 import { GlassCard } from "@/components/common/glass-card";
-import { UserAvatar } from "@/components/common/user-avatar";
-
+import { useUserIndexer } from "@/features/social/hooks/use-user-indexer";
 import { useSuggestions } from "@/features/users/hooks/use-suggestions";
-import { useFollowUser } from "@/features/users/hooks/use-follow-user";
+import { SuggestedUserCard } from "@/features/users/components/suggested-user-card";
+import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
+import { OverviewCard } from "./overview-card";
 
 export function RightSidebar() {
   const {
     data = [],
     isLoading,
   } = useSuggestions();
-
-  const {
-    mutate: follow,
-    isPending,
-  } = useFollowUser();
-
+useUserIndexer({
+  users: data,
+  source: "suggestions",
+});
 
   return (
     <Stack spacing={3}>
-
-      <GlassCard sx={{ p:3 }}>
-        <Typography
-          sx={{
-            fontWeight:700,
-            mb:2,
-          }}
-        >
-          Trending
-        </Typography>
-
-        <Stack spacing={1.5}>
-          <Typography color="text.secondary">
-            #Technology
-          </Typography>
-
-          <Typography color="text.secondary">
-            #Design
-          </Typography>
-
-          <Typography color="text.secondary">
-            #ArtificialIntelligence
-          </Typography>
-        </Stack>
-      </GlassCard>
-
-
+<OverviewCard />
       <GlassCard sx={{p:3}}>
 
-        <Typography
-          sx={{
-            fontWeight:700,
-            mb:2,
-          }}
-        >
-          Who to follow
-        </Typography>
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    mb: 2,
+  }}
+>
+  <Typography
+    sx={{
+      fontWeight: 700,
+    }}
+  >
+    Grow Your Network
+  </Typography>
+
+  <Button
+    component={Link}
+    href={ROUTES.SUGGESTIONS}
+    size="small"
+  >
+    View all
+  </Button>
+</Box>
 
 
         {isLoading ? (
@@ -77,73 +67,15 @@ export function RightSidebar() {
           spacing={2}
           divider={<Divider />}
         >
+{data.slice(0, 5).map((user) => (
 
-          {data.map((user) => (
+  <SuggestedUserCard
+    key={user._id}
+    user={user}
+    compact
+  />
 
-            <Box
-              key={user._id}
-              sx={{
-                display:"flex",
-                alignItems:"center",
-                gap:2,
-              }}
-            >
-
-              <UserAvatar
-                src={user.photo}
-                userId={user._id}
-              />
-
-
-              <Stack
-                spacing={0}
-                sx={{
-                  flex:1,
-                }}
-              >
-
-                <Typography
-                  sx={{
-                    fontWeight:600,
-                  }}
-                >
-                  {user.name}
-                </Typography>
-
-
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                >
-                  @{user.username}
-                </Typography>
-
-
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                >
-                  {user.followersCount} followers
-                </Typography>
-
-              </Stack>
-
-
-              <Button
-                size="small"
-                variant="contained"
-                disabled={isPending}
-                onClick={() =>
-                  follow(user._id)
-                }
-              >
-                Follow
-              </Button>
-
-
-            </Box>
-
-          ))}
+))}
 
         </Stack>
 

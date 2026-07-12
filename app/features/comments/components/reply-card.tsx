@@ -2,7 +2,6 @@
 
 import {
   Box,
-  Card,
   CardContent,
   Stack,
   Typography,
@@ -12,6 +11,9 @@ import { Comment } from "../types/comment.types";
 
 import { formatDate } from "@/utils/format-date";
 import { UserAvatar } from "@/components/common/user-avatar";
+import { VerifiedBadge } from "@/components/common/verified-badge";
+import { isVerified } from "@/utils/is-verified";
+import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
   reply: Comment;
@@ -21,21 +23,57 @@ export function ReplyCard({
   reply,
 }: Props) {
   return (
-    <Card
+    <GlassCard
       elevation={0}
-      sx={{
-        borderRadius: 1,
-        border: "1px solid",
-        borderColor: "divider",
-      }}
+      sx={(theme) => ({
+  borderRadius: 3,
+  border: "1px solid",
+  borderColor: "divider",
+
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))"
+      : "linear-gradient(180deg,#ffffff,#fcfcfc)",
+
+  transition: "all .25s ease",
+
+  "&:hover": {
+    borderColor: "primary.main",
+
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 12px 28px rgba(0,0,0,.28)"
+        : "0 12px 28px rgba(0,0,0,.06)",
+  },
+})}
     >
-      <CardContent>
+      <CardContent
+  sx={{
+    p: 2.5,
+    "&:last-child": {
+      pb: 2.5,
+    },
+  }}
+>
         <Stack
-          direction="row"
-          spacing={2}
-        >
+  direction="row"
+  spacing={2}
+  sx={{
+    alignItems: "flex-start",
+  }}
+>
 
         <UserAvatar
+        sx={{
+  width: 44,
+  height: 44,
+
+  border: "2px solid",
+  borderColor: "primary.main",
+
+  boxShadow:
+    "0 0 0 4px rgba(212,166,58,.08)",
+}}
           userId={
             reply.commentCreator._id
           }
@@ -48,18 +86,39 @@ export function ReplyCard({
           }
         </UserAvatar>
 
-          <Box>
+          <Box
+  sx={{
+    flex: 1,
+    minWidth: 0,
+  }}
+>
 
-            <Typography sx={{ fontWeight: 700 }}>
-              {
-                reply.commentCreator.name
-              }
-            </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{ alignItems: "center" }}
+>
+  <Typography
+    sx={{
+      fontWeight: 800,
+      fontSize: 14.5,
+    }}
+  >
+    {reply.commentCreator.name}
+  </Typography>
+
+  {isVerified(reply.commentCreator._id) && (
+    <VerifiedBadge size={16} />
+  )}
+</Stack>
 
             <Typography
-              variant="caption"
-              color="text.secondary"
-            >
+  variant="caption"
+  sx={{
+    color: "text.disabled",
+    fontWeight: 500,
+  }}
+>
               {
                 formatDate(
                   reply.createdAt
@@ -70,9 +129,11 @@ export function ReplyCard({
 
             <Typography
               sx={{
-                mt: 1,
-                whiteSpace: "pre-wrap",
-              }}
+  mt: 1.25,
+  whiteSpace: "pre-wrap",
+  lineHeight: 1.75,
+  fontSize: 14.5,
+}}
             >
               {
                 reply.content
@@ -87,12 +148,20 @@ export function ReplyCard({
                   src={reply.image}
                   alt="reply"
                   sx={{
-                    mt: 1,
-                    width: "100%",
-                    maxHeight: 250,
-                    objectFit: "cover",
-                    borderRadius: 1,
-                  }}
+  mt: 1.75,
+
+  width: "100%",
+
+  maxHeight: 260,
+
+  objectFit: "cover",
+
+  borderRadius: 3,
+
+  border: "1px solid",
+
+  borderColor: "divider",
+}}
                 />
               )
             }
@@ -101,6 +170,6 @@ export function ReplyCard({
 
         </Stack>
       </CardContent>
-    </Card>
+    </GlassCard>
   );
 }

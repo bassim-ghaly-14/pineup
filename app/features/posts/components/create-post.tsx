@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Card,
   CardContent,
   Divider,
   Stack,
@@ -20,6 +19,9 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { useCreatePost } from "../hooks/use-create-post";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { UserAvatar } from "@/components/common/user-avatar";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
+import { GlassCard } from "@/components/common/glass-card";
 
 
 export function CreatePost() {
@@ -80,7 +82,7 @@ export function CreatePost() {
   };
 
   return (
-    <Card
+    <GlassCard
       elevation={0}
       sx={{
         borderRadius: 4,
@@ -113,11 +115,21 @@ export function CreatePost() {
             </UserAvatar>
 
             <Box sx={{ flex: 1 }}>
-              <Typography
-                sx={{ mb: .5, fontWeight: 700 }}
-              >
-                {user?.name}
-              </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{ mb: .5, alignItems:"center" }}
+>
+  <Typography
+    sx={{ fontWeight: 700 }}
+  >
+    {user?.name}
+  </Typography>
+
+  {isVerified(user?._id) && (
+    <VerifiedBadge size={18} />
+  )}
+</Stack>
 
               <TextField
                 fullWidth
@@ -250,6 +262,6 @@ export function CreatePost() {
           </Box>
         </Stack>
       </CardContent>
-    </Card>
+    </GlassCard>
   );
 }

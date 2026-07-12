@@ -8,6 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+
 import {
   useAccountSwitcher,
 } from "../hooks/use-account-switcher";
@@ -15,13 +17,14 @@ import {
 import {
   STORAGE_KEYS,
 } from "@/constants/storage-keys";
-import { UserAvatar } from "@/components/common/user-avatar";
 
+import { UserAvatar } from "@/components/common/user-avatar";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
 
 type Props = {
   onClose?: () => void;
 };
-
 
 export function AccountSwitcher({
   onClose,
@@ -30,10 +33,7 @@ export function AccountSwitcher({
   const {
     accounts,
     switchAccount,
-  } = useAccountSwitcher(
-    onClose
-  );
-
+  } = useAccountSwitcher(onClose);
 
   const currentToken =
     typeof window !== "undefined"
@@ -42,18 +42,15 @@ export function AccountSwitcher({
         )
       : null;
 
-
   const availableAccounts =
     accounts.filter(
       (account) =>
         account.token !== currentToken
     );
 
-
   if (!availableAccounts.length) {
     return null;
   }
-
 
   return (
     <Box
@@ -62,99 +59,130 @@ export function AccountSwitcher({
         py: 1,
       }}
     >
-
-      <Typography
-        variant="caption"
+      <Box
         sx={{
-          px: 1.5,
-          color: "text.secondary",
-          fontWeight: 700,
-          textTransform: "uppercase",
-          letterSpacing: ".08em",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          px: 1,
+          mb: 1,
         }}
       >
-        Switch account
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: 11,
+            fontWeight: 800,
+            letterSpacing: ".08em",
+            textTransform: "uppercase",
+            color: "text.secondary",
+          }}
+        >
+          Other accounts
+        </Typography>
 
+        <Box
+          sx={{
+            display: "inline-flex",
+            alignItems: "center",
+            px: 1.3,
+            py: .45,
+            borderRadius: 999,
+            bgcolor: "primary.main",
+            color: "#111",
+            fontSize: 10,
+            fontWeight: 800,
+            letterSpacing: ".08em",
+            textTransform: "uppercase",
+          }}
+        >
+          Switch
+        </Box>
+      </Box>
 
-      {availableAccounts.map(
-        (account) => (
+      {availableAccounts.map((account) => (
+        <MenuItem
+          key={`switch-${account.user._id}`}
+          onClick={() =>
+            switchAccount(account)
+          }
+          sx={{
+            mt: .75,
+            borderRadius: 3,
+            border: "1px solid",
+            borderColor: "divider",
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,.02), transparent)",
+            transition: ".25s ease",
 
-          <MenuItem
-            key={
-              `switch-${account.user._id}`
-            }
+            "&:hover": {
+              borderColor: "primary.main",
+              background:
+                "linear-gradient(135deg, rgba(212,166,58,.12), transparent)",
+              transform: "translateX(4px)",
+              boxShadow:
+                "0 10px 24px rgba(212,166,58,.14)",
+            },
+          }}
+        >
+          <ListItemIcon>
+            <UserAvatar
+              src={account.user.photo}
+              sx={{
+                width: 44,
+                height: 44,
+                border: "2px solid",
+                borderColor: "primary.main",
+                fontWeight: 700,
+              }}
+            >
+              {account.user.name?.[0]}
+            </UserAvatar>
+          </ListItemIcon>
 
-            onClick={() =>
-              switchAccount(account)
-            }
-
+          <ListItemText
             sx={{
-              mt: .5,
-              borderRadius: 2,
-
-              transition:
-                "all .25s ease",
-
-              "&:hover": {
-                background:
-                  "rgba(212,166,58,.08)",
-                transform:
-                  "translateX(4px)",
-              },
+              paddingLeft: 1,
             }}
-          >
+            primary={
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      gap: 0.5,
+    }}
+  >
+    <Typography
+      sx={{
+        fontWeight: 700,
+        fontSize: 15,
+      }}
+    >
+      {account.user.name}
+    </Typography>
 
-            <ListItemIcon>
-
-              <UserAvatar
-                src={
-                  account.user.photo
-                }
-
-                sx={{
-                  width: 38,
-                  height: 38,
-
-                  border:
-                    "2px solid",
-
-                  borderColor:
-                    "primary.main",
-
-                  fontWeight: 700,
-                }}
+    {isVerified(account.user._id) && (
+      <VerifiedBadge size={16} />
+    )}
+  </Box>
+}
+            secondary={
+              <Typography
+                variant="caption"
+                color="text.secondary"
               >
-                {
-                  account.user.name?.[0]
-                }
-              </UserAvatar>
+                @{account.user.username} • Tap to switch
+              </Typography>
+            }
+          />
 
-            </ListItemIcon>
-
-
-
-            <ListItemText
-              primary={
-                <Typography sx={{ fontWeight: 700 }}>
-                  {account.user.name}
-                </Typography>
-              }
-
-              secondary={
-                <Typography sx={{ fontSize: 12 }}>
-                  {`@${account.user.username}`}
-                </Typography>
-              }
-            />
-
-
-
-          </MenuItem>
-
-        )
-      )}
-
+          <ChevronRightRoundedIcon
+            sx={{
+              color: "text.secondary",
+              fontSize: 20,
+            }}
+          />
+        </MenuItem>
+      ))}
     </Box>
   );
 }

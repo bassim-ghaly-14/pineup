@@ -7,22 +7,20 @@ import {
 
 import { postsService } from "../services/posts.service";
 import { updatePostInCache } from "../utils/update-post-cache";
+import { queryKeys } from "@/constants/query-keys";
+import type { Post } from "../types/post.types";
 
 export function useBookmarkPost() {
-  const queryClient =
-    useQueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn:
-      postsService.bookmark,
+    mutationFn: postsService.bookmark,
 
-    onSuccess: (
+    onSuccess: async (
       response,
       postId
     ) => {
-
       const bookmarked =
-        response?.bookmarked ??
         response?.bookmarked;
 
       if (
@@ -30,7 +28,6 @@ export function useBookmarkPost() {
       ) {
         return;
       }
-
 
       updatePostInCache(
         queryClient,
@@ -40,6 +37,24 @@ export function useBookmarkPost() {
           bookmarked,
         })
       );
+
+      if (!bookmarked) {
+        queryClient.setQueryData<Post[]>(
+          queryKeys.users.bookmarks(),
+          (old) =>
+            old?.filter(
+              (post) =>
+                post._id !== postId
+            ) ?? []
+        );
+      }
+
+      if (bookmarked) {
+        await queryClient.invalidateQueries({
+          queryKey:
+            queryKeys.users.bookmarks(),
+        });
+      }
     },
   });
 }

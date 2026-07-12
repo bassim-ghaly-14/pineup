@@ -7,8 +7,8 @@ import {
   Box,
   Stack,
   Typography,
-  Card,
 } from "@mui/material";
+import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
   children: React.ReactNode;
@@ -175,7 +175,7 @@ export function AuthShell({
           p: 3,
         }}
       >
-        <Card
+        <GlassCard
           sx={{
             width: "100%",
             maxWidth: 560,
@@ -269,7 +269,7 @@ export function AuthShell({
             </Typography>
 
           </Stack>
-        </Card>
+        </GlassCard>
       </Box>
     </Box>
   );

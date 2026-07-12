@@ -19,15 +19,27 @@ export const postsService = {
       { params }
     );
 
-    const data = res.data?.data;
-    const page = params?.page ?? 1;
+const data = res.data?.data;
+const pagination = res.data?.meta?.pagination;
+const page = params?.page ?? 1;
 
-    return {
-      posts: data?.posts ?? [],
-      page: data?.page ?? page,
-      pages: data?.pages ?? 1,
-      total: data?.total ?? 0,
-    };
+return {
+  posts: data?.posts ?? [],
+  page:
+    pagination?.currentPage ??
+    data?.page ??
+    page,
+
+  pages:
+    pagination?.numberOfPages ??
+    data?.pages ??
+    1,
+
+  total:
+    pagination?.total ??
+    data?.total ??
+    0,
+};
   },
   
   async getAll() {

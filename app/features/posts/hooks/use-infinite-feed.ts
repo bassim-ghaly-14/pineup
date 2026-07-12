@@ -7,7 +7,7 @@ import { queryKeys } from "@/constants/query-keys";
 
 export function useInfiniteFeed() {
   return useInfiniteQuery({
-    queryKey: queryKeys.posts.feed(),
+    queryKey: queryKeys.posts.explore(),
 
     initialPageParam: 1,
 
@@ -15,8 +15,7 @@ export function useInfiniteFeed() {
       postsService.getFeed({
         page: pageParam,
         limit: 10,
-        // only: "following",
-        // only: "public"
+        only: "all"
       }),
 
     getNextPageParam: (lastPage) => {

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 import {
   Box,
-  Card,
   CardContent,
   Divider,
   IconButton,
@@ -16,9 +15,9 @@ import {
 } from "@mui/material";
 
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVert";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import IosShareRoundedIcon from "@mui/icons-material/IosShareRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 
 import { toast } from "sonner";
@@ -34,6 +33,9 @@ import { PostActions } from "./post-actions";
 import { formatDate } from "@/utils/format-date";
 import { Post } from "../types/post.types";
 import { UserAvatar } from "@/components/common/user-avatar";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
+import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
   post: Post;
@@ -110,7 +112,7 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
   };
 
   return (
-    <Card
+    <GlassCard
       elevation={0}
       sx={{
         borderRadius: 4,
@@ -160,19 +162,25 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
               minWidth: 0,
             }}
           >
-            <Typography
-              onClick={openProfile}
-              sx={{
-                fontWeight: 700,
-                cursor: "pointer",
+<Box sx={{ display: "flex", flexDirection: "row", gap: 0.5, alignItems: "center" }}>
+  <Typography
+    onClick={openProfile}
+    sx={{
+      fontWeight: 700,
+      cursor: "pointer",
 
-                "&:hover": {
-                  color: "primary.main",
-                },
-              }}
-            >
-              {post.user?.name}
-            </Typography>
+      "&:hover": {
+        color: "primary.main",
+      },
+    }}
+  >
+    {post.user?.name}
+  </Typography>
+
+  {isVerified(post.user?._id) && (
+    <VerifiedBadge size={18} />
+  )}
+</Box>
 
             <Typography
               variant="body2"
@@ -383,16 +391,26 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
 
       <Box>
 
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: 14,
-          }}
-        >
-          {
-            post.sharedPost.user?.name
-          }
-        </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{
+    alignItems: "center",
+  }}
+>
+  <Typography
+    sx={{
+      fontWeight: 700,
+      fontSize: 14,
+    }}
+  >
+    {post.sharedPost.user?.name}
+  </Typography>
+
+  {isVerified(post.sharedPost.user?._id) && (
+    <VerifiedBadge size={16} />
+  )}
+</Stack>
 
 
         <Typography
@@ -456,6 +474,7 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
           postId={post._id}
           isLiked={isLiked}
           likesCount={post.likesCount ?? post.likes?.length ?? 0}
+          sharesCount={post.sharesCount ?? 0}
           isBookmarked={
             post.bookmarked ?? false
           }
@@ -505,6 +524,6 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
           });
         }}
       />
-    </Card>
+    </GlassCard>
   );
 }

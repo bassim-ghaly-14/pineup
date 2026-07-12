@@ -1,20 +1,16 @@
 "use client";
-
-import { Box } from "@mui/material";
-
+import {
+  Box,
+} from "@mui/material";
 import { CreatePost } from "@/features/posts/components/create-post";
-import { FeedList } from "@/features/posts/components/feed-list";
-import { useFeed } from "@/features/posts/hooks/use-feed";
-
-// import { useInfiniteFeed } from "@/features/posts/hooks/use-infinite-feed";
+import { FollowingFeed } from "@/features/posts/components/following-feed";
+import { FeedTabs } from "@/features/posts/components/feed-tabs";
+import { ExploreFeed } from "@/features/posts/components/explore-feed";
+import { useState } from "react";
 
 export default function FeedPage() {
-  const {
-    data: posts = [],
-    // fetchNextPage,
-    // hasNextPage,
-    // isFetchingNextPage,
-  } = useFeed();
+  const [tab, setTab] = useState<"following" | "explore">
+  ("following");
 
   return (
     <Box
@@ -25,13 +21,15 @@ export default function FeedPage() {
       }}
     >
       <CreatePost />
-
-      <FeedList
-        posts={posts}
-        // fetchNextPage={fetchNextPage}
-        // hasNextPage={hasNextPage}
-        // isFetchingNextPage={isFetchingNextPage}
-      />
+<FeedTabs
+  value={tab}
+  onChange={setTab}
+/>
+{tab === "following" ? (
+  <FollowingFeed />
+) : (
+  <ExploreFeed />
+)}
     </Box>
   );
 }

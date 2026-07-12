@@ -7,6 +7,7 @@ export const queryKeys = {
   posts: {
     all: ["posts"] as const,
     feed: () => ["posts", "feed"] as const,
+    explore: () => ["posts", "explore"],
     list: () => ["posts", "list"] as const,
     single: (id: string) =>
       ["posts", "single", id] as const,

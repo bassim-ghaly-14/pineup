@@ -8,6 +8,7 @@ import {
 import { commentsService } from "../services/comments.service";
 
 import { queryKeys } from "@/constants/query-keys";
+import { updatePostInCache } from "@/features/posts/utils/update-post-cache";
 
 type CreateCommentPayload = {
   postId: string;
@@ -28,18 +29,22 @@ export function useCreateComment() {
         formData
       ),
 
-    onSuccess: async (_, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.comments.post(
-            variables.postId
-          ),
-      });
+onSuccess: (response, variables) => {
+  updatePostInCache(
+    queryClient,
+    variables.postId,
+    (oldPost) => ({
+      ...oldPost,
+      commentsCount: (oldPost.commentsCount ?? 0) + 1,
+      topComment: response.comment,
+    })
+  );
 
-      await queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.posts.feed(),
-      });
-    },
+  queryClient.invalidateQueries({
+    queryKey: queryKeys.comments.post(
+      variables.postId
+    ),
+  });
+},
   });
 }

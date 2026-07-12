@@ -36,6 +36,7 @@ export function UserAvatar({
 
 
   return (
+    <>
     <Avatar
       {...props}
       onClick={handleClick}
@@ -67,5 +68,6 @@ export function UserAvatar({
           : []),
       ]}
     />
+    </>
   );
 }

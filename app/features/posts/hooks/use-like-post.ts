@@ -27,7 +27,19 @@ export function useLikePost() {
       updatePostInCache(
         queryClient,
         post._id,
-        () => post,
+(oldPost) => ({
+  ...oldPost,
+  ...post,
+
+  sharedPost:
+    typeof post.sharedPost === "string"
+      ? oldPost.sharedPost
+      : post.sharedPost,
+
+  commentsCount:
+    post.commentsCount ??
+    oldPost.commentsCount,
+}),
         post.user?._id
       );
     },

@@ -1,15 +1,12 @@
 "use client";
 
-
 import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-
 import {
   useRouter,
 } from "next/navigation";
-
 
 import {
   getStoredAccounts,
@@ -17,51 +14,38 @@ import {
   type StoredAccount,
 } from "../utils/account-storage";
 
-
 import {
   STORAGE_KEYS,
 } from "@/constants/storage-keys";
-
 
 import {
   queryKeys,
 } from "@/constants/query-keys";
 
-
 import {
   ROUTES,
 } from "@/constants/routes";
 
-
-
 export function useAccountSwitcher(
-  onClose?:()=>void
+  onClose?: () => void
 ) {
-
 
   const router =
     useRouter();
 
-
   const queryClient =
     useQueryClient();
-
-
 
   const switchAccount = (
     account: StoredAccount
   ) => {
 
-
     onClose?.();
-
-
 
     localStorage.setItem(
       STORAGE_KEYS.TOKEN,
       account.token
     );
-
 
     localStorage.setItem(
       STORAGE_KEYS.USER,
@@ -70,41 +54,33 @@ export function useAccountSwitcher(
       )
     );
 
-
-
     document.cookie =
       `pineup_token=${account.token}; Path=/; Max-Age=2592000; SameSite=Lax;`;
-
-
 
     window.dispatchEvent(
       new Event("auth-change")
     );
 
-
-
-    queryClient.clear();
-
-
+    queryClient.removeQueries({
+      queryKey: queryKeys.auth.all,
+    });
 
     queryClient.setQueryData(
       queryKeys.auth.profile(),
       {
-        user:
-          account.user,
+        user: account.user,
       }
     );
 
+    queryClient.invalidateQueries();
 
+    router.refresh();
 
     router.replace(
       ROUTES.FEED
     );
 
   };
-
-
-
 
   const saveCurrentAccount = (
     account: StoredAccount
@@ -116,16 +92,12 @@ export function useAccountSwitcher(
 
   };
 
-
-
   return {
 
     accounts:
       getStoredAccounts(),
 
-
     switchAccount,
-
 
     saveCurrentAccount,
 

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { commentsService } from "../services/comments.service";
 
 import { queryKeys } from "@/constants/query-keys";
+import { Comment } from "../types/comment.types";
 
 type Props = {
   postId: string;
@@ -17,7 +18,7 @@ export function useReplies({
   commentId,
   enabled = false,
 }: Props) {
-  return useQuery({
+  return useQuery<Comment[]>({
     queryKey:
       queryKeys.comments.replies(
         postId,

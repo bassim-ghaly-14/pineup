@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import {
+  getStoredAccounts,
+  removeAccount,
+} from "@/features/auth/utils/account-storage";
 import {
   Divider,
   ListItemIcon,
@@ -12,7 +15,6 @@ import {
 } from "@mui/material";
 
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
@@ -82,20 +84,61 @@ export function UserMenu({
 
 
 
-  const handleLogout = () => {
+const handleLogout = () => {
+  setConfirmOpen(false);
+  const currentUser = JSON.parse(
+    localStorage.getItem(STORAGE_KEYS.USER) || "null"
+  );
 
-    localStorage.removeItem(
-      STORAGE_KEYS.TOKEN
+  if (!currentUser) {
+    window.location.href = ROUTES.LOGIN;
+    return;
+  }
+
+  removeAccount(currentUser._id);
+
+  const accounts = getStoredAccounts();
+
+  if (accounts.length > 0) {
+    const nextAccount = accounts[0];
+
+    localStorage.setItem(
+      STORAGE_KEYS.TOKEN,
+      nextAccount.token
     );
 
+    localStorage.setItem(
+      STORAGE_KEYS.USER,
+      JSON.stringify(nextAccount.user)
+    );
 
     document.cookie =
-      "pineup_token=; Path=/; Max-Age=0";
+      `pineup_token=${nextAccount.token}; Path=/; Max-Age=2592000; SameSite=Lax;`;
 
+    window.dispatchEvent(
+      new Event("auth-change")
+    );
+    router.replace(
+      ROUTES.FEED
+    );
 
-    window.location.href =
-      ROUTES.LOGIN;
-  };
+    return;
+  }
+
+  localStorage.removeItem(
+    STORAGE_KEYS.TOKEN
+  );
+
+  localStorage.removeItem(
+    STORAGE_KEYS.USER
+  );
+
+  document.cookie =
+    "pineup_token=; Path=/; Max-Age=0";
+
+  window.location.href =
+    ROUTES.LOGIN;
+};
 
 
 
@@ -110,14 +153,15 @@ export function UserMenu({
           paper: {
             sx: {
               mt: 1,
-              minWidth: 290,
+              minWidth: 320,
+              maxWidth: 340,
               borderRadius: 3,
               p:1,
               bgcolor: "background.paper",
               border: "1px solid",
               borderColor: "divider",
               backdropFilter: "blur(24px)",
-              boxShadow: "1px solid rgba(255,255,255,.08)",
+              boxShadow: "0 24px 60px rgba(0,0,0,.38)",
               overflow: "hidden",
             },
           },
@@ -132,6 +176,46 @@ export function UserMenu({
     onClose={onClose}
   />
 </>
+<Divider sx={{ my: 1 }} />
+<MenuItem
+  onClick={() =>
+    navigate(
+      `${ROUTES.LOGIN}?addAccount=true`
+    )
+  }
+  sx={{
+    my: 1,
+    borderRadius: 3,
+    bgcolor: "primary.main",
+    color: "#111",
+    fontWeight: 700,
+    transition: ".25s",
+
+    "&:hover": {
+      bgcolor: "primary.light",
+      transform: "translateY(-1px)",
+    },
+  }}
+>
+  <ListItemIcon
+    sx={{
+      color: "#111",
+      minWidth: 38,
+    }}
+  >
+    <AddRoundedIcon />
+  </ListItemIcon>
+
+  <ListItemText
+    primary="Add another account"
+    secondary="Sign in without logging out"
+    sx={{
+      '& .MuiListItemText-secondary': {
+        color: 'rgba(0,0,0,.65)',
+      },
+    }}
+  />
+</MenuItem>
 
         <MenuItem
           onClick={() =>
@@ -139,6 +223,9 @@ export function UserMenu({
               ROUTES.SETTINGS
             )
           }
+          sx={{
+            borderRadius: 2,
+          }}
         >
 
           <ListItemIcon>
@@ -158,6 +245,9 @@ export function UserMenu({
           onClick={
             toggleTheme
           }
+          sx={{
+            borderRadius: 2,
+          }}
         >
 
           <ListItemIcon>
@@ -181,32 +271,7 @@ export function UserMenu({
 
         </MenuItem>
 
-
-
-        <MenuItem
-          onClick={() =>
-navigate(
-  `${ROUTES.LOGIN}?addAccount=true`
-)
-          }
-        >
-
-          <ListItemIcon>
-            <AddRoundedIcon />
-          </ListItemIcon>
-
-
-          <ListItemText
-            primary="Add account"
-          />
-
-        </MenuItem>
-
-
-
-        <Divider />
-
-
+<Divider sx={{ my: 1 }} />
 
         <MenuItem
           onClick={

@@ -12,8 +12,13 @@ import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { useState } from "react";
 import { CreatePostDialog } from "@/features/posts/components/create-post-dialog";
+import { useAuth } from "@/features/auth/hooks/use-auth";
+import { ROUTES } from "@/constants/routes";
 
-const items = [
+export function MobileNav() {
+  const { data } = useAuth();
+  const profileHref = data?.user?._id ? `/profile/${data.user._id}` : `/profile`;
+  const items = [
   {
     label: "Feed",
     href: "/feed",
@@ -37,12 +42,10 @@ const items = [
   },
   {
     label: "Profile",
-    href: "/profile",
+    href: profileHref,
     icon: PersonRoundedIcon,
   },
 ];
-
-export function MobileNav() {
   const pathname = usePathname();
   const [createOpen, setCreateOpen] =
     useState(false);

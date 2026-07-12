@@ -16,7 +16,7 @@ export function getNotificationTitle(
     case "reply_comment":
       return `${actor} replied to your comment`;
 
-    case "follow":
+    case "follow_user":
       return `${actor} started following you`;
 
     case "share_post":

@@ -1,3 +1,9 @@
+type NotificationType =
+  | "like_post"
+  | "comment_post"
+  | "reply_comment"
+  | "follow_user"
+  | "share_post";
 export interface Notification {
   _id: string;
 
@@ -13,7 +19,7 @@ export interface Notification {
     photo: string;
   };
 
-  type: string;
+  type: NotificationType;
   entityType: string;
   entityId: string;
   isRead: boolean;

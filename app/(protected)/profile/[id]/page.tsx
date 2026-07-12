@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/common/empty-state";
 import { useProfile } from "@/features/users/hooks/use-profile";
 import { useUserPosts } from "@/features/users/hooks/use-user-posts";
 import { useAuth } from "@/features/auth/hooks/use-auth";
+import { useBookmarks } from "@/features/users/hooks/use-bookmarks";
 
 import { ProfileCover } from "@/features/profile/components/profile-cover";
 import { ProfileInfo } from "@/features/profile/components/profile-info";
@@ -19,7 +20,7 @@ import { ProfileStats } from "@/features/profile/components/profile-stats";
 import { ProfileActions } from "@/features/profile/components/profile-actions";
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 import { ProfilePosts } from "@/features/profile/components/profile-posts";
-
+import { isVerified } from "@/utils/is-verified";
 type Props = {
   params: Promise<{
     id:string;
@@ -50,9 +51,11 @@ export default function ProfilePage({
     data: currentUser,
   } = useAuth();
 
+const {
+  data: bookmarks = [],
+} = useBookmarks();
 
   const user = data?.user;
-
 
   const isOwner =
     currentUser?.user?._id === user?._id;
@@ -71,7 +74,6 @@ export default function ProfilePage({
       />
     );
   }
-
 
 
   return (
@@ -96,6 +98,7 @@ export default function ProfilePage({
             name={user.name}
             username={user.username}
             bio={user.bio}
+            isVerified={isVerified(user._id)}
           />
 
 
@@ -109,10 +112,13 @@ export default function ProfilePage({
 
 
         <ProfileStats
-          userId={user._id}
           followers={user.followersCount}
           following={user.followingCount}
-          bookmarks={user.bookmarksCount}
+          bookmarks={
+                      isOwner
+                        ? bookmarks.length
+                        : user.bookmarksCount}
+          isOwner={isOwner}
         />
 
       </Box>

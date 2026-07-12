@@ -20,6 +20,8 @@ import { UserAvatar } from "@/components/common/user-avatar";
 
 import { useAuth } from "../hooks/use-auth";
 import { useUploadPhoto } from "../hooks/use-upload-photo";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
 
 export function ProfilePhotoCard() {
   const inputRef =
@@ -200,24 +202,44 @@ export function ProfilePhotoCard() {
           }}
         >
 
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-            }}
-          >
-            {data?.user?.name}
-          </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{ alignItems: "center", justifyContent:"center" }}
+  
+>
+  <Typography
+    variant="h6"
+    sx={{
+      fontWeight: 800,
+      color: "text.primary",
+      letterSpacing: "-0.2px",
+    }}
+  >
+    {data?.user?.name}
+  </Typography>
+
+  {isVerified(data?.user?._id) && (
+    <VerifiedBadge size={18} />
+  )}
+</Stack>
 
           <Typography
-            color="text.secondary"
+            sx={{
+              color: "primary.main",
+              fontWeight: 600,
+              fontSize: 14,
+            }}
           >
             @{data?.user?.username}
           </Typography>
 
           <Typography
             variant="caption"
-            color="text.secondary"
+            sx={{
+              mt: 0.5,
+              color: "text.secondary",
+            }}
           >
             Click your avatar to change your profile photo
           </Typography>

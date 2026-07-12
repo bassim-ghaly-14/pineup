@@ -2,40 +2,52 @@
 
 import {
   Box,
-  Card,
-  Tooltip,
   Typography,
 } from "@mui/material";
+
+import { useRouter } from "next/navigation";
+
+import { ROUTES } from "@/constants/routes";
+import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
   followers: number;
   following: number;
   bookmarks?: number;
-  userId?: string;
+  isOwner?: boolean;
 };
-
+type StatItem = {
+  label: string;
+  value: number;
+  onClick?: () => void;
+};
 export function ProfileStats({
   followers,
   following,
   bookmarks = 0,
+  isOwner = false,
 }: Props) {
-  const items = [
+  const router = useRouter();
+
+  const items: StatItem[] = [
     {
       label: "Followers",
       value: followers,
-      disabled: true,
     },
     {
       label: "Following",
       value: following,
-      disabled: true,
-    },
-    {
-      label: "Bookmarks",
-      value: bookmarks,
-      disabled: false,
     },
   ];
+
+  if (isOwner) {
+    items.push({
+      label: "Bookmarks",
+      value: bookmarks,
+      onClick: () =>
+        router.push(ROUTES.BOOKMARKS),
+    });
+  }
 
   return (
     <Box
@@ -43,59 +55,47 @@ export function ProfileStats({
         display: "grid",
         gridTemplateColumns: {
           xs: "1fr",
-          sm: "repeat(3,1fr)",
+          sm: `repeat(${items.length}, 1fr)`,
         },
         gap: 2,
         mb: 3,
       }}
     >
       {items.map((item) => (
-        <Tooltip
+        <GlassCard
           key={item.label}
-          title={
-            item.disabled
-              ? "Coming soon"
-              : ""
-          }
+          onClick={item.onClick}
+          sx={{
+            p: 2,
+            textAlign: "center",
+            cursor: item.onClick
+              ? "pointer"
+              : "default",
+            transition: "all .2s ease",
+
+            "&:hover": item.onClick
+              ? {
+                  transform:
+                    "translateY(-3px)",
+                }
+              : {},
+          }}
         >
-          <Card
+          <Typography
+            variant="h5"
             sx={{
-              p: 2,
-              textAlign: "center",
-
-              cursor: item.disabled
-                ? "not-allowed"
-                : "pointer",
-
-              opacity: item.disabled
-                ? 0.6
-                : 1,
-
-              transition: "all .2s ease",
-
-              "&:hover": {
-                transform: item.disabled
-                  ? "none"
-                  : "translateY(-3px)",
-              },
+              fontWeight: 800,
             }}
           >
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 800,
-              }}
-            >
-              {item.value}
-            </Typography>
+            {item.value}
+          </Typography>
 
-            <Typography
-              color="text.secondary"
-            >
-              {item.label}
-            </Typography>
-          </Card>
-        </Tooltip>
+          <Typography
+            color="text.secondary"
+          >
+            {item.label}
+          </Typography>
+        </GlassCard>
       ))}
     </Box>
   );

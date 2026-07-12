@@ -8,4 +8,5 @@ export const ROUTES = {
   BOOKMARKS: "/bookmarks",
   NOTIFICATIONS: "/notifications",
   SETTINGS: "/settings",
+  SUGGESTIONS: "/suggestions",
 } as const;
