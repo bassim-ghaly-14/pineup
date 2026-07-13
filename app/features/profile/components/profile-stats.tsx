@@ -15,6 +15,8 @@ type Props = {
   following: number;
   bookmarks?: number;
   isOwner?: boolean;
+  onFollowersClick?: () => void;
+  onFollowingClick?: () => void;
 };
 type StatItem = {
   label: string;
@@ -26,19 +28,23 @@ export function ProfileStats({
   following,
   bookmarks = 0,
   isOwner = false,
+  onFollowersClick,
+  onFollowingClick,
 }: Props) {
   const router = useRouter();
 
-  const items: StatItem[] = [
-    {
-      label: "Followers",
-      value: followers,
-    },
-    {
-      label: "Following",
-      value: following,
-    },
-  ];
+const items: StatItem[] = [
+  {
+    label: "Followers",
+    value: followers,
+    onClick: onFollowersClick,
+  },
+  {
+    label: "Following",
+    value: following,
+    onClick: onFollowingClick,
+  },
+];
 
   if (isOwner) {
     items.push({

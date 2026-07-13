@@ -1,3 +1,5 @@
+import { FollowUser } from "@/features/auth/types/auth.types";
+
 export interface User {
   _id: string;
   name: string;
@@ -6,8 +8,8 @@ export interface User {
   photo?: string;
   cover?:string;
   bio?: string;
-  followers:string[];
-  following:string[];
+  followers:FollowUser[];
+  following:FollowUser[];
   followersCount: number;
   followingCount: number;
   bookmarksCount?:number;

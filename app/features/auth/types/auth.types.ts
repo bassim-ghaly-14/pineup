@@ -32,7 +32,15 @@ export interface UpdateProfileDto {
 export interface UploadPhotoResponse {
   photo: string;
 }
-
+export interface FollowUser {
+  _id: string;
+  id: string;
+  name: string;
+  photo?: string;
+  followersCount: number;
+  followingCount: number;
+  bookmarksCount: number;
+}
 export interface User {
   _id: string;
   name: string;
@@ -43,8 +51,8 @@ export interface User {
   dateOfBirth: string;
   gender?: Gender;
   bookmarks: string[];
-  followers: string[];
-  following: string[];
+  followers: FollowUser[];
+  following: FollowUser[];
   followersCount?: number;
   followingCount?: number;
   bookmarksCount?: number;
