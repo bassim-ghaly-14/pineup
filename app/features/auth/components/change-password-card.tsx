@@ -294,7 +294,7 @@ const strength = (() => {
       }
       sx={{
         height: 8,
-        borderRadius: 20,
+        borderRadius: 1
       }}
     />
 

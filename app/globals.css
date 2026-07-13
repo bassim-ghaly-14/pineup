@@ -1,22 +1,127 @@
 :root {
   --color-gold: #d4a63a;
-  --color-gold-hover: #e0b84d;
+  --color-gold-light: #e7c46a;
   --color-gold-dark: #b88922;
 
   --color-graphite: #1f232b;
   --color-graphite-light: #2b313c;
   --color-graphite-dark: #14171d;
+
+  --scrollbar-size: 10px;
 }
 
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gold) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  background: linear-gradient(90deg, #0e0f11 0%, #14171d 100%);
-  color: white;
   min-height: 100vh;
+
+  background:
+    radial-gradient(circle at top, rgba(212,166,58,.06), transparent 35%),
+    linear-gradient(180deg,#0f1115 0%,#14171d 100%);
+
+  color: white;
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-y: overlay;
+}
+
+/* Selection */
+
+::selection {
+  background: rgba(212,166,58,.35);
+  color: white;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #e7c46a,
+    #d4a63a,
+    #b88922
+  );
+
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #f0d17d,
+    #e0b84d,
+    #c79526
+  );
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Images */
+
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Links */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Buttons */
+
+button {
+  font: inherit;
+}
+
+/* Focus */
+
+:focus-visible {
+  outline: 2px solid #d4a63a;
+  outline-offset: 3px;
+}
+
+/* Animations */
+
+* {
+  transition:
+    background-color .25s,
+    border-color .25s,
+    color .25s,
+    box-shadow .25s;
 }

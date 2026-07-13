@@ -13,7 +13,7 @@ export function VerifiedBadge({
     <VerifiedRoundedIcon
       sx={{
         fontSize: size,
-        color: "#D4A63A",
+        color: "primary.main",
         flexShrink: 0,
       }}
     />

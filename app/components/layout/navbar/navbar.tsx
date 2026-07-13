@@ -68,11 +68,8 @@ export function Navbar() {
             theme.palette.mode === "dark"
               ? "rgba(15,17,21,.75)"
               : "rgba(255,255,255,.75)",
-
           backdropFilter: "blur(24px)",
-
           borderBottom: "1px solid",
-
           borderColor: "divider",
         })}
       >
