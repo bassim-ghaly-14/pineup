@@ -75,7 +75,11 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
       ROUTES.PROFILE_BY_ID(post.user._id)
     );
   };
-
+const openPost = () => {
+  router.push(
+    ROUTES.POST(post._id)
+  );
+};
   const postUrl =
     typeof window !== "undefined"
       ? window.location.origin +
@@ -115,12 +119,14 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
   return (
     <GlassCard
       elevation={0}
+      onClick={openPost}
       sx={{
         borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
         overflow: "hidden",
         transition: "all .25s ease",
+        cursor: "pointer",
 
         "&:hover": {
           borderColor: "primary.main",
@@ -165,7 +171,10 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
           >
 <Box sx={{ display: "flex", flexDirection: "row", gap: 0.5, alignItems: "center" }}>
   <Typography
-    onClick={openProfile}
+    onClick={(e) => {
+  e.stopPropagation();
+  openProfile();
+}}
     sx={{
       fontWeight: 700,
       cursor: "pointer",
@@ -201,10 +210,11 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
           </Box>
 
           <IconButton
-            onClick={(e) =>
-              setAnchorEl(e.currentTarget)
-            }
-          >
+  onClick={(e) => {
+    e.stopPropagation();
+    setAnchorEl(e.currentTarget);
+  }}
+>
             <MoreVertRoundedIcon />
           </IconButton>
 

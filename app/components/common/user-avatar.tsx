@@ -34,7 +34,7 @@ export function UserAvatar({
   const handleClick = (
     event: React.MouseEvent<HTMLDivElement>
   ) => {
-
+    event.stopPropagation();
     onClick?.(event);
 
     if (userId) {

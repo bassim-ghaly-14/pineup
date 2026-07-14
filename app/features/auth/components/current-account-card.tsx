@@ -65,7 +65,10 @@ export function CurrentAccountCard({
   return (
 
     <Box
-      onClick={openProfile}
+      onClick={(e) => {
+  e.stopPropagation();
+  openProfile();
+}}
       sx={{
         mx: 1,
         mb: 1,

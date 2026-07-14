@@ -59,6 +59,7 @@ export function PostActions({
 
   return (
     <Stack
+      onClick={(e) => e.stopPropagation()}
       direction="row"
       sx={{
         mt: 1,
