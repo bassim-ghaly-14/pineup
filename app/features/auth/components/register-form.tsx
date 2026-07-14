@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRegister } from "../hooks/use-register";
 import { registerSchema } from "../schemas/register.schema";
-import { RegisterDto } from "../types/auth.types";
+import { RegisterFormValues } from "../schemas/register.schema";
 
 export function RegisterForm() {
   const mutation = useRegister();
@@ -35,7 +35,7 @@ export function RegisterForm() {
     setValue,
     handleSubmit,
     formState: { isValid, dirtyFields },
-  } = useForm<RegisterDto>({
+  } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     mode: "onChange",
     defaultValues: {
@@ -86,7 +86,7 @@ export function RegisterForm() {
   }, []);
 
   const onSubmit = useCallback(
-    (data: RegisterDto) => {
+    (data: RegisterFormValues) => {
       mutation.mutate(data);
     },
     [mutation]

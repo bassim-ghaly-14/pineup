@@ -1,4 +1,4 @@
-export type Gender = string | "male" | "female";
+export type Gender = "male" | "female";
 
 export interface LoginDto {
   email: string;

@@ -45,7 +45,9 @@ export const registerSchema = z
       .string()
       .min(1, "Date of birth is required."),
 
-    gender: z.enum(["male", "female"] as const),
+    gender: z.enum(["male", "female"], {
+  message: "Please select your gender.",
+}),
 
     password: z
       .string()
@@ -106,6 +108,8 @@ export const registerSchema = z
     }
   });
 
-export type RegisterSchema = z.infer<typeof registerSchema>;
+export type RegisterFormValues = z.infer<
+  typeof registerSchema
+>;
 
-export type Gender = RegisterSchema["gender"];
+export type Gender = RegisterFormValues["gender"];
