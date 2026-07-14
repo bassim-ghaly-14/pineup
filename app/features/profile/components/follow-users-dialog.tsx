@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState, useEffect } from "react";
-
 import { motion, AnimatePresence } from "framer-motion";
 
 import {
@@ -18,19 +17,17 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-
 import {
   CloseRounded,
   SearchRounded,
   PeopleRounded,
 } from "@mui/icons-material";
-
-import { GlassCard } from "@/components/common/glass-card";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { AppState } from "@/components/common/app-state";
 import type { FollowUser } from "@/features/auth/types/auth.types";
 import { useFollowUser } from "@/features/users/hooks/use-follow-user";
 import { useUnfollowUser } from "@/features/users/hooks/use-unfollow-user";
+import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
   open: boolean;
@@ -88,9 +85,10 @@ useEffect(() => {
       onClose={onClose}
       fullWidth
       maxWidth="sm"
-      PaperProps={{
+      slotProps={{
+        paper: {
         sx: (theme) => ({
-          borderRadius: 5,
+          borderRadius: 3,
           overflow: "hidden",
           backdropFilter: "blur(24px)",
           bgcolor: alpha(
@@ -102,6 +100,7 @@ useEffect(() => {
             .12
           )}`,
         }),
+        }
       }}
     >
 
@@ -115,6 +114,7 @@ useEffect(() => {
           px: 3,
           pt: 3,
           pb: 2,
+        //   marginBottom: 3,
           backdropFilter: "blur(24px)",
           bgcolor: "background.paper",
           borderBottom: "1px solid",
@@ -222,12 +222,14 @@ useEffect(() => {
               borderRadius: 999,
             },
           }}
-          InputProps={{
+          slotProps={{
+            input: {
             startAdornment: (
               <InputAdornment position="start">
                 <SearchRounded />
               </InputAdornment>
             ),
+            }
           }}
         />
 
@@ -297,7 +299,8 @@ return (
       delay: index * .03,
     }}
   >
-    <GlassCard
+    <GlassCard>
+    <Box
       component={Link}
       href={`/profile/${user._id}`}
       onClick={onClose}
@@ -458,20 +461,17 @@ onError: () => {
   </Button>
 </Box>
 )}
+    </Box>
     </GlassCard>
   </MotionBox>
 );
 })}
 
               </Stack>
-
             </AnimatePresence>
-
           )
         }
-
       </DialogContent>
-
     </Dialog>
   );
 }
