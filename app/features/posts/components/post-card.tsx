@@ -294,20 +294,22 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
         )}
 
         {post.image && (
-          <Box
-            component="img"
-            src={post.image}
-            alt="post"
-            loading="lazy"
-            sx={{
-              width: "100%",
-              maxHeight: 520,
-              objectFit: "cover",
-              borderRadius: 3,
-              mb: 2.5,
-            }}
-          />
-        )}
+  <Box
+    component="img"
+    src={post.image}
+    alt="post"
+    loading="lazy"
+    sx={{
+      width: "100%",
+      maxHeight: 650,
+      objectFit: "contain",
+      display: "block",
+      borderRadius: 3,
+      mb: 2.5,
+      bgcolor: "background.default",
+    }}
+  />
+)}
 {post.isShare && post.sharedPost && (
   <Box
     sx={{
@@ -445,26 +447,23 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
 
 
 
-    {post.sharedPost.image && (
-      <Box
-        component="img"
-        src={
-          post.sharedPost.image
-        }
-        alt="shared post"
-        loading="lazy"
-        sx={{
-          width: "100%",
-          mt: 2,
-
-          borderRadius: 3,
-
-          maxHeight: 420,
-
-          objectFit: "cover",
-        }}
-      />
-    )}
+{post.sharedPost.image && (
+  <Box
+    component="img"
+    src={post.sharedPost.image}
+    alt="shared post"
+    loading="lazy"
+    sx={{
+      width: "100%",
+      mt: 2,
+      borderRadius: 3,
+      maxHeight: 520,
+      objectFit: "contain",
+      display: "block",
+      bgcolor: "background.default",
+    }}
+  />
+)}
 
   </Box>
 )}

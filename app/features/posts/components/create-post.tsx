@@ -153,23 +153,28 @@ export function CreatePost() {
           </Stack>
 
           {preview && (
-            <Box
-              sx={{
-                position: "relative",
-                overflow: "hidden",
-                borderRadius: 3,
-              }}
-            >
+           <Box
+  sx={{
+    position: "relative",
+    overflow: "hidden",
+    borderRadius: 3,
+    bgcolor: "background.default",
+    display: "flex",
+    justifyContent: "center",
+  }}
+>
               <Box
-                component="img"
-                src={preview}
-                alt="preview"
-                sx={{
-                  width: "100%",
-                  maxHeight: 420,
-                  objectFit: "cover",
-                }}
-              />
+  component="img"
+  src={preview}
+  alt="preview"
+  sx={{
+    width: "100%",
+    maxHeight: 600,
+    objectFit: "contain",
+    display: "block",
+    bgcolor: "background.default",
+  }}
+/>
 
               <Button
                 onClick={() => {
