@@ -1,9 +1,14 @@
 "use client";
 
-import { Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+} from "@mui/material";
 
 type Props = {
   value: "following" | "explore";
+
   onChange: (
     value: "following" | "explore"
   ) => void;
@@ -14,41 +19,82 @@ export function FeedTabs({
   onChange,
 }: Props) {
   return (
-    <Tabs
-      value={value}
-      onChange={(_, newValue) =>
-        onChange(newValue)
-      }
+    <Box
       sx={{
-        mb: 1,
+        display: "flex",
 
-        "& .MuiTabs-indicator": {
-          height: 3,
-          borderRadius: 999,
-        },
+        width: "fit-content",
 
-        "& .MuiTab-root": {
-          textTransform: "none",
-          fontWeight: 700,
-          fontSize: 15,
-          minHeight: 48,
-          transition: ".2s",
+        p: 0.5,
 
-          "&.Mui-selected": {
-            color: "primary.main",
-          },
-        },
+        borderRadius: 3,
+
+        bgcolor: "action.hover",
+
+        border: "1px solid",
+        borderColor: "divider",
       }}
     >
-      <Tab
-        value="following"
-        label="Following"
-      />
+      <Tabs
+        value={value}
+        onChange={(_, newValue) =>
+          onChange(newValue)
+        }
+        sx={{
+          minHeight: 0,
 
-      <Tab
-        value="explore"
-        label="Explore"
-      />
-    </Tabs>
+          "& .MuiTabs-indicator": {
+            display: "none",
+          },
+
+          "& .MuiTabs-flexContainer": {
+            gap: 0.5,
+          },
+
+          "& .MuiTab-root": {
+            minHeight: 40,
+
+            px: 3,
+
+            borderRadius: 2,
+
+            textTransform: "none",
+
+            fontWeight: 700,
+
+            fontSize: 14,
+
+            color: "text.secondary",
+
+            transition:
+              "all .25s ease",
+
+            "&:hover": {
+              bgcolor: "action.selected",
+            },
+
+            "&.Mui-selected": {
+              color:
+                "primary.contrastText",
+
+              bgcolor:
+                "primary.main",
+
+              boxShadow: 1,
+            },
+          },
+        }}
+      >
+        <Tab
+          value="following"
+          label="Following"
+        />
+
+        <Tab
+          value="explore"
+          label="Explore"
+        />
+      </Tabs>
+    </Box>
   );
 }
