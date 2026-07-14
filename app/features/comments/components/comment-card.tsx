@@ -147,9 +147,15 @@ boxShadow: animateHighlight
       >
         <CardContent
           sx={{
-            p: 3,
+            p: {
+              xs: 1.5,
+              sm: 3,
+            },
             "&:last-child": {
-              pb: 3,
+              pb: {
+                xs: 1.5,
+                sm: 3,
+              },
             },
           }}
         >
@@ -397,9 +403,15 @@ boxShadow: animateHighlight
 {showReplies && (
   <Box
     sx={{
-      ml: 7,
+      ml: {
+        xs: 2,
+        sm: 7,
+      },
+      pl: {
+        xs:1,
+        sm: 2,
+      },
       mt: 2,
-      pl: 2,
       borderLeft: "2px solid",
       borderColor: "divider"
     }}

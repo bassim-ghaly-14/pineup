@@ -63,7 +63,7 @@ export function MobileNav() {
         transform: "translateX(-50%)",
         width: "calc(100% - 24px)",
         maxWidth: 430,
-        zIndex: 2000,
+        zIndex: 1200,
         height: 74,
       }}
     >

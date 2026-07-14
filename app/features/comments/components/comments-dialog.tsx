@@ -18,7 +18,7 @@ import { useComments } from "../hooks/use-comments";
 import { CommentCard } from "./comment-card";
 import { CreateComment } from "./create-comment";
 import { Comment } from "../types/comment.types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   open: boolean;
@@ -35,14 +35,47 @@ export function CommentsDialog({
     useComments(postId);
   const [editingComment, setEditingComment] =
   useState<Comment | null>(null);
+useEffect(() => {
+  if (!open) return;
 
+  const original = document.body.style.overflow;
+
+  document.body.style.overflow = "hidden";
+
+  return () => {
+    document.body.style.overflow = original;
+  };
+}, [open]);
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-      maxWidth="sm"
-    >
+<Dialog
+  open={open}
+  onClose={onClose}
+  fullWidth
+  maxWidth="sm"
+  scroll="paper"
+  slotProps={{
+    paper: {
+      sx: {
+        m: {
+          xs: 1,
+          sm: 2,
+        },
+        width: {
+          xs: "calc(100% - 16px)",
+          sm: "100%",
+        },
+        maxHeight: {
+          xs: "calc(100% - 32px)",
+          sm: "calc(100% - 64px)",
+        },
+        borderRadius: {
+          xs: 3,
+          sm: 4,
+        },
+      },
+    },
+  }}
+>
       <DialogTitle
         sx={{
           display: "flex",
@@ -57,7 +90,22 @@ export function CommentsDialog({
         </IconButton>
       </DialogTitle>
 
-      <DialogContent dividers>
+<DialogContent
+  dividers
+  sx={{
+    overflowX: "hidden",
+
+    px: {
+      xs: 1.5,
+      sm: 3,
+    },
+
+    pb: {
+      xs: 12,
+      sm: 3,
+    },
+  }}
+>
         {isLoading ? (
           <Stack sx={{ alignItems: "center", justifyContent: "center", py: 4 }}>
             <CircularProgress />
