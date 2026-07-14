@@ -18,7 +18,7 @@ import { useComments } from "../hooks/use-comments";
 import { CommentCard } from "./comment-card";
 import { CreateComment } from "./create-comment";
 import { Comment } from "../types/comment.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Props = {
   open: boolean;
@@ -35,17 +35,7 @@ export function CommentsDialog({
     useComments(postId);
   const [editingComment, setEditingComment] =
   useState<Comment | null>(null);
-useEffect(() => {
-  if (!open) return;
 
-  const original = document.body.style.overflow;
-
-  document.body.style.overflow = "hidden";
-
-  return () => {
-    document.body.style.overflow = original;
-  };
-}, [open]);
   return (
 <Dialog
   open={open}
