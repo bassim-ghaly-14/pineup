@@ -243,38 +243,44 @@ export function RegisterForm() {
         />
       </Stack>
 
-      {/* Strength */}
-      <Box>
-        <Typography variant="caption" color="text.secondary">
-          Password Strength
-        </Typography>
+{/* Strength */}
+{password && (
+  <Box>
+    <Typography variant="caption" color="text.secondary">
+      Password Strength
+    </Typography>
 
-        <LinearProgress
-          variant="determinate"
-          value={(passwordStrength / 5) * 100}
-          sx={{ mt: 1, height: 8, borderRadius: 8 }}
-        />
+    <LinearProgress
+      variant="determinate"
+      value={(passwordStrength / 5) * 100}
+      sx={{
+        mt: 1,
+        height: 8,
+        borderRadius: 8,
+      }}
+    />
 
-        <Typography
-          variant="caption"
-          sx={{
-            mt: 1,
-            display: "block",
-            color:
-              passwordStrength === 5
-                ? "success.main"
-                : passwordStrength >= 3
-                ? "warning.main"
-                : "error.main",
-          }}
-        >
-          {passwordStrength === 5
-            ? "Strong password"
+    <Typography
+      variant="caption"
+      sx={{
+        mt: 1,
+        display: "block",
+        color:
+          passwordStrength === 5
+            ? "success.main"
             : passwordStrength >= 3
-            ? "Good password"
-            : "Weak password"}
-        </Typography>
-      </Box>
+            ? "warning.main"
+            : "error.main",
+      }}
+    >
+      {passwordStrength === 5
+        ? "Strong password"
+        : passwordStrength >= 3
+        ? "Good password"
+        : "Weak password"}
+    </Typography>
+  </Box>
+)}
 
       {/* Submit */}
       <Button type="submit" variant="contained" size="large" disabled={mutation.isPending || !isValid}>
