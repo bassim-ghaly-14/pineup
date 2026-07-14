@@ -14,6 +14,7 @@ import { UserAvatar } from "@/components/common/user-avatar";
 import { VerifiedBadge } from "@/components/common/verified-badge";
 import { isVerified } from "@/utils/is-verified";
 import { GlassCard } from "@/components/common/glass-card";
+import { LinkifyText } from "@/components/common/linkify-text";
 
 type Props = {
   reply: Comment;
@@ -135,9 +136,7 @@ export function ReplyCard({
   fontSize: 14.5,
 }}
             >
-              {
-                reply.content
-              }
+              <LinkifyText text={reply.content} />
             </Typography>
 
 

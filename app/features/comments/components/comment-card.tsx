@@ -34,6 +34,7 @@ import { UserAvatar } from "@/components/common/user-avatar";
 import { isVerified } from "@/utils/is-verified";
 import { VerifiedBadge } from "@/components/common/verified-badge";
 import { GlassCard } from "@/components/common/glass-card";
+import { LinkifyText } from "@/components/common/linkify-text";
 
 type Props = {
   postId: string;
@@ -230,7 +231,7 @@ boxShadow: animateHighlight
                   fontSize: 15,
                 }}
               >
-                {comment.content}
+                <LinkifyText text={comment.content} />
               </Typography>
               {comment.image && (
                 <Box

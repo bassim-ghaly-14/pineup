@@ -36,6 +36,7 @@ import { UserAvatar } from "@/components/common/user-avatar";
 import { isVerified } from "@/utils/is-verified";
 import { VerifiedBadge } from "@/components/common/verified-badge";
 import { GlassCard } from "@/components/common/glass-card";
+import { LinkifyText } from "@/components/common/linkify-text";
 
 type Props = {
   post: Post;
@@ -288,7 +289,7 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
               fontSize: 15,
             }}
           >
-            {post.body}
+            <LinkifyText text={post.body} />
           </Typography>
         )}
 
@@ -438,9 +439,7 @@ export function PostCard({ post, hideCommentsDialog=false, }: Props) {
           fontSize: 14.5,
         }}
       >
-        {
-          post.sharedPost.body
-        }
+<LinkifyText text={post.sharedPost.body} />
       </Typography>
     )}
 
