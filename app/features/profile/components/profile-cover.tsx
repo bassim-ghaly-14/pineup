@@ -2,18 +2,25 @@
 
 import { Box } from "@mui/material";
 import DefaultCover from "@/assets/pineup-cover.png"
+import DefaultAvatar from "@/assets/default-avatar.png"
 type Props = {
   cover?: string;
   avatar?: string;
   name: string;
 };
 const DEFAULT_COVER = DefaultCover.src;
+const DEFAULT_AVATAR = DefaultAvatar.src;
 export function ProfileCover({
   cover,
   avatar,
   name,
 }: Props) {
   const coverImage = cover?.trim() || DEFAULT_COVER;
+const avatarImage =
+  avatar?.trim() &&
+  !avatar.includes("default-profile.png")
+    ? avatar
+    : DEFAULT_AVATAR;
   return (
     <Box
       sx={{
@@ -38,7 +45,7 @@ export function ProfileCover({
 
       <Box
         component="img"
-        src={avatar}
+        src={avatarImage}
         alt={name}
         sx={{
           position: "absolute",
@@ -52,7 +59,7 @@ export function ProfileCover({
           },
           borderRadius: "50%",
           objectFit: "cover",
-          bottom: -30,
+          bottom: -25,
           left: {
             xs: 24,
             md: 40,

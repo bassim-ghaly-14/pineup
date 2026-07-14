@@ -55,11 +55,9 @@ const {
 } = useBookmarks();
 
   const user = data?.user;
-
+console.log("PROFILE ID:", user?._id);
   const isOwner =
     currentUser?.user?._id === user?._id;
-
-
 
   if(isPending){
     return <Loader />;

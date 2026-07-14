@@ -13,7 +13,6 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { useState } from "react";
 import { CreatePostDialog } from "@/features/posts/components/create-post-dialog";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { ROUTES } from "@/constants/routes";
 
 export function MobileNav() {
   const { data } = useAuth();

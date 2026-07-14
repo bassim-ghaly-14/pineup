@@ -7,19 +7,29 @@ import {
 
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import DefaultAvatar from "@/assets/default-avatar.png";
 
 type Props = AvatarProps & {
   userId?: string;
 };
 
+const DEFAULT_AVATAR = DefaultAvatar.src;
+
 export function UserAvatar({
   userId,
   onClick,
+  src,
   ...props
 }: Props) {
 
   const router = useRouter();
 
+  const avatarImage =
+    typeof src === "string" &&
+    src.trim() &&
+    !src.includes("default-profile.png")
+      ? src
+      : DEFAULT_AVATAR;
 
   const handleClick = (
     event: React.MouseEvent<HTMLDivElement>
@@ -34,11 +44,10 @@ export function UserAvatar({
     }
   };
 
-
   return (
-    <>
     <Avatar
       {...props}
+      src={avatarImage}
       onClick={handleClick}
       sx={[
         {
@@ -68,6 +77,5 @@ export function UserAvatar({
           : []),
       ]}
     />
-    </>
   );
 }

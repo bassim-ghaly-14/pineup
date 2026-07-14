@@ -28,6 +28,8 @@ import type { FollowUser } from "@/features/auth/types/auth.types";
 import { useFollowUser } from "@/features/users/hooks/use-follow-user";
 import { useUnfollowUser } from "@/features/users/hooks/use-unfollow-user";
 import { GlassCard } from "@/components/common/glass-card";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
 
 type Props = {
   open: boolean;
@@ -114,7 +116,6 @@ useEffect(() => {
           px: 3,
           pt: 3,
           pb: 2,
-        //   marginBottom: 3,
           backdropFilter: "blur(24px)",
           bgcolor: "background.paper",
           borderBottom: "1px solid",
@@ -268,7 +269,7 @@ useEffect(() => {
 
             <AnimatePresence mode="popLayout">
 
-              <Stack spacing={1.5}>
+              <Stack sx={{padding: 2}} spacing={1.5}>
 
 {filteredUsers.map((user, index) => {
 const isMe =
@@ -338,15 +339,28 @@ return (
         }}
       >
 
-        <Typography
-          noWrap
-          sx={{
-            fontWeight: 800,
-            fontSize: 16,
-          }}
-        >
-          {user.name}
-        </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{
+    alignItems: "center",
+    minWidth: 0,
+  }}
+>
+  <Typography
+    noWrap
+    sx={{
+      fontWeight: 800,
+      fontSize: 16,
+    }}
+  >
+    {user.name}
+  </Typography>
+
+  {isVerified(user._id) && (
+    <VerifiedBadge size={16} />
+  )}
+</Stack>
 
         <Typography
           variant="body2"

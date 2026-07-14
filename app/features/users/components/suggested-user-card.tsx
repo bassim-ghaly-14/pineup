@@ -6,12 +6,15 @@ import {
   Box,
   Button,
   Typography,
+  Stack,
 } from "@mui/material";
 
 import { ROUTES } from "@/constants/routes";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { User } from "../types/user.types";
 import { useFollowUser } from "../hooks/use-follow-user";
+import { isVerified } from "@/utils/is-verified";
+import { VerifiedBadge } from "@/components/common/verified-badge";
 
 type Props = {
   user: User;
@@ -54,9 +57,38 @@ export function SuggestedUserCard({
 
       <Box sx={{ flex: 1, minWidth: 0, }}>
 
-        <Typography sx={{fontWeight:700, maxWidth: "100%",}} noWrap>
-          {user.name}
-        </Typography>
+<Stack
+  direction="row"
+  spacing={0.5}
+  sx={{
+    maxWidth: "100%",
+    alignItems:"center",
+  }}
+>
+
+  <Typography
+    sx={{
+      fontWeight:700,
+      maxWidth:"100%",
+    }}
+    noWrap
+  >
+    {user.name}
+  </Typography>
+
+
+  {isVerified(user._id) && (
+    <Box sx={{
+      display:"flex",
+      flexShrink: 0,
+      "& svg": {
+        fontSize: 16,},
+    }}>
+    <VerifiedBadge />
+    </Box>
+  )}
+
+</Stack>
 
         <Typography
   variant={compact ? "caption" : "body2"}
