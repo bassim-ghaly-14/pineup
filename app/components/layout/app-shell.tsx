@@ -45,7 +45,7 @@ export function AppShell({
           },
           py:3,
           pb:{
-            xs:12,
+            xs:16,
             lg:3,
           },
         }}

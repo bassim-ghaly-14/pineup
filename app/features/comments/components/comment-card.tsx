@@ -154,10 +154,16 @@ boxShadow: animateHighlight
           }}
         >
           <Stack
-            direction="row"
-            spacing={2}
-            sx={{ alignItems: "flex-start" }}
-          >
+  direction="row"
+  spacing={{
+    xs: 1.25,
+    sm: 2,
+  }}
+  sx={{
+    alignItems: "flex-start",
+    minWidth: 0,
+  }}
+>
             <UserAvatar
               src={comment.commentCreator.photo}
               userId={comment.commentCreator._id}
@@ -172,11 +178,16 @@ boxShadow: animateHighlight
             >
               {comment.commentCreator.name?.[0]}
             </UserAvatar>
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 1, minWidth: 0, overflow: "hidden", }}>
               <Stack
-                direction="row"
-                sx={{ justifyContent: "space-between" }}
-              >
+  direction="row"
+  sx={{
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    minWidth: 0,
+    gap: 1,
+  }}
+>
                 <Box>
 <Stack
   direction="row"
@@ -223,14 +234,16 @@ boxShadow: animateHighlight
                   </IconButton>
                 )}
               </Stack>
-              <Typography
-                sx={{
-                  mt: 1.4,
-                  whiteSpace: "pre-wrap",
-                  lineHeight: 1.8,
-                  fontSize: 15,
-                }}
-              >
+             <Typography
+  sx={{
+    mt: 1.4,
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    wordBreak: "break-word",
+    lineHeight: 1.8,
+    fontSize: 15,
+  }}
+>
                 <LinkifyText text={comment.content} />
               </Typography>
               {comment.image && (
@@ -252,7 +265,7 @@ boxShadow: animateHighlight
               )}
               <Stack
                 direction="row"
-                spacing={2}
+                spacing={1}
                 sx={{
                   mt: 2,
                   pt: 1.5,
@@ -260,6 +273,8 @@ boxShadow: animateHighlight
                   borderColor: "divider",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  flexWrap: "wrap",
+                  rowGap: 1,
                 }}
               >
               <Box

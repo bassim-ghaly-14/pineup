@@ -58,11 +58,13 @@ export function MobileNav() {
         },
         position: "fixed",
         bottom: 18,
+        mb: "env(safe-area-inset-bottom)",
         left: "50%",
         transform: "translateX(-50%)",
         width: "calc(100% - 24px)",
         maxWidth: 430,
         zIndex: 2000,
+        height: 74,
       }}
     >
       <Stack
