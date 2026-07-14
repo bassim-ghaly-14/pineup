@@ -131,8 +131,12 @@ export function CurrentAccountCard({
 <Stack
   direction="row"
   spacing={1}
+  useFlexGap
   sx={{
     alignItems: "center",
+    flexWrap: "wrap",
+    rowGap: 0.5,
+    minWidth: 0,
   }}
 >
   <Stack
@@ -155,19 +159,20 @@ export function CurrentAccountCard({
     )}
   </Stack>
 
-  <Chip
-    label="Current"
-    size="small"
-    sx={{
-      height: 22,
-      px: .5,
-      bgcolor: "rgba(212,166,58,.16)",
-      color: "primary.main",
-      border: "1px solid rgba(212,166,58,.28)",
-      fontSize: 11,
-      fontWeight: 800,
-    }}
-  />
+<Chip
+  label="Current"
+  size="small"
+  sx={{
+    flexShrink: 0,
+    height: 22,
+    px: 0.5,
+    bgcolor: "rgba(212,166,58,.16)",
+    color: "primary.main",
+    border: "1px solid rgba(212,166,58,.28)",
+    fontSize: 11,
+    fontWeight: 800,
+  }}
+/>
 </Stack>
 
           <Typography

@@ -21,7 +21,6 @@ import { ProfileActions } from "@/features/profile/components/profile-actions";
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 import { ProfilePosts } from "@/features/profile/components/profile-posts";
 import { isVerified } from "@/utils/is-verified";
-import { FollowUsersDialog } from "@/features/profile/components/follow-users-dialog";
 type Props = {
   params: Promise<{
     id:string;
@@ -35,8 +34,6 @@ export default function ProfilePage({
 
   const {id}=use(params);
   const [tab,setTab]=useState(0);
-const [followersOpen, setFollowersOpen] = useState(false);
-const [followingOpen, setFollowingOpen] = useState(false);
   const {
     data,
     isPending,
@@ -108,17 +105,17 @@ console.log("PROFILE ID:", user?._id);
         </Box>
 
 
-        <ProfileStats
-          followers={user.followersCount}
-          following={user.followingCount}
-          bookmarks={
-                      isOwner
-                        ? bookmarks.length
-                        : user.bookmarksCount}
-          isOwner={isOwner}
-          onFollowersClick={() => setFollowersOpen(true)}
-          onFollowingClick={() => setFollowingOpen(true)}
-        />
+<ProfileStats
+  userId={user._id}
+  followers={user.followersCount}
+  following={user.followingCount}
+  bookmarks={
+    isOwner
+      ? bookmarks.length
+      : user.bookmarksCount
+  }
+  isOwner={isOwner}
+/>
 
       </Box>
 
@@ -136,23 +133,6 @@ console.log("PROFILE ID:", user?._id);
         />
       }
 
-<FollowUsersDialog
-    open={followersOpen}
-    title="Followers"
-    users={user.followers}
-    following={user.following}
-    currentUserId={currentUser!.user._id}
-    onClose={() => setFollowersOpen(false)}
-/>
-
-<FollowUsersDialog
-    open={followingOpen}
-    title="Following"
-    users={user.following}
-    following={user.following}
-    currentUserId={currentUser!.user._id}
-    onClose={() => setFollowingOpen(false)}
-/>
     </Stack>
   );
 }

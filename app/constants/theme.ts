@@ -30,10 +30,10 @@ export function pineUpTheme(
 ): ThemeOptions {
   const dark = mode === "dark";
 const radius = {
-  sm: 12,
-  md: 16,
-  lg: 20,
-  xl: 24,
+  sm: 10,
+  md: 14,
+  lg: 16,
+  xl: 20,
 };
 
 const motion = {
@@ -44,7 +44,7 @@ const motion = {
 
 const gold = {
   main: "#D4A63A",
-  light: "#E7C46A",
+  light: "#DDB55A",
   dark: "#B88922",
 };
   const shadows: Shadows = dark
@@ -62,8 +62,8 @@ const gold = {
         "none",
         "0 2px 8px rgba(0,0,0,.05)",
         "0 6px 18px rgba(0,0,0,.08)",
-        "0 12px 30px rgba(0,0,0,.10)",
-        "0 20px 45px rgba(0,0,0,.12)",
+        "0 8px 24px rgba(0,0,0,.08)",
+        "0 16px 36px rgba(0,0,0,.10)",
         ...Array(20).fill(
           "0 20px 45px rgba(0,0,0,.12)"
         ),
@@ -84,8 +84,8 @@ const gold = {
         dark: dark ? "#14171D" : "#D8DDE5",
       },
       background: {
-        default: dark ? "#0F1115" : "#F7F8FA",
-        paper: dark ? "#1A1F27" : "#FFFFFF",
+        default: dark ? "#0F1115" : "#F3F4F6",
+        paper: dark ? "#1A1F27" : "#FCFCFD",
       },
       text: {
         primary: dark ? "#FFFFFF" : "#111827",

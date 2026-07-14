@@ -11,12 +11,11 @@ import { ROUTES } from "@/constants/routes";
 import { GlassCard } from "@/components/common/glass-card";
 
 type Props = {
+  userId: string;
   followers: number;
   following: number;
   bookmarks?: number;
   isOwner?: boolean;
-  onFollowersClick?: () => void;
-  onFollowingClick?: () => void;
 };
 type StatItem = {
   label: string;
@@ -24,25 +23,29 @@ type StatItem = {
   onClick?: () => void;
 };
 export function ProfileStats({
+  userId,
   followers,
   following,
   bookmarks = 0,
   isOwner = false,
-  onFollowersClick,
-  onFollowingClick,
 }: Props) {
   const router = useRouter();
-
 const items: StatItem[] = [
   {
     label: "Followers",
     value: followers,
-    onClick: onFollowersClick,
+    onClick: () =>
+      router.push(
+        ROUTES.PROFILE_FOLLOWERS(userId)
+      ),
   },
   {
     label: "Following",
     value: following,
-    onClick: onFollowingClick,
+    onClick: () =>
+      router.push(
+        ROUTES.PROFILE_FOLLOWING(userId)
+      ),
   },
 ];
 
@@ -54,7 +57,6 @@ const items: StatItem[] = [
         router.push(ROUTES.BOOKMARKS),
     });
   }
-
   return (
     <Box
   sx={{
