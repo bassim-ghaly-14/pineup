@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -13,7 +12,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-
+import { AppDialog } from "@/components/common/app-dialog";
 import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
@@ -94,12 +93,12 @@ export function CreatePostDialog({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-      maxWidth="sm"
-    >
+<AppDialog
+  open={open}
+  onClose={onClose}
+  fullWidth
+  maxWidth="sm"
+>
       <DialogTitle>
         Create Post
       </DialogTitle>
@@ -188,6 +187,6 @@ export function CreatePostDialog({
             : "Publish"}
         </Button>
       </DialogActions>
-    </Dialog>
+    </AppDialog>
   );
 }

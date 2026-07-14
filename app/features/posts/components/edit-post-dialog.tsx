@@ -5,15 +5,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
-
+import { AppDialog } from "@/components/common/app-dialog";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import PhotoCameraRoundedIcon from "@mui/icons-material/PhotoCamera";
 
@@ -95,12 +93,12 @@ export function EditPostDialog({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-      maxWidth="sm"
-    >
+<AppDialog
+  open={open}
+  onClose={onClose}
+  fullWidth
+  maxWidth="sm"
+>
       <DialogTitle>
         Edit Post
       </DialogTitle>
@@ -199,6 +197,6 @@ export function EditPostDialog({
             : "Save"}
         </Button>
       </DialogActions>
-    </Dialog>
+    </AppDialog>
   );
 }

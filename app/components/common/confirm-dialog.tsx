@@ -2,13 +2,12 @@
 
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Typography,
 } from "@mui/material";
-
+import { AppDialog } from "@/components/common/app-dialog";
 type Props = {
   open: boolean;
   title: string;
@@ -29,24 +28,20 @@ export function ConfirmDialog({
   onConfirm,
 }: Props) {
   return <>
-    <Dialog
-      open={open}
-      onClose={onClose}
-      slotProps={{
-        paper: {
-          sx: {
-            borderRadius: 1,
-            minWidth: {
-              xs: "90%",
-              sm: 420,
-            },
-            bgcolor: "background.paper",
-            border: "1px solid",
-            borderColor: "divider",
-          },
+<AppDialog
+  open={open}
+  onClose={onClose}
+  slotProps={{
+    paper: {
+      sx: {
+        minWidth: {
+          xs: "90%",
+          sm: 420,
         },
-      }}
-    >
+      },
+    },
+  }}
+>
       <DialogTitle>
         <Typography
           component="span"
@@ -86,6 +81,6 @@ export function ConfirmDialog({
           {confirmText}
         </Button>
       </DialogActions>
-    </Dialog>
+    </AppDialog>
   </>
 }

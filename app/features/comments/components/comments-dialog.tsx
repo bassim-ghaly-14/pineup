@@ -3,14 +3,13 @@
 import {
   Box,
   CircularProgress,
-  Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
   Stack,
   Typography,
 } from "@mui/material";
-
+import { AppDialog } from "@/components/common/app-dialog";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { useComments } from "../hooks/use-comments";
@@ -37,7 +36,7 @@ export function CommentsDialog({
   useState<Comment | null>(null);
 
   return (
-<Dialog
+<AppDialog
   open={open}
   onClose={onClose}
   fullWidth
@@ -50,14 +49,17 @@ export function CommentsDialog({
           xs: 1,
           sm: 2,
         },
+
         width: {
           xs: "calc(100% - 16px)",
           sm: "100%",
         },
+
         maxHeight: {
           xs: "calc(100% - 32px)",
           sm: "calc(100% - 64px)",
         },
+
         borderRadius: {
           xs: 3,
           sm: 4,
@@ -147,6 +149,6 @@ export function CommentsDialog({
         )}
         </Box>
       </DialogContent>
-    </Dialog>
+    </AppDialog>
   );
 }
