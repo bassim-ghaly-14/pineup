@@ -67,11 +67,6 @@ export function NotificationList({
 const handleNavigation = (
   item: Notification
 ) => {
-console.log("========== CLICK ==========");
-console.log("type:", item.type);
-console.log("entityId:", item.entityId);
-console.log("entity:", item.entity);
-console.log("full notification:", item);
   if (!item.isRead) {
     markRead(item._id);
   }
@@ -113,10 +108,6 @@ case "reply_comment": {
   const commentId =
     item.entity?.topComment?._id ??
     item.entity?._id;
-
-  console.log("postId:", postId);
-  console.log("postUrl:", postUrl);
-  console.log("commentId:", commentId);
 
   if (commentId) {
     router.push(`${postUrl}?comment=${commentId}`);

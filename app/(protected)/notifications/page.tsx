@@ -21,8 +21,11 @@ export default function NotificationsPage() {
 
   const {
     data = [],
+    isPending,
   } = useNotifications();
-
+if (isPending) {
+  return null;
+}
 
   return (
     <Stack spacing={3}>

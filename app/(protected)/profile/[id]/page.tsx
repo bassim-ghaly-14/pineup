@@ -21,6 +21,7 @@ import { ProfileActions } from "@/features/profile/components/profile-actions";
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 import { ProfilePosts } from "@/features/profile/components/profile-posts";
 import { isVerified } from "@/utils/is-verified";
+import { ProfileTabPlaceholder } from "@/features/profile/components/profile-tab-placeholder";
 type Props = {
   params: Promise<{
     id:string;
@@ -127,12 +128,17 @@ console.log("PROFILE ID:", user?._id);
       />
 
 
-      {
-        tab===0 &&
-        <ProfilePosts
-          posts={posts}
-        />
-      }
+{tab === 0 && (
+  <ProfilePosts posts={posts} />
+)}
+
+{tab === 1 && (
+  <ProfileTabPlaceholder type="about" />
+)}
+
+{tab === 2 && (
+  <ProfileTabPlaceholder type="media" />
+)}
 
     </Stack>
   );
