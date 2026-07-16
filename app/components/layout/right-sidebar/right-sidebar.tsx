@@ -15,6 +15,7 @@ import { SuggestedUserCard } from "@/features/users/components/suggested-user-ca
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { OverviewCard } from "./overview-card";
+import { SuggestionsLoader } from "@/components/common/loader";
 
 export function RightSidebar() {
   const {
@@ -58,9 +59,7 @@ useUserIndexer({
 
 
         {isLoading ? (
-          <Typography color="text.secondary">
-            Loading...
-          </Typography>
+             <SuggestionsLoader />
         ) : (
 
         <Stack

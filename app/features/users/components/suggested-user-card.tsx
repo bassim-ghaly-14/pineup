@@ -55,7 +55,13 @@ const isFollowing = user.isFollowing;
         userId={user._id}
       />
 
-      <Box sx={{ flex: 1, minWidth: 0, }}>
+<Box
+  sx={{
+    flex: 1,
+    minWidth: 0,
+    overflow: "hidden",
+  }}
+>
 
 <Stack
   direction="row"
@@ -98,12 +104,16 @@ const isFollowing = user.isFollowing;
           @{user.username}
         </Typography>
 
-        <Typography
-          variant="caption"
-          color="text.secondary"
-        >
-          {user.followersCount} followers
-        </Typography>
+<Typography
+  variant="caption"
+  color="text.secondary"
+  noWrap
+  sx={{
+    display: "block",
+  }}
+>
+  {user.followersCount.toLocaleString()} followers
+</Typography>
 
       </Box>
 
@@ -116,7 +126,8 @@ const isFollowing = user.isFollowing;
  }
  sx={{
    flexShrink:0,
-   minWidth:90,
+   minWidth:74,
+   px: 1.5,
  }}
  onClick={(e)=>{
    e.preventDefault();

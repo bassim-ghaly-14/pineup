@@ -100,7 +100,8 @@ const gold = {
     },
     typography: {
       fontFamily: [
-        "Inter",
+        "var(--font-sans)",
+        "var(--font-arabic)",
         "system-ui",
         "sans-serif",
       ].join(","),

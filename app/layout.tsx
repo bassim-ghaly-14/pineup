@@ -7,7 +7,10 @@ import { ApiProvider } from "@/components/providers/api-provider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { AppShell } from "./components/layout/app-shell";
 import type { Metadata } from "next";
-
+import {
+  englishFont,
+  arabicFont,
+} from "./fonts";
 export const metadata: Metadata = {
   metadataBase: new URL("https://pineup.app"), // if real-domain
   title: {
@@ -77,7 +80,7 @@ export default function RootLayout({
 }) {
 return (
   <html lang="en">
-    <body>
+    <body className={`${englishFont.variable} ${arabicFont.variable}`}>
       <AppRouterCacheProvider>
         <QueryProvider>
           <ThemeProvider>
