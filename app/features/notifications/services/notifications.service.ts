@@ -6,6 +6,7 @@ export const notificationsService = {
     const res = await api.get(
       API_ENDPOINTS.NOTIFICATIONS.GET_ALL
     );
+    
     return res.data?.data?.notifications ?? [];
   },
 

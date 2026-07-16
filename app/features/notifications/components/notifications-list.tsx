@@ -67,7 +67,11 @@ export function NotificationList({
 const handleNavigation = (
   item: Notification
 ) => {
-
+console.log("========== CLICK ==========");
+console.log("type:", item.type);
+console.log("entityId:", item.entityId);
+console.log("entity:", item.entity);
+console.log("full notification:", item);
   if (!item.isRead) {
     markRead(item._id);
   }
@@ -93,34 +97,35 @@ const handleNavigation = (
       );
       return;
 
+case "comment_post":
+case "reply_comment": {
+  const postId =
+    typeof item.entity?.post === "string"
+      ? item.entity.post
+      : item.entity?.post?._id;
 
-    case "comment_post":
-    case "reply_comment":
-      if (!item.entityId) {
-        return;
-      }
+  if (!postId) {
+    return;
+  }
 
-      const postUrl =
-        ROUTES.POST(
-          item.entityId
-        );
+  const postUrl = ROUTES.POST(postId);
 
+  const commentId =
+    item.entity?.topComment?._id ??
+    item.entity?._id;
 
-      const commentId =
-        item.entity?.topComment?._id ||
-        item.entity?._id;
+  console.log("postId:", postId);
+  console.log("postUrl:", postUrl);
+  console.log("commentId:", commentId);
 
+  if (commentId) {
+    router.push(`${postUrl}?comment=${commentId}`);
+  } else {
+    router.push(postUrl);
+  }
 
-      if (commentId) {
-        router.push(
-          `${postUrl}?comment=${commentId}`
-        );
-      } else {
-        router.push(postUrl);
-      }
-
-      return;
-
+  return;
+}
 
     case "like_post":
     case "share_post":

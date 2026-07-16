@@ -216,6 +216,7 @@ const commentId = searchParams.get("comment");
                           comment
                         }
                         highlighted={comment._id === commentId}
+                        openReplies={comment._id === commentId}
                         onEdit={
                           (comment) =>
                             setEditingComment(

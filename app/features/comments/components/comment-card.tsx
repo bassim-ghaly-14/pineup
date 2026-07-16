@@ -40,6 +40,7 @@ type Props = {
   postId: string;
   comment: Comment;
   highlighted?: boolean;
+  openReplies?: boolean;
   onEdit: (comment: Comment) => void;
 };
 
@@ -48,6 +49,7 @@ export function CommentCard({
   postId,
   comment,
   highlighted = false,
+  openReplies = false,
   onEdit,
 }: Props) {
   const likeComment =
@@ -110,7 +112,11 @@ const y =
   }, 2000);
   return () => clearTimeout(timer);
 }, [highlighted, SCROLL_OFFSET]);
-
+useEffect(() => {
+  if (openReplies) {
+    setShowReplies(true);
+  }
+}, [openReplies]);
   return (
     <>
       <GlassCard

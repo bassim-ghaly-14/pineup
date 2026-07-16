@@ -28,14 +28,19 @@ export interface Notification {
 
   entity?: {
     reply?: {
-   _id:string;
-   content:string;
-   createdAt:string;
- };
+      _id:string;
+      content:string;
+      createdAt:string;
+    };
     isReply?: boolean;
     parentComment?: string | null;
     _id: string;
 
+    post?:
+    | string
+    | {
+        _id: string;
+      };
     unavailable?: boolean;
 
     body?: string;
