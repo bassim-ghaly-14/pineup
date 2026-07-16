@@ -10,11 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { NotificationList } from "@/features/notifications/components/notifications-list";
+import { NotificationList } from "src/features/notifications/components/notifications-list";
 
-import { GlassCard } from "@/components/common/glass-card";
+import { GlassCard } from "src/components/common/glass-card";
 
-import { useNotifications } from "@/features/notifications/hooks/use-notifications";
+import { useNotifications } from "src/features/notifications/hooks/use-notifications";
 
 
 export default function NotificationsPage() {

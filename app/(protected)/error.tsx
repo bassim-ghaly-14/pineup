@@ -1,5 +1,5 @@
 "use client";
-import { AppState } from "@/components/common/app-state";
+import { AppState } from "src/components/common/app-state";
 export default function Error({
  error,
  reset,

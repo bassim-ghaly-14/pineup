@@ -4,16 +4,16 @@ import {
   SearchRounded,
 } from "@mui/icons-material";
 import { useState } from "react";
-import { useUserSearch } from "@/features/social/hooks/use-user-search";
-import { SearchResults } from "@/features/search/components/search-results";
+import { useUserSearch } from "src/features/social/hooks/use-user-search";
+import { SearchResults } from "src/features/search/components/search-results";
 import {
   Box,
   Stack,
   Typography,
 } from "@mui/material";
 
-import { GlassCard } from "@/components/common/glass-card";
-import { SearchInput } from "@/components/common/search-input";
+import { GlassCard } from "src/components/common/glass-card";
+import { SearchInput } from "src/components/common/search-input";
 
 export default function SearchPage() {
 const [query,setQuery] = useState("");

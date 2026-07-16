@@ -2,12 +2,12 @@
 
 import { use } from "react";
 
-import { Loader } from "@/components/common/loader";
-import { EmptyState } from "@/components/common/empty-state";
+import { Loader } from "src/components/common/loader";
+import { EmptyState } from "src/components/common/empty-state";
 
-import { FollowUsersPage } from "@/features/profile/components/follow-users-page";
+import { FollowUsersPage } from "src/features/profile/components/follow-users-page";
 
-import { useProfile } from "@/features/users/hooks/use-profile";
+import { useProfile } from "src/features/users/hooks/use-profile";
 
 type Props = {
   params: Promise<{

@@ -1,5 +1,5 @@
-import { AuthShell } from "@/features/auth/components/auth-shell";
-import { LoginForm } from "@/features/auth/components/login-form";
+import { AuthShell } from "src/features/auth/components/auth-shell";
+import { LoginForm } from "src/features/auth/components/login-form";
 
 type Props = {
   searchParams: Promise<{

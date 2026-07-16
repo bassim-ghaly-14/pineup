@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/features/auth/hooks/use-auth";
+import { useAuth } from "src/features/auth/hooks/use-auth";
 
 export default function ProfileRedirectPage() {
   const router = useRouter();

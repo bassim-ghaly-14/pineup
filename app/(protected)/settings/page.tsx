@@ -8,9 +8,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { GlassCard } from "@/components/common/glass-card";
-import { ProfilePhotoCard } from "@/features/auth/components/profile-photo-card";
-import { ChangePasswordCard } from "@/features/auth/components/change-password-card";
+import { GlassCard } from "src/components/common/glass-card";
+import { ProfilePhotoCard } from "src/features/auth/components/profile-photo-card";
+import { ChangePasswordCard } from "src/features/auth/components/change-password-card";
 
 export default function SettingsPage() {
   return (

@@ -10,15 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 
-import { FeedList } from "@/features/posts/components/feed-list";
+import { FeedList } from "src/features/posts/components/feed-list";
 
-import { useBookmarks } from "@/features/users/hooks/use-bookmarks";
+import { useBookmarks } from "src/features/users/hooks/use-bookmarks";
 
-import { Loader } from "@/components/common/loader";
+import { Loader } from "src/components/common/loader";
 
-import { AppState } from "@/components/common/app-state";
+import { AppState } from "src/components/common/app-state";
 
-import { GlassCard } from "@/components/common/glass-card";
+import { GlassCard } from "src/components/common/glass-card";
 
 
 export default function BookmarksPage() {

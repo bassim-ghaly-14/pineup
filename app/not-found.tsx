@@ -1,4 +1,4 @@
-import { AppState } from "@/components/common/app-state";
+import { AppState } from "src/components/common/app-state";
 
 export default function NotFound() {
   return (

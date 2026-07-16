@@ -1,11 +1,11 @@
 import "./globals.css";
-import { QueryProvider } from "@/components/providers/query-provider";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { ToastProvider } from "@/components/providers/toast-provider";
-import { SocketProvider } from "@/components/providers/socket-provider";
-import { ApiProvider } from "@/components/providers/api-provider";
+import { QueryProvider } from "src/components/providers/query-provider";
+import { ThemeProvider } from "src/components/providers/theme-provider";
+import { ToastProvider } from "src/components/providers/toast-provider";
+import { SocketProvider } from "src/components/providers/socket-provider";
+import { ApiProvider } from "src/components/providers/api-provider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
-import { AppShell } from "./components/layout/app-shell";
+import { AppShell } from "../src/components/layout/app-shell";
 import type { Metadata } from "next";
 import {
   englishFont,

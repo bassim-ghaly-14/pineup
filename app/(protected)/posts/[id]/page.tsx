@@ -9,15 +9,15 @@ import {
   Typography,
 } from "@mui/material";
 
-import { PageContainer } from "@/components/common/page-container";
-import { AppState } from "@/components/common/app-state";
-import { PostCard } from "@/features/posts/components/post-card";
-import { usePost } from "@/features/posts/hooks/use-post";
+import { PageContainer } from "src/components/common/page-container";
+import { AppState } from "src/components/common/app-state";
+import { PostCard } from "src/features/posts/components/post-card";
+import { usePost } from "src/features/posts/hooks/use-post";
 import { useSearchParams } from "next/navigation";
-import { CreateComment } from "@/features/comments/components/create-comment";
-import { CommentCard } from "@/features/comments/components/comment-card";
-import { useComments } from "@/features/comments/hooks/use-comments";
-import { Comment } from "@/features/comments/types/comment.types";
+import { CreateComment } from "src/features/comments/components/create-comment";
+import { CommentCard } from "src/features/comments/components/comment-card";
+import { useComments } from "src/features/comments/hooks/use-comments";
+import { Comment } from "src/features/comments/types/comment.types";
 
 type Props = {
   params: Promise<{

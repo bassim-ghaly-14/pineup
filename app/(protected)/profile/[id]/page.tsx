@@ -6,22 +6,22 @@ import {
   Stack,
 } from "@mui/material";
 
-import { Loader } from "@/components/common/loader";
-import { EmptyState } from "@/components/common/empty-state";
+import { Loader } from "src/components/common/loader";
+import { EmptyState } from "src/components/common/empty-state";
 
-import { useProfile } from "@/features/users/hooks/use-profile";
-import { useUserPosts } from "@/features/users/hooks/use-user-posts";
-import { useAuth } from "@/features/auth/hooks/use-auth";
-import { useBookmarks } from "@/features/users/hooks/use-bookmarks";
+import { useProfile } from "src/features/users/hooks/use-profile";
+import { useUserPosts } from "src/features/users/hooks/use-user-posts";
+import { useAuth } from "src/features/auth/hooks/use-auth";
+import { useBookmarks } from "src/features/users/hooks/use-bookmarks";
 
-import { ProfileCover } from "@/features/profile/components/profile-cover";
-import { ProfileInfo } from "@/features/profile/components/profile-info";
-import { ProfileStats } from "@/features/profile/components/profile-stats";
-import { ProfileActions } from "@/features/profile/components/profile-actions";
-import { ProfileTabs } from "@/features/profile/components/profile-tabs";
-import { ProfilePosts } from "@/features/profile/components/profile-posts";
-import { isVerified } from "@/utils/is-verified";
-import { ProfileTabPlaceholder } from "@/features/profile/components/profile-tab-placeholder";
+import { ProfileCover } from "src/features/profile/components/profile-cover";
+import { ProfileInfo } from "src/features/profile/components/profile-info";
+import { ProfileStats } from "src/features/profile/components/profile-stats";
+import { ProfileActions } from "src/features/profile/components/profile-actions";
+import { ProfileTabs } from "src/features/profile/components/profile-tabs";
+import { ProfilePosts } from "src/features/profile/components/profile-posts";
+import { isVerified } from "src/utils/is-verified";
+import { ProfileTabPlaceholder } from "src/features/profile/components/profile-tab-placeholder";
 type Props = {
   params: Promise<{
     id:string;

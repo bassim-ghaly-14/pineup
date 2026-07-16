@@ -12,13 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import { GlassCard } from "@/components/common/glass-card";
-import { UserAvatar } from "@/components/common/user-avatar";
+import { GlassCard } from "src/components/common/glass-card";
+import { UserAvatar } from "src/components/common/user-avatar";
 
-import { useSuggestions } from "@/features/users/hooks/use-suggestions";
-import { useFollowUser } from "@/features/users/hooks/use-follow-user";
-import { useUserIndexer } from "@/features/social/hooks/use-user-indexer";
-import { SuggestedUserCard } from "@/features/users/components/suggested-user-card";
+import { useSuggestions } from "src/features/users/hooks/use-suggestions";
+import { useFollowUser } from "src/features/users/hooks/use-follow-user";
+import { useUserIndexer } from "src/features/social/hooks/use-user-indexer";
+import { SuggestedUserCard } from "src/features/users/components/suggested-user-card";
 
 export default function SuggestionsPage() {
 
