@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 
 import { usersService } from "../services/users.service";
-
+import { User } from "../types/user.types";
 import { queryKeys } from "@/constants/query-keys";
 
 import type {
@@ -62,9 +62,30 @@ export function useFollowUser() {
           }
         );
       }
+const previousSuggestions =
+  queryClient.getQueryData<User[]>(
+    queryKeys.users.suggestions()
+  );
 
+
+queryClient.setQueryData<User[]>(
+  queryKeys.users.suggestions(),
+  (old) => {
+    if (!old) return old;
+
+    return old.map((user) =>
+      user._id === userId
+        ? {
+            ...user,
+            isFollowing: true,
+          }
+        : user
+    );
+  }
+);
       return {
         previous,
+        previousSuggestions,
       };
     },
 
@@ -84,7 +105,12 @@ export function useFollowUser() {
         );
 
       }
-
+if(context?.previousSuggestions){
+  queryClient.setQueryData(
+    queryKeys.users.suggestions(),
+    context.previousSuggestions
+  );
+}
     },
 
     onSettled: (
@@ -105,10 +131,11 @@ export function useFollowUser() {
           ),
       });
 
-      queryClient.invalidateQueries({
-        queryKey:
-          queryKeys.users.suggestions(),
-      });
+setTimeout(() => {
+  queryClient.invalidateQueries({
+    queryKey: queryKeys.users.suggestions(),
+  });
+}, 900);
 
       queryClient.invalidateQueries({
           queryKey: queryKeys.users.all,

@@ -25,7 +25,7 @@ export function SuggestedUserCard({
   user,
   compact = false,
 }: Props) {
-
+const isFollowing = user.isFollowing;
   const {
     mutate: follow,
     isPending,
@@ -108,21 +108,27 @@ export function SuggestedUserCard({
       </Box>
 
 <Button
-  size={compact ? "small" : "medium"}
-  variant="contained"
-  sx={{flexShrink: 0,}}
-        disabled={isPending}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+ size={compact ? "small" : "medium"}
+ variant={
+   isFollowing
+    ? "outlined"
+    : "contained"
+ }
+ sx={{
+   flexShrink:0,
+   minWidth:90,
+ }}
+ onClick={(e)=>{
+   e.preventDefault();
+   e.stopPropagation();
 
-          follow({
-            userId: user._id,
-          });
-        }}
-      >
-        Follow
-      </Button>
+   follow({
+     userId:user._id,
+   });
+ }}
+>
+ {isFollowing ? "Following" : "Follow"}
+</Button>
 
     </Box>
 
