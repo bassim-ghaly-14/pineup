@@ -20,20 +20,7 @@ import {
   saveAccount,
 } from "../utils/account-storage";
 
-type ApiError = {
-  message?: string;
-  errors?: string;
-};
-
-function getErrorMessage(
-  error: AxiosError<ApiError>
-) {
-  return (
-    error.response?.data?.message ??
-    error.response?.data?.errors ??
-    "Invalid email or password."
-  );
-}
+import { getApiErrorMessage } from "@/utils/api-error";
 
 export function useLogin() {
   const router = useRouter();
@@ -93,12 +80,12 @@ localStorage.setItem(
   );
 },
 
-    onError: (error) => {
-      toast.error(
-        getErrorMessage(
-          error as AxiosError<ApiError>
-        )
-      );
-    },
+onError: (error) => {
+  toast.error(
+    getApiErrorMessage(
+      error
+    )
+  );
+},
   });
 }

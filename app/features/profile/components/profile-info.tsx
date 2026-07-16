@@ -5,10 +5,12 @@ import {
   Typography,
 } from "@mui/material";
 import { VerifiedBadge } from "@/components/common/verified-badge";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 type Props = {
   name: string;
   username: string;
   bio?: string;
+  createdAt: string;
   isVerified?: boolean;
 };
 
@@ -16,8 +18,16 @@ export function ProfileInfo({
   name,
   username,
   bio,
+  createdAt,
   isVerified,
 }: Props) {
+const joinedDate = new Intl.DateTimeFormat(
+  "en",
+  {
+    month: "long",
+    year: "numeric",
+  }
+).format(new Date(createdAt));
   return (
     <Box
       sx={{
@@ -64,6 +74,26 @@ export function ProfileInfo({
           {bio}
         </Typography>
       )}
+<Box
+  sx={{
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+    mt: bio ? 2 : 1,
+    color: "text.secondary",
+  }}
+>
+  <CalendarMonthRoundedIcon
+    sx={{ fontSize: 18 }}
+  />
+
+  <Typography
+    variant="body2"
+    color="inherit"
+  >
+    Joined {joinedDate}
+  </Typography>
+</Box>
     </Box>
   );
 }

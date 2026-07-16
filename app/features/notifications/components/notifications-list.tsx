@@ -19,10 +19,10 @@ import { VerifiedBadge } from "@/components/common/verified-badge";
 import { isVerified } from "@/utils/is-verified";
 import {
   getNotificationBody,
-  getNotificationTitle,
+  getNotificationAction,
 } from "@/utils/notification.mapper";
 
-import { formatDate } from "@/utils/format-date";
+import { formatRelativeDate } from "@/utils/format-date";
 import { Notification } from "../types/notifications-types";
 import { ROUTES } from "@/constants/routes";
 import { UserAvatar } from "@/components/common/user-avatar";
@@ -123,17 +123,12 @@ if (item.entityType === "post") {
           item: Notification,
           index: number
         ) => {
-          const title =
-            getNotificationTitle(item);
           const body =
             getNotificationBody(item);
-          const action = title.replace(
-  `${item.actor?.name ?? "Someone"} `,
-  ""
-);
           const isUnavailable =
             item.entity?.unavailable === true;
-
+const action =
+  getNotificationAction(item);
           return (
             <Box
               key={item._id}
@@ -194,27 +189,23 @@ if (item.entityType === "post") {
     spacing={0.5}
     sx={{ alignItems: "center", flexWrap:"wrap" }}
   >
-    <Typography
-      component="span"
-      sx={{
-        fontWeight: item.isRead ? 500 : 700,
-      }}
-    >
-      {item.actor?.name ?? "Someone"}
-    </Typography>
+<Typography sx={{fontWeight:700}}
+  component="span"
+>
+  {item.actor?.name ?? "Someone"}
+</Typography>
 
-    {isVerified(item.actor?._id) && (
-      <VerifiedBadge size={16} />
-    )}
+{isVerified(item.actor?._id) && (
+  <VerifiedBadge size={16} />
+)}
 
-    <Typography
-      component="span"
-      sx={{
-        fontWeight: item.isRead ? 500 : 700,
-      }}
-    >
-      {action}
-    </Typography>
+<Typography sx={{fontWeight:400}}
+  component="span"
+  color="text.primary"
+>
+  {" "}
+  {action}
+</Typography>
   </Stack>
 }
                   secondary={
@@ -241,9 +232,9 @@ if (item.entityType === "post") {
                             "block",
                         }}
                       >
-                        {formatDate(
-                          item.createdAt
-                        )}
+                        {formatRelativeDate(
+  item.createdAt
+)}
                       </Typography>
 
                       <Typography

@@ -238,21 +238,13 @@ export function Navbar() {
               <NotificationBell />
             </PremiumIconButton>
 
-            <Box
-              onClick={(e) =>
-                setAnchorEl(
-                  e.currentTarget
-                )
-              }
-              sx={{
-                cursor: "pointer",
-              }}
-            >
-              <UserAvatar
-                src={data?.user?.photo}
-                alt={data?.user?.name}
-              />
-            </Box>
+<UserAvatar
+  src={data?.user?.photo}
+  alt={data?.user?.name}
+  onClick={(e) => {
+    setAnchorEl(e.currentTarget);
+  }}
+/>
           </Stack>
         </Toolbar>
       </AppBar>

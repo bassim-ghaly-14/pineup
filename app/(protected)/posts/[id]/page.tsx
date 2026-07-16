@@ -89,6 +89,7 @@ const commentId = searchParams.get("comment");
         <PostCard
           post={post}
           hideCommentsDialog
+          showFullDate
         />
 
         <Box

@@ -91,7 +91,10 @@ export function EditPostDialog({
       }
     );
   };
-
+const hasChanges =
+  body.trim() !== initialBody.trim() ||
+  image !== null ||
+  removeImage;
   return (
 <AppDialog
   open={open}
@@ -121,30 +124,27 @@ export function EditPostDialog({
           spacing={2}
           sx={{ mt: 3 }}
         >
-          <Button
-            component="label"
-            variant="outlined"
-            startIcon={
-              <PhotoCameraRoundedIcon />
-            }
-          >
-            Change Image
+<Button
+  component="label"
+  variant="outlined"
+  startIcon={<PhotoCameraRoundedIcon />}
+>
+  {preview ? "Change Image" : "Add Image"}
 
-            <input
-              hidden
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file =
-                  e.target.files?.[0];
+  <input
+    hidden
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files?.[0];
 
-                if (!file) return;
+      if (!file) return;
 
-                setImage(file);
-                setRemoveImage(false);
-              }}
-            />
-          </Button>
+      setImage(file);
+      setRemoveImage(false);
+    }}
+  />
+</Button>
 
           {(preview || image) && (
             <Button
@@ -185,17 +185,17 @@ export function EditPostDialog({
         </Button>
 
         <Button
-          variant="contained"
-          disabled={
-            updatePost.isPending ||
-            !body.trim()
-          }
-          onClick={handleSave}
-        >
-          {updatePost.isPending
-            ? "Saving..."
-            : "Save"}
-        </Button>
+  variant="contained"
+  disabled={
+    updatePost.isPending ||
+    !hasChanges
+  }
+  onClick={handleSave}
+>
+  {updatePost.isPending
+    ? "Saving..."
+    : "Save"}
+</Button>
       </DialogActions>
     </AppDialog>
   );

@@ -29,7 +29,7 @@ import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { Comment } from "../types/comment.types";
 import { useLikeComment } from "../hooks/use-like-comment";
 import { useDeleteComment } from "../hooks/use-delete-comment";
-import { formatDate } from "@/utils/format-date";
+import { formatRelativeDate } from "@/utils/format-date";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { isVerified } from "@/utils/is-verified";
 import { VerifiedBadge } from "@/components/common/verified-badge";
@@ -221,10 +221,10 @@ boxShadow: animateHighlight
                     }}
                   >
                     {
-                      formatDate(
-                        comment.createdAt
-                      )
-                    }
+  formatRelativeDate(
+    comment.createdAt
+  )
+}
                   </Typography>
                 </Box>
                 {isOwner && (

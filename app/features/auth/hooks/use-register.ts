@@ -12,20 +12,7 @@ import { authService } from "../services/auth.service";
 
 import { ROUTES } from "@/constants/routes";
 
-type ApiError = {
-  message?: string;
-  errors?: string;
-};
-
-function getErrorMessage(
-  error: AxiosError<ApiError>
-) {
-  return (
-    error.response?.data?.message ??
-    error.response?.data?.errors ??
-    "Registration failed. Please try again."
-  );
-}
+import { getApiErrorMessage } from "@/utils/api-error";
 
 export function useRegister() {
   const router = useRouter();
@@ -41,12 +28,12 @@ export function useRegister() {
       router.replace(ROUTES.LOGIN);
     },
 
-    onError: (error) => {
-      toast.error(
-        getErrorMessage(
-          error as AxiosError<ApiError>
-        )
-      );
-    },
+onError: (error) => {
+  toast.error(
+    getApiErrorMessage(
+      error
+    )
+  );
+},
   });
 }

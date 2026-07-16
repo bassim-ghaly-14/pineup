@@ -30,7 +30,7 @@ import { CommentsDialog } from "@/features/comments/components/comments-dialog";
 import { useDeletePost } from "../hooks/use-delete-post";
 import { EditPostDialog } from "./edit-post-dialog";
 import { PostActions } from "./post-actions";
-import { formatDate } from "@/utils/format-date";
+import { formatDate,formatRelativeDate } from "@/utils/format-date";
 import { Post } from "../types/post.types";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { isVerified } from "@/utils/is-verified";
@@ -40,10 +40,11 @@ import { LinkifyText } from "@/components/common/linkify-text";
 
 type Props = {
   post: Post;
-  hideCommentsDialog?:boolean;
+  hideCommentsDialog?: boolean;
+  showFullDate?: boolean;
 };
 
-export function PostCard({ post, hideCommentsDialog=false, }: Props) {
+export function PostCard({ post, hideCommentsDialog= false, showFullDate= false }: Props) {
   const router = useRouter();
 
   const { data: me } = useAuth();
@@ -119,14 +120,12 @@ const openPost = () => {
   return (
     <GlassCard
       elevation={0}
-      onClick={openPost}
       sx={{
         borderRadius: 4,
         border: "1px solid",
         borderColor: "divider",
         overflow: "hidden",
         transition: "all .25s ease",
-        cursor: "pointer",
 
         "&:hover": {
           borderColor: "primary.main",
@@ -199,14 +198,17 @@ const openPost = () => {
               @{post.user?.username}
             </Typography>
 
-            <Typography
-              variant="caption"
-              color="text.secondary"
-            >
-              {post.createdAt
-                ? formatDate(post.createdAt)
-                : "Just now"}
-            </Typography>
+<Typography
+  variant="caption"
+  sx={{
+    color: "text.disabled",
+    fontWeight: 500,
+  }}
+>
+  {showFullDate
+    ? formatDate(post.createdAt)
+    : formatRelativeDate(post.createdAt)}
+</Typography>
           </Box>
 
           <IconButton
@@ -227,11 +229,13 @@ const openPost = () => {
           >
             {isOwner && (
               <MenuItem
-                onClick={() => {
-                  setAnchorEl(null);
-                  setOpenEdit(true);
-                }}
-              >
+  onClick={(e) => {
+    e.stopPropagation();
+
+    setAnchorEl(null);
+    setOpenEdit(true);
+  }}
+>
                 <EditRoundedIcon
                   fontSize="small"
                   sx={{ mr: 1.5 }}
@@ -241,11 +245,13 @@ const openPost = () => {
             )}
 
             <MenuItem
-              onClick={async () => {
-                setAnchorEl(null);
-                await copyPostLink();
-              }}
-            >
+  onClick={async (e) => {
+    e.stopPropagation();
+
+    setAnchorEl(null);
+    await copyPostLink();
+  }}
+>
               <ContentCopyRoundedIcon
                 fontSize="small"
                 sx={{ mr: 1.5 }}
@@ -254,11 +260,13 @@ const openPost = () => {
             </MenuItem>
             
             <MenuItem
-              onClick={async () => {
-                setAnchorEl(null);
-                await shareOutside();
-              }}
-            >
+  onClick={async (e) => {
+    e.stopPropagation();
+
+    setAnchorEl(null);
+    await shareOutside();
+  }}
+>
               <IosShareRoundedIcon
                 fontSize="small"
                 sx={{ mr: 1.5 }}
@@ -271,14 +279,16 @@ const openPost = () => {
                 <Divider />
 
                 <MenuItem
-                  sx={{
-                    color: "error.main",
-                  }}
-                  onClick={() => {
-                    setAnchorEl(null);
-                    setOpenDelete(true);
-                  }}
-                >
+  sx={{
+    color: "error.main",
+  }}
+  onClick={(e) => {
+    e.stopPropagation();
+
+    setAnchorEl(null);
+    setOpenDelete(true);
+  }}
+>
                   <DeleteOutlineRoundedIcon
                     fontSize="small"
                     sx={{ mr: 1.5 }}
@@ -289,7 +299,15 @@ const openPost = () => {
             )}
           </Menu>
         </Stack>
-
+<Box
+  onClick={(e) => {
+    e.stopPropagation();
+    openPost();
+  }}
+  sx={{
+    cursor: "pointer",
+  }}
+>
         {post.body && (
           <Typography
             sx={{
@@ -477,7 +495,7 @@ const openPost = () => {
 
   </Box>
 )}
-
+</Box>
         <PostActions
           postId={post._id}
           isLiked={isLiked}

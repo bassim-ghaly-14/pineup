@@ -1,29 +1,26 @@
 import { Notification } from "@/features/notifications/types/notifications-types";
 
-export function getNotificationTitle(
+export function getNotificationAction(
   notification: Notification
 ) {
-  const actor =
-    notification.actor?.name ?? "Someone";
-
   switch (notification.type) {
     case "like_post":
-      return `${actor} liked your post`;
+      return "liked your post";
 
     case "comment_post":
-      return `${actor} commented on your post`;
+      return "commented on your post";
 
     case "reply_comment":
-      return `${actor} replied to your comment`;
+      return "replied to your comment";
 
     case "follow_user":
-      return `${actor} started following you`;
+      return "started following you";
 
     case "share_post":
-      return `${actor} shared your post`;
+      return "reposted your post";
 
     default:
-      return `${actor} interacted with you`;
+      return "interacted with you";
   }
 }
 
@@ -31,7 +28,6 @@ export function getNotificationBody(
   notification: Notification
 ) {
   return (
-    notification.entity?.body ??
-    "Tap to view"
+    notification.entity?.body
   );
 }

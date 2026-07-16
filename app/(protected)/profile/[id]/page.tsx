@@ -89,11 +89,12 @@ console.log("PROFILE ID:", user?._id);
         >
 
           <ProfileInfo
-            name={user.name}
-            username={user.username}
-            bio={user.bio}
-            isVerified={isVerified(user._id)}
-          />
+  name={user.name}
+  username={user.username}
+  bio={user.bio}
+  createdAt={user.createdAt}
+  isVerified={isVerified(user._id)}
+/>
 
 
           <ProfileActions

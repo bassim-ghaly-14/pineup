@@ -71,10 +71,12 @@ export function CreatePostDialog({
 
     const formData = new FormData();
 
-    formData.append(
-      "body",
-      body.trim()
-    );
+    if (body.trim()) {
+  formData.append(
+    "body",
+    body.trim()
+  );
+}
 
     if (image) {
       formData.append(

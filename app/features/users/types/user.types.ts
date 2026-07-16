@@ -14,4 +14,5 @@ export interface User {
   followingCount: number;
   bookmarksCount?:number;
   isFollowing?: boolean;
+  createdAt: string;
 }

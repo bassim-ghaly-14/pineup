@@ -9,7 +9,7 @@ import {
 
 import { Comment } from "../types/comment.types";
 
-import { formatDate } from "@/utils/format-date";
+import { formatRelativeDate } from "@/utils/format-date";
 import { UserAvatar } from "@/components/common/user-avatar";
 import { VerifiedBadge } from "@/components/common/verified-badge";
 import { isVerified } from "@/utils/is-verified";
@@ -121,10 +121,10 @@ export function ReplyCard({
   }}
 >
               {
-                formatDate(
-                  reply.createdAt
-                )
-              }
+  formatRelativeDate(
+    reply.createdAt
+  )
+}
             </Typography>
 
 

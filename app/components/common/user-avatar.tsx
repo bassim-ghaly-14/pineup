@@ -31,18 +31,22 @@ export function UserAvatar({
       ? src
       : DEFAULT_AVATAR;
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>
-  ) => {
-    event.stopPropagation();
-    onClick?.(event);
+const handleClick = (
+  event: React.MouseEvent<HTMLDivElement>
+) => {
+  event.stopPropagation();
 
-    if (userId) {
-      router.push(
-        ROUTES.PROFILE_BY_ID(userId)
-      );
-    }
-  };
+  if (onClick) {
+    onClick(event);
+    return;
+  }
+
+  if (userId) {
+    router.push(
+      ROUTES.PROFILE_BY_ID(userId)
+    );
+  }
+};
 
   return (
     <Avatar
@@ -57,18 +61,20 @@ export function UserAvatar({
           border: "2px solid",
           borderColor: "primary.main",
 
-          cursor: userId
-            ? "pointer"
-            : "default",
+          cursor:
+  userId || onClick
+    ? "pointer"
+    : "default",
 
           transition:
             "border-color .25s, transform .25s",
 
-          "&:hover": userId
-            ? {
-                transform: "scale(1.05)",
-              }
-            : {},
+          "&:hover":
+  userId || onClick
+    ? {
+        transform: "scale(1.05)",
+      }
+    : {},
         },
         ...(Array.isArray(props.sx)
           ? props.sx
