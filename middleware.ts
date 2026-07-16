@@ -34,11 +34,14 @@ export function middleware(
 }
 
 export const config = {
-  matcher: [
-    "/feed/:path*",
-    "/profile/:path*",
-    "/bookmarks/:path*",
-    "/notifications/:path*",
-    "/settings/:path*",
-  ],
+  matcher:[
+ "/feed/:path*",
+ "/profile/:path*",
+ "/bookmarks/:path*",
+ "/notifications/:path*",
+ "/settings/:path*",
+ "/posts/:path*",
+ "/search/:path*",
+ "/suggestions/:path*"
+]
 };

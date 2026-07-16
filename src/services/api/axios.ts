@@ -1,5 +1,5 @@
 import axios from "axios";
-import { STORAGE_KEYS } from "src/constants/storage-keys";
+import { STORAGE_KEYS } from "@/constants/storage-keys";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "",
