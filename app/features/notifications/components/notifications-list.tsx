@@ -27,7 +27,13 @@ import { Notification } from "../types/notifications-types";
 import { ROUTES } from "@/constants/routes";
 import { UserAvatar } from "@/components/common/user-avatar";
 
-export function NotificationList() {
+type Props = {
+  onClose?: () => void;
+};
+
+export function NotificationList({
+  onClose,
+}: Props) {
   const {
     data = [],
     isPending,
@@ -58,58 +64,84 @@ export function NotificationList() {
     );
   }
 
-    const handleNavigation = (
-      item: Notification
-    ) => {
+const handleNavigation = (
+  item: Notification
+) => {
 
-      if (!item.isRead) {
-        markRead(item._id);
+  if (!item.isRead) {
+    markRead(item._id);
+  }
+
+  onClose?.();
+
+
+  if (item.entity?.unavailable) {
+    toast.info(
+      "This content is no longer available."
+    );
+    return;
+  }
+
+
+  switch (item.type) {
+
+    case "follow_user":
+      router.push(
+        ROUTES.PROFILE_BY_ID(
+          item.actor._id
+        )
+      );
+      return;
+
+
+    case "comment_post":
+    case "reply_comment":
+      if (!item.entityId) {
+        return;
       }
 
-      switch (item.type) {
+      const postUrl =
+        ROUTES.POST(
+          item.entityId
+        );
 
-        case "follow_user":
-          router.push(
-            ROUTES.PROFILE_BY_ID(
-              item.actor._id
-            )
-          );
-          return;
 
-        default:
+      const commentId =
+        item.entity?.topComment?._id ||
+        item.entity?._id;
 
-          if (
-            item.entity?.unavailable
-          ) {
-            toast.info(
-              "This post is no longer available."
-            );
 
-            return;
-          }
-if (!item.entityId) return;
-
-if (item.entityType === "post") {
-  const postUrl = ROUTES.POST(item.entityId);
-
-  const isCommentNotification =
-    item.type === "comment_post";
-
-  const commentId =
-    item.entity?.topComment?._id;
-
-  router.push(
-    isCommentNotification && commentId
-      ? `${postUrl}?comment=${commentId}`
-      : postUrl
-  );
-
-  return;
-}
-
-          return;
+      if (commentId) {
+        router.push(
+          `${postUrl}?comment=${commentId}`
+        );
+      } else {
+        router.push(postUrl);
       }
-    };
+
+      return;
+
+
+    case "like_post":
+    case "share_post":
+
+      if (!item.entityId) {
+        return;
+      }
+
+      router.push(
+        ROUTES.POST(
+          item.entityId
+        )
+      );
+
+      return;
+
+
+    default:
+      return;
+  }
+};
 
   return (
     <List
@@ -134,7 +166,7 @@ const action =
               key={item._id}
             >
               <ListItemButton
-                disabled={isUnavailable}
+                // disabled={isUnavailable}
                 onClick={() =>
                   handleNavigation(item)
                 }
@@ -173,6 +205,7 @@ const action =
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
+                    onClose?.();
 
                     router.push(
                       ROUTES.PROFILE_BY_ID(

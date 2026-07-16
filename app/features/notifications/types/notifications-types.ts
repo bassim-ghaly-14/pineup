@@ -27,6 +27,13 @@ export interface Notification {
   readAt?: string;
 
   entity?: {
+    reply?: {
+   _id:string;
+   content:string;
+   createdAt:string;
+ };
+    isReply?: boolean;
+    parentComment?: string | null;
     _id: string;
 
     unavailable?: boolean;

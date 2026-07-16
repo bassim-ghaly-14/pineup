@@ -90,7 +90,7 @@ export function NotificationsDropdown({
           overflowY: "auto",
         }}
       >
-        <NotificationList />
+        <NotificationList onClose={onClose} />
       </Box>
     </Menu>
   );

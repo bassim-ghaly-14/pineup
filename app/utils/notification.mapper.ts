@@ -3,12 +3,22 @@ import { Notification } from "@/features/notifications/types/notifications-types
 export function getNotificationAction(
   notification: Notification
 ) {
+const isReply =
+  !!notification.entity?.parentComment ||
+  !!notification.entity?.isReply;
+
+  if (notification.entity?.unavailable) {
+    return "This content is no longer available";
+  }
+
   switch (notification.type) {
     case "like_post":
       return "liked your post";
 
     case "comment_post":
-      return "commented on your post";
+      return isReply
+        ? "replied to your comment"
+        : "commented on your post";
 
     case "reply_comment":
       return "replied to your comment";
@@ -27,7 +37,9 @@ export function getNotificationAction(
 export function getNotificationBody(
   notification: Notification
 ) {
-  return (
-    notification.entity?.body
-  );
+  if (notification.entity?.unavailable) {
+    return null;
+  }
+
+  return notification.entity?.body ?? "";
 }
