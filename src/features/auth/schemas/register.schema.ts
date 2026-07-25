@@ -51,6 +51,7 @@ export const registerSchema = z
 
     password: z
       .string()
+      .trim()
       .min(1, "Password is required.")
       .regex(
         PASSWORD_REGEX,
@@ -59,6 +60,7 @@ export const registerSchema = z
 
     rePassword: z
       .string()
+      .trim()
       .min(1, "Please confirm your password."),
   })
   .superRefine((data, ctx) => {
@@ -79,6 +81,16 @@ export const registerSchema = z
         code: z.ZodIssueCode.custom,
         path: ["dateOfBirth"],
         message: "Invalid date of birth.",
+      });
+
+      return;
+    }
+
+    if (birth > new Date(MAX_DATE)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["dateOfBirth"],
+        message: "Date of birth cannot be in the future.",
       });
 
       return;

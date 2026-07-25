@@ -37,7 +37,8 @@ export function RegisterForm() {
     formState: { isValid, dirtyFields },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    mode: "onChange",
+    mode: "onTouched",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       username: "",
