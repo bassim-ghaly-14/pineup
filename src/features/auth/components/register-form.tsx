@@ -37,7 +37,7 @@ export function RegisterForm() {
     formState: { isValid, dirtyFields },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    mode: "onTouched",
+    mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
       name: "",
@@ -75,7 +75,7 @@ export function RegisterForm() {
 
   const passwordStrength = useMemo(
     () => calculatePasswordStrength(password ?? ""),
-    [password]
+    [password],
   );
 
   const togglePassword = useCallback(() => {
@@ -90,30 +90,35 @@ export function RegisterForm() {
     (data: RegisterFormValues) => {
       mutation.mutate(data);
     },
-    [mutation]
+    [mutation],
   );
 
   return (
-    <Stack component="form" spacing={2.5} noValidate onSubmit={handleSubmit(onSubmit)}>
+    <Stack
+      component="form"
+      spacing={2.5}
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}>
       {/* Header */}
-      <Box sx={{
-        position: "relative",
-        overflow: "hidden",
-        p: 2.5,
-        borderRadius: 1,
-        background:
-          "linear-gradient(135deg, rgba(212,166,58,.12), rgba(212,166,58,.03))",
-        border: "1px solid rgba(212,166,58,.18)",
-        boxShadow: "0 10px 30px rgba(212,166,58,.08)",
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          inset: 0,
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          p: 2.5,
+          borderRadius: 1,
           background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent)",
-          pointerEvents: "none",
-        },
-      }}>
+            "linear-gradient(135deg, rgba(212,166,58,.12), rgba(212,166,58,.03))",
+          border: "1px solid rgba(212,166,58,.18)",
+          boxShadow: "0 10px 30px rgba(212,166,58,.08)",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent)",
+            pointerEvents: "none",
+          },
+        }}>
         <Typography sx={{ fontWeight: 700, color: "primary.main", mb: 0.5 }}>
           Welcome to PineUp
         </Typography>
@@ -129,7 +134,13 @@ export function RegisterForm() {
           name="name"
           control={control}
           render={({ field, fieldState: { error } }) => (
-            <TextField {...field} fullWidth label="Full Name" error={!!error} helperText={error?.message} />
+            <TextField
+              {...field}
+              fullWidth
+              label="Full Name"
+              error={!!error}
+              helperText={error?.message}
+            />
           )}
         />
 
@@ -142,13 +153,19 @@ export function RegisterForm() {
               fullWidth
               label="Username"
               error={!!error}
-              helperText={error?.message || (!error && field.value ? "Username available" : "")}
+              helperText={
+                error?.message ||
+                (!error && field.value ? "Username available" : "")
+              }
               slotProps={{
                 input: {
                   endAdornment:
                     !error && field.value ? (
                       <InputAdornment position="end">
-                        <CheckCircleRoundedIcon color="success" fontSize="small" />
+                        <CheckCircleRoundedIcon
+                          color="success"
+                          fontSize="small"
+                        />
                       </InputAdornment>
                     ) : undefined,
                 },
@@ -163,7 +180,14 @@ export function RegisterForm() {
         name="email"
         control={control}
         render={({ field, fieldState: { error } }) => (
-          <TextField {...field} fullWidth label="Email Address" type="email" error={!!error} helperText={error?.message} />
+          <TextField
+            {...field}
+            fullWidth
+            label="Email Address"
+            type="email"
+            error={!!error}
+            helperText={error?.message}
+          />
         )}
       />
 
@@ -173,7 +197,15 @@ export function RegisterForm() {
           name="dateOfBirth"
           control={control}
           render={({ field, fieldState: { error } }) => (
-            <TextField {...field} fullWidth type="date" label="Date of Birth" error={!!error} helperText={error?.message} slotProps={{ inputLabel: { shrink: true } }} />
+            <TextField
+              {...field}
+              fullWidth
+              type="date"
+              label="Date of Birth"
+              error={!!error}
+              helperText={error?.message}
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
           )}
         />
 
@@ -181,7 +213,14 @@ export function RegisterForm() {
           name="gender"
           control={control}
           render={({ field, fieldState: { error } }) => (
-            <TextField {...field} select fullWidth label="Gender" value={field.value || ""} error={!!error} helperText={error?.message}>
+            <TextField
+              {...field}
+              select
+              fullWidth
+              label="Gender"
+              value={field.value || ""}
+              error={!!error}
+              helperText={error?.message}>
               <MenuItem value="male">Male</MenuItem>
               <MenuItem value="female">Female</MenuItem>
             </TextField>
@@ -207,7 +246,11 @@ export function RegisterForm() {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={togglePassword}>
-                        {showPassword ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
+                        {showPassword ? (
+                          <VisibilityOffRoundedIcon />
+                        ) : (
+                          <VisibilityRoundedIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -233,7 +276,11 @@ export function RegisterForm() {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={toggleRePassword}>
-                        {showRePassword ? <VisibilityOffRoundedIcon /> : <VisibilityRoundedIcon />}
+                        {showRePassword ? (
+                          <VisibilityOffRoundedIcon />
+                        ) : (
+                          <VisibilityRoundedIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -244,47 +291,59 @@ export function RegisterForm() {
         />
       </Stack>
 
-{/* Strength */}
-{password && (
-  <Box>
-    <Typography variant="caption" color="text.secondary">
-      Password Strength
-    </Typography>
+      {/* Strength */}
+      {password && (
+        <Box>
+          <Typography variant="caption" color="text.secondary">
+            Password Strength
+          </Typography>
 
-    <LinearProgress
-      variant="determinate"
-      value={(passwordStrength / 5) * 100}
-      sx={{
-        mt: 1,
-        height: 8,
-        borderRadius: 8,
-      }}
-    />
+          <LinearProgress
+            variant="determinate"
+            value={(passwordStrength / 5) * 100}
+            sx={{
+              mt: 1,
+              height: 8,
+              borderRadius: 8,
+            }}
+          />
 
-    <Typography
-      variant="caption"
-      sx={{
-        mt: 1,
-        display: "block",
-        color:
-          passwordStrength === 5
-            ? "success.main"
-            : passwordStrength >= 3
-            ? "warning.main"
-            : "error.main",
-      }}
-    >
-      {passwordStrength === 5
-        ? "Strong password"
-        : passwordStrength >= 3
-        ? "Good password"
-        : "Weak password"}
-    </Typography>
-  </Box>
-)}
-
+          <Typography
+            variant="caption"
+            sx={{
+              mt: 1,
+              display: "block",
+              color:
+                passwordStrength === 5
+                  ? "success.main"
+                  : passwordStrength >= 3
+                    ? "warning.main"
+                    : "error.main",
+            }}>
+            {passwordStrength === 5
+              ? "Strong password"
+              : passwordStrength >= 3
+                ? "Good password"
+                : "Weak password"}
+          </Typography>
+        </Box>
+      )}
+      {!isValid && (
+        <Typography
+          variant="caption"
+          sx={{
+            color: "error.main",
+            textAlign: "center",
+          }}>
+          Please complete all required fields to create your account.
+        </Typography>
+      )}
       {/* Submit */}
-      <Button type="submit" variant="contained" size="large" disabled={mutation.isPending || !isValid}>
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        disabled={mutation.isPending || !isValid}>
         {mutation.isPending ? "Creating Account..." : "Create Account"}
       </Button>
     </Stack>
