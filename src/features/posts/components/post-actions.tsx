@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -13,7 +8,7 @@ import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded
 import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 import RepeatRoundedIcon from "@mui/icons-material/RepeatRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-
+import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 import { useLikePost } from "../hooks/use-like-post";
 import { useBookmarkPost } from "../hooks/use-bookmark-post";
 import { useRepostPost } from "../hooks/use-repost-post";
@@ -40,6 +35,7 @@ export function PostActions({
   const likePost = useLikePost();
   const bookmarkPost = useBookmarkPost();
   const repostPost = useRepostPost();
+  const { requireAuth } = useRequireAuthAction();
 
   const iconStyle = {
     borderRadius: 3,
@@ -68,17 +64,19 @@ export function PostActions({
         borderColor: "divider",
         justifyContent: "space-between",
         alignItems: "center",
-      }}
-    >
+      }}>
       <Stack direction="row" spacing={2}>
         <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
           <Tooltip title="Like">
             <IconButton
               sx={iconStyle}
               disabled={likePost.isPending}
-              onClick={() => likePost.mutate(postId)}
-              color={isLiked ? "error" : "default"}
-            >
+              onClick={() =>
+                requireAuth(() => {
+                  likePost.mutate(postId);
+                })
+              }
+              color={isLiked ? "error" : "default"}>
               {isLiked ? (
                 <FavoriteRoundedIcon />
               ) : (
@@ -94,10 +92,7 @@ export function PostActions({
 
         <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
           <Tooltip title="Comments">
-            <IconButton
-              sx={iconStyle}
-              onClick={onCommentsClick}
-            >
+            <IconButton sx={iconStyle} onClick={onCommentsClick}>
               <ChatBubbleOutlineRoundedIcon />
             </IconButton>
           </Tooltip>
@@ -113,9 +108,12 @@ export function PostActions({
           <IconButton
             sx={iconStyle}
             disabled={bookmarkPost.isPending}
-            onClick={() => bookmarkPost.mutate(postId)}
-            color={isBookmarked ? "primary" : "default"}
-          >
+            onClick={() =>
+              requireAuth(() => {
+                bookmarkPost.mutate(postId);
+              })
+            }
+            color={isBookmarked ? "primary" : "default"}>
             {isBookmarked ? (
               <BookmarkRoundedIcon />
             ) : (
@@ -129,8 +127,11 @@ export function PostActions({
             <IconButton
               sx={iconStyle}
               disabled={repostPost.isPending}
-              onClick={() => repostPost.mutate(postId)}
-            >
+              onClick={() =>
+                requireAuth(() => {
+                  repostPost.mutate(postId);
+                })
+              }>
               <RepeatRoundedIcon />
             </IconButton>
           </Tooltip>

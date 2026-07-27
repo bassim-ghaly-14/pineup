@@ -2,12 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import {
-  Box,
-  Button,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 
@@ -15,6 +10,7 @@ import { Comment } from "../types/comment.types";
 
 import { useCreateComment } from "../hooks/use-create-comment";
 import { useUpdateComment } from "../hooks/use-update-comment";
+import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 
 type Props = {
   postId: string;
@@ -32,94 +28,62 @@ export function CreateComment({
   comment,
   onSuccess,
 }: Props) {
-  const [content, setContent] =
-    useState(
-      comment?.content ?? ""
-    );
-
-  const [image, setImage] =
-    useState<File | null>(null);
-
-  const inputRef =
-    useRef<HTMLInputElement>(null);
-
-  const createMutation =
-    useCreateComment();
-
-  const updateMutation =
-    useUpdateComment();
-
-  const mutation =
-    mode === "create"
-      ? createMutation
-      : updateMutation;
-
+  const [content, setContent] = useState(comment?.content ?? "");
+  const [image, setImage] = useState<File | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const createMutation = useCreateComment();
+  const updateMutation = useUpdateComment();
+  const mutation = mode === "create" ? createMutation : updateMutation;
+  const { requireAuth } = useRequireAuthAction();
 
   const submit = () => {
-    if (
-      content.trim().length < 2 &&
-      !image
-    ) {
+    if (content.trim().length < 2 && !image) {
       return;
     }
 
-    const formData =
-      new FormData();
-
+    const formData = new FormData();
 
     if (content.trim()) {
-      formData.append(
-        "content",
-        content.trim()
-      );
+      formData.append("content", content.trim());
     }
-
 
     if (image) {
-      formData.append(
-        "image",
-        image
-      );
+      formData.append("image", image);
     }
 
-
     if (mode === "create") {
-      createMutation.mutate(
-        {
-          postId,
-          formData,
-        },
-        {
-          onSuccess: (res) => {
-            reset();
+      requireAuth(() => {
+        createMutation.mutate(
+          {
+            postId,
+            formData,
           },
-          onError: (err) => {
+          {
+            onSuccess: () => {
+              reset();
+            },
           },
-        }
-      );
+        );
+      });
 
       return;
     }
 
-
     if (!comment?._id) return;
-
 
     updateMutation.mutate(
       {
         postId,
-        commentId:
-          comment._id,
+        commentId: comment._id,
         formData,
       },
       {
         onSuccess: () => {
           reset();
         },
-      }
+      },
     );
   };
-
 
   const reset = () => {
     setContent("");
@@ -132,23 +96,14 @@ export function CreateComment({
     onSuccess?.();
   };
 
-
   return (
     <Stack spacing={2}>
       <TextField
         multiline
         minRows={2}
-        placeholder={
-          mode === "edit"
-            ? "Edit comment..."
-            : "Write a comment..."
-        }
+        placeholder={mode === "edit" ? "Edit comment..." : "Write a comment..."}
         value={content}
-        onChange={(e) =>
-          setContent(
-            e.target.value
-          )
-        }
+        onChange={(e) => setContent(e.target.value)}
         // sx={{
         //   "& .MuiOutlinedInput-root": {
         //     color: "white",
@@ -190,15 +145,13 @@ export function CreateComment({
         />
       )}
 
-
       <input
         ref={inputRef}
         hidden
         type="file"
         accept="image/*"
         onChange={(e) => {
-          const file =
-            e.target.files?.[0];
+          const file = e.target.files?.[0];
 
           if (file) {
             setImage(file);
@@ -206,34 +159,17 @@ export function CreateComment({
         }}
       />
 
-
-      <Stack
-        direction="row"
-        sx={{ justifyContent: "space-between" }}
-      >
+      <Stack direction="row" sx={{ justifyContent: "space-between" }}>
         <Button
-          startIcon={
-            <AddPhotoAlternateRoundedIcon />
-          }
-          onClick={() =>
-            inputRef.current?.click()
-          }
-        >
+          startIcon={<AddPhotoAlternateRoundedIcon />}
+          onClick={() => inputRef.current?.click()}>
           Photo
         </Button>
 
-
         <Button
           variant="contained"
-          disabled={
-            mutation.isPending ||
-            (
-              content.trim().length < 2 &&
-              !image
-            )
-          }
-          onClick={submit}
-        >
+          disabled={mutation.isPending || (content.trim().length < 2 && !image)}
+          onClick={submit}>
           {mutation.isPending
             ? mode === "edit"
               ? "Saving..."

@@ -29,22 +29,19 @@ return {
     pagination?.currentPage ??
     data?.page ??
     page,
-
   pages:
     pagination?.numberOfPages ??
     data?.pages ??
     1,
-
   total:
     pagination?.total ??
     data?.total ??
     0,
 };
   },
-  
+
   async getAll() {
     const res = await api.get(API_ENDPOINTS.POSTS.GET_ALL);
-
     return res.data?.data?.posts ?? res.data?.data ?? [];
   },
 
@@ -62,23 +59,23 @@ return {
     return res.data?.data ?? null;
   },
 
-async update(
-  id: string,
-  formData: FormData
-) {
-  const res = await api.put(
-    API_ENDPOINTS.POSTS.UPDATE(id),
-    formData,
-    {
-      headers: {
-        "Content-Type":
-          "multipart/form-data",
-      },
-    }
-  );
+  async update(
+    id: string,
+    formData: FormData
+  ) {
+    const res = await api.put(
+      API_ENDPOINTS.POSTS.UPDATE(id),
+      formData,
+      {
+        headers: {
+          "Content-Type":
+            "multipart/form-data",
+        },
+      }
+    );
 
-  return res.data?.data ?? null;
-},
+    return res.data?.data ?? null;
+  },
 
   async remove(id: string) {
     const res = await api.delete(API_ENDPOINTS.POSTS.DELETE(id));

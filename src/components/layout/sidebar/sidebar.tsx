@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { MouseEvent } from "react";
+import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 import { Stack, Typography, Box } from "@mui/material";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -43,6 +44,13 @@ const items = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const protectedRoutes = new Set([
+    "/profile",
+    "/bookmarks",
+    "/notifications",
+    "/settings",
+  ]);
+  const { requireAuth } = useRequireAuthAction();
 
   return (
     <GlassCard
@@ -50,8 +58,7 @@ export function Sidebar() {
         p: 2,
         position: "sticky",
         top: 92,
-      }}
-    >
+      }}>
       <Typography
         variant="overline"
         sx={{
@@ -60,8 +67,7 @@ export function Sidebar() {
           mb: 2,
           display: "block",
           letterSpacing: 1.2,
-        }}
-      >
+        }}>
         Navigation
       </Typography>
 
@@ -75,6 +81,17 @@ export function Sidebar() {
               key={item.href}
               component={Link}
               href={item.href}
+              onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+                if (!protectedRoutes.has(item.href)) {
+                  return;
+                }
+
+                e.preventDefault();
+
+                requireAuth(() => {
+                  window.location.href = item.href;
+                });
+              }}
               sx={(theme) => {
                 const isDark = theme.palette.mode === "dark";
 
@@ -86,8 +103,7 @@ export function Sidebar() {
                   ? "rgba(212,166,58,.12)"
                   : "rgba(212,166,58,.10)";
 
-                const activeBorder =
-                  "1px solid rgba(212,166,58,.25)";
+                const activeBorder = "1px solid rgba(212,166,58,.25)";
 
                 return {
                   display: "flex",
@@ -100,17 +116,11 @@ export function Sidebar() {
                   borderRadius: 3,
                   textDecoration: "none",
 
-                  color: active
-                    ? "primary.main"
-                    : "text.primary",
+                  color: active ? "primary.main" : "text.primary",
 
-                  bgcolor: active
-                    ? activeBg
-                    : "transparent",
+                  bgcolor: active ? activeBg : "transparent",
 
-                  border: active
-                    ? activeBorder
-                    : "1px solid transparent",
+                  border: active ? activeBorder : "1px solid transparent",
 
                   transition: "all .25s ease",
 
@@ -119,15 +129,13 @@ export function Sidebar() {
                     transform: "translateX(4px)",
                   },
                 };
-              }}
-            >
+              }}>
               <Icon fontSize="small" />
 
               <Typography
                 sx={{
                   fontWeight: active ? 700 : 500,
-                }}
-              >
+                }}>
                 {item.label}
               </Typography>
             </Box>

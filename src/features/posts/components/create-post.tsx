@@ -18,29 +18,21 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 import { useCreatePost } from "../hooks/use-create-post";
 import { useAuth } from "src/features/auth/hooks/use-auth";
+import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 import { UserAvatar } from "src/components/common/user-avatar";
 import { isVerified } from "src/utils/is-verified";
 import { VerifiedBadge } from "src/components/common/verified-badge";
 import { GlassCard } from "src/components/common/glass-card";
 
-
 export function CreatePost() {
   const [body, setBody] = useState("");
   const [image, setImage] = useState<File | null>(null);
-
-  const inputRef =
-    useRef<HTMLInputElement>(null);
-
-  const mutation =
-    useCreatePost();
-
-  const {data} = useAuth();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const mutation = useCreatePost();
+  const { requireAuth } = useRequireAuthAction();
+  const { data } = useAuth();
   const user = data?.user;
-
-  const preview =
-    image
-      ? URL.createObjectURL(image)
-      : null;
+  const preview = image ? URL.createObjectURL(image) : null;
 
   useEffect(() => {
     return () => {
@@ -56,28 +48,23 @@ export function CreatePost() {
     const formData = new FormData();
 
     if (body.trim()) {
-      formData.append(
-        "body",
-        body.trim()
-      );
+      formData.append("body", body.trim());
     }
 
     if (image) {
-      formData.append(
-        "image",
-        image
-      );
+      formData.append("image", image);
     }
 
-    mutation.mutate(formData, {
-      onSuccess: () => {
-        setBody("");
-        setImage(null);
-
-        if (inputRef.current) {
-          inputRef.current.value = "";
-        }
-      },
+    requireAuth(() => {
+      mutation.mutate(formData, {
+        onSuccess: () => {
+          setBody("");
+          setImage(null);
+          if (inputRef.current) {
+            inputRef.current.value = "";
+          }
+        },
+      });
     });
   };
 
@@ -92,44 +79,30 @@ export function CreatePost() {
         transition: ".25s",
         "&:hover": {
           borderColor: "primary.main",
-          boxShadow:
-            "0 10px 30px rgba(0,0,0,.08)",
+          boxShadow: "0 10px 30px rgba(0,0,0,.08)",
         },
-      }}
-    >
+      }}>
       <CardContent sx={{ p: 3 }}>
         <Stack spacing={2.5}>
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{ alignItems: "flex-start" }}
-          >
+          <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start" }}>
             <UserAvatar
               src={user?.photo}
               sx={{
                 width: 50,
                 height: 50,
-              }}
-            >
+              }}>
               {user?.name?.[0]}
             </UserAvatar>
 
             <Box sx={{ flex: 1 }}>
-<Stack
-  direction="row"
-  spacing={0.5}
-  sx={{ mb: .5, alignItems:"center" }}
->
-  <Typography
-    sx={{ fontWeight: 700 }}
-  >
-    {user?.name}
-  </Typography>
+              <Stack
+                direction="row"
+                spacing={0.5}
+                sx={{ mb: 0.5, alignItems: "center" }}>
+                <Typography sx={{ fontWeight: 700 }}>{user?.name}</Typography>
 
-  {isVerified(user?._id) && (
-    <VerifiedBadge size={18} />
-  )}
-</Stack>
+                {isVerified(user?._id) && <VerifiedBadge size={18} />}
+              </Stack>
 
               <TextField
                 fullWidth
@@ -137,52 +110,47 @@ export function CreatePost() {
                 minRows={3}
                 placeholder="Share something with your network..."
                 value={body}
-                onChange={(e) =>
-                  setBody(
-                    e.target.value
-                  )
-                }
+                onChange={(e) => setBody(e.target.value)}
                 variant="standard"
                 sx={{
-                  "& .MuiInput-root:before, & .MuiInput-root:after, & .MuiInput-underline:before, & .MuiInput-underline:after": {
-                    borderBottom: "none",
-                  },
+                  "& .MuiInput-root:before, & .MuiInput-root:after, & .MuiInput-underline:before, & .MuiInput-underline:after":
+                    {
+                      borderBottom: "none",
+                    },
                 }}
               />
             </Box>
           </Stack>
 
           {preview && (
-           <Box
-  sx={{
-    position: "relative",
-    overflow: "hidden",
-    borderRadius: 3,
-    bgcolor: "background.default",
-    display: "flex",
-    justifyContent: "center",
-  }}
->
+            <Box
+              sx={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: 3,
+                bgcolor: "background.default",
+                display: "flex",
+                justifyContent: "center",
+              }}>
               <Box
-  component="img"
-  src={preview}
-  alt="preview"
-  sx={{
-    width: "100%",
-    maxHeight: 600,
-    objectFit: "contain",
-    display: "block",
-    bgcolor: "background.default",
-  }}
-/>
+                component="img"
+                src={preview}
+                alt="preview"
+                sx={{
+                  width: "100%",
+                  maxHeight: 600,
+                  objectFit: "contain",
+                  display: "block",
+                  bgcolor: "background.default",
+                }}
+              />
 
               <Button
                 onClick={() => {
                   setImage(null);
 
                   if (inputRef.current) {
-                    inputRef.current.value =
-                      "";
+                    inputRef.current.value = "";
                   }
                 }}
                 sx={{
@@ -193,16 +161,13 @@ export function CreatePost() {
                   width: 40,
                   height: 40,
                   borderRadius: "50%",
-                  bgcolor:
-                    "rgba(0,0,0,.55)",
+                  bgcolor: "rgba(0,0,0,.55)",
                   color: "#fff",
 
                   "&:hover": {
-                    bgcolor:
-                      "rgba(0,0,0,.75)",
+                    bgcolor: "rgba(0,0,0,.75)",
                   },
-                }}
-              >
+                }}>
                 <CloseRoundedIcon />
               </Button>
             </Box>
@@ -214,8 +179,7 @@ export function CreatePost() {
             type="file"
             accept="image/*"
             onChange={(e) => {
-              const file =
-                e.target.files?.[0];
+              const file = e.target.files?.[0];
 
               if (file) {
                 setImage(file);
@@ -230,39 +194,27 @@ export function CreatePost() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-            }}
-          >
+            }}>
             <Button
-              startIcon={
-                <AddPhotoAlternateRoundedIcon />
-              }
-              onClick={() =>
-                inputRef.current?.click()
-              }
+              startIcon={<AddPhotoAlternateRoundedIcon />}
+              onClick={() => inputRef.current?.click()}
               sx={{
                 borderRadius: 99,
                 px: 2.5,
-              }}
-            >
+              }}>
               Add Photo
             </Button>
 
             <Button
               variant="contained"
               endIcon={<SendRoundedIcon />}
-              disabled={
-                mutation.isPending ||
-                (!body.trim() && !image)
-              }
+              disabled={mutation.isPending || (!body.trim() && !image)}
               onClick={submit}
               sx={{
                 borderRadius: 99,
                 px: 3.5,
-              }}
-            >
-              {mutation.isPending
-                ? "Publishing..."
-                : "Publish"}
+              }}>
+              {mutation.isPending ? "Publishing..." : "Publish"}
             </Button>
           </Box>
         </Stack>

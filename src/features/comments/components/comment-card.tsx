@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "src/features/auth/hooks/use-auth";
 import { useReplies } from "../hooks/use-replies";
 import { ReplyCard } from "./reply-card";
@@ -35,6 +31,7 @@ import { isVerified } from "src/utils/is-verified";
 import { VerifiedBadge } from "src/components/common/verified-badge";
 import { GlassCard } from "src/components/common/glass-card";
 import { LinkifyText } from "src/components/common/linkify-text";
+import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 
 type Props = {
   postId: string;
@@ -52,105 +49,83 @@ export function CommentCard({
   openReplies = false,
   onEdit,
 }: Props) {
-  const likeComment =
-    useLikeComment();
-  const deleteComment =
-    useDeleteComment();
-  const [anchorEl, setAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const [confirmOpen, setConfirmOpen] =
-    useState(false);
-  const [showReplies, setShowReplies] =
-    useState(false);
-  const [showReplyBox, setShowReplyBox] = 
-    useState(false);
-  const { data: currentUser } =
-    useAuth();
-  const user =
-    currentUser?.user;
-  const isLiked =
-    comment.likes.includes(
-      user?._id ?? ""
-    );
-  const isOwner =
-    user?._id ===
-    comment.commentCreator._id;
-  const {
-  data: replies,
-  isLoading: repliesLoading,
-} = useReplies({
-  postId,
-  commentId: comment._id,
-  enabled: showReplies,
-});
-const cardRef =
-  useRef<HTMLDivElement>(null);
-const [
-  animateHighlight,
-  setAnimateHighlight,
-] = useState(false);
-useEffect(() => {
-  if (!highlighted || !cardRef.current) {
-    return;
-  }
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      if (!cardRef.current) return;
-const y =
-  window.scrollY +
-  cardRef.current.getBoundingClientRect().top -
-  SCROLL_OFFSET;
-      window.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
-    }, 150);
+  const likeComment = useLikeComment();
+  const deleteComment = useDeleteComment();
+  const { requireAuth } = useRequireAuthAction();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  const [showReplyBox, setShowReplyBox] = useState(false);
+  const { data: currentUser } = useAuth();
+  const user = currentUser?.user;
+  const isLiked = comment.likes.includes(user?._id ?? "");
+  const isOwner = user?._id === comment.commentCreator._id;
+  const { data: replies, isLoading: repliesLoading } = useReplies({
+    postId,
+    commentId: comment._id,
+    enabled: showReplies,
   });
-  setAnimateHighlight(true);
-  const timer = setTimeout(() => {
-    setAnimateHighlight(false);
-  }, 2000);
-  return () => clearTimeout(timer);
-}, [highlighted, SCROLL_OFFSET]);
-useEffect(() => {
-  if (openReplies) {
-    setShowReplies(true);
-  }
-}, [openReplies]);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [animateHighlight, setAnimateHighlight] = useState(false);
+  useEffect(() => {
+    if (!highlighted || !cardRef.current) {
+      return;
+    }
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (!cardRef.current) return;
+        const y =
+          window.scrollY +
+          cardRef.current.getBoundingClientRect().top -
+          SCROLL_OFFSET;
+        window.scrollTo({
+          top: y,
+          behavior: "smooth",
+        });
+      }, 150);
+    });
+    setAnimateHighlight(true);
+    const timer = setTimeout(() => {
+      setAnimateHighlight(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [highlighted, SCROLL_OFFSET]);
+  useEffect(() => {
+    if (openReplies) {
+      setShowReplies(true);
+    }
+  }, [openReplies]);
   return (
     <>
       <GlassCard
         ref={cardRef}
         elevation={0}
-sx={(theme) => ({
-  outline: animateHighlight
-  ? "2px solid"
-  : "none",
-outlineColor: "primary.main",
-boxShadow: animateHighlight
-  ? `0 0 0 6px ${theme.palette.primary.main}22`
-  : undefined,
-  transition:
-  "transform .25s ease, box-shadow .35s ease, outline-color .35s ease",
-  borderRadius: 4,
-  border: "1px solid",
-  borderColor: "divider",
-  background:
-    theme.palette.mode === "dark"
-      ? "linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))"
-      : "linear-gradient(180deg,#fff,#fcfcfc)",
-...( !animateHighlight && {
-  "&:hover": {
-    borderColor: "primary.main",
-    transform: "translateY(-2px)",
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 16px 36px rgba(0,0,0,.35)"
-        : "0 16px 36px rgba(0,0,0,.08)",
-  },
-}),
-})}
-      >
+        sx={(theme) => ({
+          outline: animateHighlight ? "2px solid" : "none",
+          outlineColor: "primary.main",
+          boxShadow: animateHighlight
+            ? `0 0 0 6px ${theme.palette.primary.main}22`
+            : undefined,
+          transition:
+            "transform .25s ease, box-shadow .35s ease, outline-color .35s ease",
+          borderRadius: 4,
+          border: "1px solid",
+          borderColor: "divider",
+          background:
+            theme.palette.mode === "dark"
+              ? "linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))"
+              : "linear-gradient(180deg,#fff,#fcfcfc)",
+          ...(!animateHighlight && {
+            "&:hover": {
+              borderColor: "primary.main",
+              transform: "translateY(-2px)",
+              boxShadow:
+                theme.palette.mode === "dark"
+                  ? "0 16px 36px rgba(0,0,0,.35)"
+                  : "0 16px 36px rgba(0,0,0,.08)",
+            },
+          }),
+        })}>
         <CardContent
           sx={{
             p: {
@@ -163,19 +138,17 @@ boxShadow: animateHighlight
                 sm: 3,
               },
             },
-          }}
-        >
+          }}>
           <Stack
-  direction="row"
-  spacing={{
-    xs: 1.25,
-    sm: 2,
-  }}
-  sx={{
-    alignItems: "flex-start",
-    minWidth: 0,
-  }}
->
+            direction="row"
+            spacing={{
+              xs: 1.25,
+              sm: 2,
+            }}
+            sx={{
+              alignItems: "flex-start",
+              minWidth: 0,
+            }}>
             <UserAvatar
               src={comment.commentCreator.photo}
               userId={comment.commentCreator._id}
@@ -184,78 +157,62 @@ boxShadow: animateHighlight
                 height: 50,
                 border: "2px solid",
                 borderColor: "primary.main",
-                boxShadow:
-                  "0 0 0 4px rgba(212,166,58,.10)",
-              }}
-            >
+                boxShadow: "0 0 0 4px rgba(212,166,58,.10)",
+              }}>
               {comment.commentCreator.name?.[0]}
             </UserAvatar>
-            <Box sx={{ flex: 1, minWidth: 0, overflow: "hidden", }}>
+            <Box sx={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
               <Stack
-  direction="row"
-  sx={{
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    minWidth: 0,
-    gap: 1,
-  }}
->
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  minWidth: 0,
+                  gap: 1,
+                }}>
                 <Box>
-<Stack
-  direction="row"
-  spacing={0.5}
-  sx={{ alignItems: "center" }}
->
-  <Typography
-    sx={{
-      fontWeight: 800,
-      fontSize: 15,
-    }}
-  >
-    {comment.commentCreator.name}
-  </Typography>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    sx={{ alignItems: "center" }}>
+                    <Typography
+                      sx={{
+                        fontWeight: 800,
+                        fontSize: 15,
+                      }}>
+                      {comment.commentCreator.name}
+                    </Typography>
 
-  {isVerified(comment.commentCreator._id) && (
-    <VerifiedBadge size={16} />
-  )}
-</Stack>
+                    {isVerified(comment.commentCreator._id) && (
+                      <VerifiedBadge size={16} />
+                    )}
+                  </Stack>
                   <Typography
                     variant="caption"
                     sx={{
                       color: "text.disabled",
                       fontWeight: 500,
-                    }}
-                  >
-                    {
-  formatRelativeDate(
-    comment.createdAt
-  )
-}
+                    }}>
+                    {formatRelativeDate(comment.createdAt)}
                   </Typography>
                 </Box>
                 {isOwner && (
                   <IconButton
                     size="small"
-                    onClick={(e) =>
-                      setAnchorEl(
-                        e.currentTarget
-                      )
-                    }
-                  >
+                    onClick={(e) => setAnchorEl(e.currentTarget)}>
                     <MoreHorizRoundedIcon fontSize="small" />
                   </IconButton>
                 )}
               </Stack>
-             <Typography
-  sx={{
-    mt: 1.4,
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    wordBreak: "break-word",
-    lineHeight: 1.8,
-    fontSize: 15,
-  }}
->
+              <Typography
+                sx={{
+                  mt: 1.4,
+                  whiteSpace: "pre-wrap",
+                  overflowWrap: "anywhere",
+                  wordBreak: "break-word",
+                  lineHeight: 1.8,
+                  fontSize: 15,
+                }}>
                 <LinkifyText text={comment.content} />
               </Typography>
               {comment.image && (
@@ -271,7 +228,7 @@ boxShadow: animateHighlight
                     objectFit: "cover",
                     borderRadius: 3,
                     border: "1px solid",
-                    borderColor: "divider"
+                    borderColor: "divider",
                   }}
                 />
               )}
@@ -287,37 +244,31 @@ boxShadow: animateHighlight
                   alignItems: "center",
                   flexWrap: "wrap",
                   rowGap: 1,
-                }}
-              >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+                }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}>
                   <IconButton
                     sx={{
-                          borderRadius: 999,
-                          transition: ".25s",
-                          "&:hover": {
-                            bgcolor: "action.hover",
-                            transform: "scale(1.08)",
-                          },
-                        }}
+                      borderRadius: 999,
+                      transition: ".25s",
+                      "&:hover": {
+                        bgcolor: "action.hover",
+                        transform: "scale(1.08)",
+                      },
+                    }}
                     size="small"
-                    color={
-                      isLiked
-                        ? "error"
-                        : "default"
-                    }
+                    color={isLiked ? "error" : "default"}
                     onClick={() =>
-                      likeComment.mutate({
-                        postId,
-                        commentId:
-                          comment._id,
-                      })
-                    }
-                  >
+                      requireAuth(() =>
+                        likeComment.mutate({
+                          postId,
+                          commentId: comment._id,
+                        }),
+                      )
+                    }>
                     {isLiked ? (
                       <FavoriteRoundedIcon fontSize="small" />
                     ) : (
@@ -328,25 +279,18 @@ boxShadow: animateHighlight
                     variant="caption"
                     sx={{
                       fontWeight: 700,
-                      ml: .25,
-                    }}
-                  >
-                    {
-                      comment.likes.length
-                    }
+                      ml: 0.25,
+                    }}>
+                    {comment.likes.length}
                   </Typography>
                 </Box>
                 <Stack
                   direction="row"
                   spacing={0.5}
-                  sx={{ alignItems: "center" }}
-                >
+                  sx={{ alignItems: "center" }}>
                   <IconButton
                     size="small"
-                    onClick={() =>
-                      setShowReplyBox((prev) => !prev)
-                    }
-                  >
+                    onClick={() => setShowReplyBox((prev) => !prev)}>
                     <ReplyRoundedIcon fontSize="small" />
                   </IconButton>
                   <Typography
@@ -354,12 +298,9 @@ boxShadow: animateHighlight
                     sx={{
                       cursor: "pointer",
                       fontWeight: 700,
-                      "&:hover": {color: "primary.main",},
+                      "&:hover": { color: "primary.main" },
                     }}
-                    onClick={() =>
-                      setShowReplies((prev) => !prev)
-                    }
-                  >
+                    onClick={() => setShowReplies((prev) => !prev)}>
                     {showReplies
                       ? "Hide Replies"
                       : `Replies (${comment.repliesCount})`}
@@ -368,24 +309,16 @@ boxShadow: animateHighlight
                 <Stack
                   direction="row"
                   sx={{
-                      cursor: "pointer",
-                      alignItems: "center",
-                      transition: ".25s",
-                      "&:hover": {
-                        color: "primary.main",
-                      },
-                    }}
-                  onClick={() =>
-                    setShowReplyBox(
-                      (prev) => !prev
-                    )
-                  }
-                >
+                    cursor: "pointer",
+                    alignItems: "center",
+                    transition: ".25s",
+                    "&:hover": {
+                      color: "primary.main",
+                    },
+                  }}
+                  onClick={() => setShowReplyBox((prev) => !prev)}>
                   <ReplyRoundedIcon fontSize="small" />
-                  <Typography
-                    variant="caption"
-                    sx={{ ml: 0.5 }}
-                  >
+                  <Typography variant="caption" sx={{ ml: 0.5 }}>
                     Reply
                   </Typography>
                 </Stack>
@@ -395,79 +328,62 @@ boxShadow: animateHighlight
         </CardContent>
       </GlassCard>
 
-{showReplyBox && (
-  <CreateReply
-    postId={postId}
-    commentId={comment._id}
-    onSuccess={() => {
-      setShowReplyBox(false);
-      setShowReplies(true);
-    }}
-  />
-)}
+      {showReplyBox && (
+        <CreateReply
+          postId={postId}
+          commentId={comment._id}
+          onSuccess={() => {
+            setShowReplyBox(false);
+            setShowReplies(true);
+          }}
+        />
+      )}
 
-{showReplies && (
-  <Box
-    sx={{
-      ml: {
-        xs: 2,
-        sm: 7,
-      },
-      pl: {
-        xs:1,
-        sm: 2,
-      },
-      mt: 2,
-      borderLeft: "2px solid",
-      borderColor: "divider"
-    }}
-  >
-    {repliesLoading ? (
-      <Typography
-        variant="caption"
-        color="text.secondary"
-      >
-        Loading replies...
-      </Typography>
-    ) : replies?.length ? (
-      <Stack spacing={1}>        
-        {replies.map((reply) => (
-          <ReplyCard
-            key={reply._id}
-            reply={reply}
-          />
-        ))}
-      </Stack>
-    ) : (
-      <Typography
-        variant="caption"
-        color="text.secondary"
-      >
-        No replies yet.
-      </Typography>
-    )}
-  </Box>
-)}
+      {showReplies && (
+        <Box
+          sx={{
+            ml: {
+              xs: 2,
+              sm: 7,
+            },
+            pl: {
+              xs: 1,
+              sm: 2,
+            },
+            mt: 2,
+            borderLeft: "2px solid",
+            borderColor: "divider",
+          }}>
+          {repliesLoading ? (
+            <Typography variant="caption" color="text.secondary">
+              Loading replies...
+            </Typography>
+          ) : replies?.length ? (
+            <Stack spacing={1}>
+              {replies.map((reply) => (
+                <ReplyCard key={reply._id} reply={reply} />
+              ))}
+            </Stack>
+          ) : (
+            <Typography variant="caption" color="text.secondary">
+              No replies yet.
+            </Typography>
+          )}
+        </Box>
+      )}
 
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
-        onClose={() =>
-          setAnchorEl(null)
-        }
-      >
+        onClose={() => setAnchorEl(null)}>
         {isOwner && (
           <>
             <MenuItem
               onClick={() => {
                 setAnchorEl(null);
                 onEdit(comment);
-              }}
-            >
-              <EditRoundedIcon
-                  fontSize="small"
-                  sx={{ mr: 1.5 }}
-              />
+              }}>
+              <EditRoundedIcon fontSize="small" sx={{ mr: 1.5 }} />
               Edit Comment
             </MenuItem>
             <MenuItem
@@ -476,13 +392,9 @@ boxShadow: animateHighlight
                 setConfirmOpen(true);
               }}
               sx={{
-                    color: "error.main",
-              }}
-            >
-              <DeleteOutlineRoundedIcon
-                    fontSize="small"
-                    sx={{ mr: 1.5 }}
-              />
+                color: "error.main",
+              }}>
+              <DeleteOutlineRoundedIcon fontSize="small" sx={{ mr: 1.5 }} />
               Delete Comment
             </MenuItem>
           </>
@@ -493,20 +405,16 @@ boxShadow: animateHighlight
         title="Delete Comment?"
         description="This comment will be permanently deleted."
         confirmText="Delete"
-        onClose={() =>
-          setConfirmOpen(false)
-        }
+        onClose={() => setConfirmOpen(false)}
         onConfirm={() => {
           deleteComment.mutate(
             {
               postId,
-              commentId:
-                comment._id,
+              commentId: comment._id,
             },
             {
-              onSuccess: () =>
-                setConfirmOpen(false),
-            }
+              onSuccess: () => setConfirmOpen(false),
+            },
           );
         }}
       />

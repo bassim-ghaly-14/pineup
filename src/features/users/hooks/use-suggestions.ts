@@ -2,13 +2,15 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { usersService } from "../services/users.service";
+import { useAuth } from "src/features/auth/hooks/use-auth";
 import { queryKeys } from "src/constants/query-keys";
-import { User } from "../types/user.types";
+import { usersService } from "../services/users.service";
 
 export function useSuggestions() {
-  return useQuery<User[]>({
+  const { data } = useAuth();
+  return useQuery({
     queryKey: queryKeys.users.suggestions(),
     queryFn: usersService.getSuggestions,
+    enabled: !!data?.user,
   });
 }

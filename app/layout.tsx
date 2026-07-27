@@ -5,12 +5,10 @@ import { ToastProvider } from "src/components/providers/toast-provider";
 import { SocketProvider } from "src/components/providers/socket-provider";
 import { ApiProvider } from "src/components/providers/api-provider";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import { AuthPromptProvider } from "src/features/auth/hooks/use-auth-prompt";
 import { AppShell } from "../src/components/layout/app-shell";
 import type { Metadata } from "next";
-import {
-  englishFont,
-  arabicFont,
-} from "./fonts";
+import { englishFont, arabicFont } from "./fonts";
 export const metadata: Metadata = {
   metadataBase: new URL("https://pineup.app"), // if real-domain
   title: {
@@ -63,8 +61,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PineUp",
-    description:
-      "Connect. Share. Grow. A modern social networking platform.",
+    description: "Connect. Share. Grow. A modern social networking platform.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -74,28 +71,28 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
- children,
-}:{
- children:React.ReactNode;
+  children,
+}: {
+  children: React.ReactNode;
 }) {
-return (
-  <html lang="en">
-    <body className={`${englishFont.variable} ${arabicFont.variable}`}>
-      <AppRouterCacheProvider>
-        <QueryProvider>
-          <ThemeProvider>
-            <ToastProvider />
-            <SocketProvider>
-              <ApiProvider>
-                <AppShell>
-                  {children}
-                </AppShell>
-              </ApiProvider>
-            </SocketProvider>
-          </ThemeProvider>
-        </QueryProvider>
-      </AppRouterCacheProvider>
-    </body>
-  </html>
-);
+  return (
+    <html lang="en">
+      <body className={`${englishFont.variable} ${arabicFont.variable}`}>
+        <AppRouterCacheProvider>
+          <QueryProvider>
+            <ThemeProvider>
+              <ToastProvider />
+              <SocketProvider>
+                <ApiProvider>
+                  <AuthPromptProvider>
+                    <AppShell>{children}</AppShell>
+                  </AuthPromptProvider>
+                </ApiProvider>
+              </SocketProvider>
+            </ThemeProvider>
+          </QueryProvider>
+        </AppRouterCacheProvider>
+      </body>
+    </html>
+  );
 }
