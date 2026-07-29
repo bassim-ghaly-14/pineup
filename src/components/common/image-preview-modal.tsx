@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Box,
-  IconButton,
-  useTheme,
-} from "@mui/material";
+import { Box, CircularProgress, IconButton, useTheme } from "@mui/material";
 
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
@@ -12,7 +8,7 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import { motion } from "framer-motion";
 
 import { AppDialog } from "./app-dialog";
-
+import { useDownloadImage } from "@/features/social/hooks/use-download-image";
 
 type Props = {
   open: boolean;
@@ -21,272 +17,159 @@ type Props = {
   alt?: string;
 };
 
-
 export function ImagePreviewModal({
   open,
   onClose,
   src,
   alt = "image",
 }: Props) {
-
-
   const theme = useTheme();
 
-  const dark =
-    theme.palette.mode === "dark";
+  const dark = theme.palette.mode === "dark";
 
-
-
-  const downloadImage = () => {
-
-    try {
-
-      const downloadUrl =
-        `/api/download-image?url=${encodeURIComponent(src)}`;
-
-
-      const link =
-        document.createElement("a");
-
-
-      link.href = downloadUrl;
-
-      link.download =
-        "pineup-image.jpg";
-
-
-      document.body.appendChild(link);
-
-      link.click();
-
-      link.remove();
-
-
-    } catch {
-
-      console.log("Download failed");
-
-    }
-
-  };
-
-
+  const { downloadImage, isDownloading } = useDownloadImage();
 
   const glassButton = {
-
     width: 48,
-
     height: 48,
 
-    color: dark
-      ? "#FFFFFF"
-      : theme.palette.text.primary,
+    color: dark ? "#FFFFFF" : theme.palette.text.primary,
 
-    bgcolor: dark
-      ? "rgba(255,255,255,.12)"
-      : "rgba(255,255,255,.85)",
+    bgcolor: dark ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.85)",
 
     border: "1px solid",
 
-    borderColor: dark
-      ? "rgba(255,255,255,.15)"
-      : "rgba(0,0,0,.08)",
+    borderColor: dark ? "rgba(255,255,255,.15)" : "rgba(0,0,0,.08)",
 
-    backdropFilter:
-      "blur(14px)",
+    backdropFilter: "blur(14px)",
 
-
-    transition:
-      "all .25s ease",
-
+    transition: "all .25s ease",
 
     "&:hover": {
+      bgcolor: theme.palette.primary.main,
 
-      bgcolor:
-        theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
 
-      color:
-        theme.palette.primary.contrastText,
-
-      transform:
-        "translateY(-2px)",
-
+      transform: "translateY(-2px)",
     },
-
   };
 
-
-
   return (
-
     <AppDialog
       open={open}
       onClose={onClose}
       maxWidth={false}
       fullScreen
-
       slotProps={{
-        backdrop:{
-          sx:{
-            bgcolor:
-              dark
-                ? "rgba(0,0,0,.88)"
-                : "rgba(15,17,21,.65)",
+        backdrop: {
+          sx: {
+            bgcolor: dark ? "rgba(0,0,0,.88)" : "rgba(15,17,21,.65)",
 
-            backdropFilter:
-              "blur(14px)",
+            backdropFilter: "blur(14px)",
           },
         },
-      }}
-
-    >
-
-
+      }}>
       <Box
         sx={{
+          width: "100%",
+          height: "100%",
 
-          width:"100%",
-          height:"100%",
+          display: "flex",
 
-          display:"flex",
+          alignItems: "center",
 
-          alignItems:"center",
+          justifyContent: "center",
 
-          justifyContent:"center",
+          position: "relative",
 
-          position:"relative",
-
-          overflow:"hidden",
-
-        }}
-      >
-
-
-
-        {/* Close Button */}
-
+          overflow: "hidden",
+        }}>
         <IconButton
-
           onClick={onClose}
-
           sx={{
-
             ...glassButton,
 
-            position:"absolute",
+            position: "absolute",
 
-            top:{
-              xs:16,
-              md:24,
+            top: {
+              xs: 16,
+              md: 24,
             },
 
-            right:{
-              xs:16,
-              md:24,
+            right: {
+              xs: 16,
+              md: 24,
             },
 
-            zIndex:5,
-
-          }}
-
-        >
-
+            zIndex: 5,
+          }}>
           <CloseRoundedIcon />
-
         </IconButton>
-
-
-
-
-        {/* Download Button */}
 
         <IconButton
-
-          onClick={downloadImage}
-
+          disabled={isDownloading}
+          onClick={() =>
+            downloadImage({
+              imageUrl: src,
+              fileName: "profile-image",
+            })
+          }
           sx={{
-
             ...glassButton,
 
-            position:"absolute",
+            position: "absolute",
 
-            top:{
-              xs:16,
-              md:24,
+            top: {
+              xs: 16,
+              md: 24,
             },
 
-            left:{
-              xs:16,
-              md:24,
+            left: {
+              xs: 16,
+              md: 24,
             },
 
-            zIndex:5,
-
-          }}
-
-        >
-
-          <DownloadRoundedIcon />
-
+            zIndex: 5,
+          }}>
+          {isDownloading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            <DownloadRoundedIcon />
+          )}
         </IconButton>
-
-
-
-
-
-        {/* Image */}
 
         <motion.img
-
           src={src}
-
           alt={alt}
-
-
           initial={{
-            opacity:0,
-            scale:.88,
+            opacity: 0,
+            scale: 0.88,
           }}
-
-
           animate={{
-            opacity:1,
-            scale:1,
+            opacity: 1,
+            scale: 1,
           }}
-
-
           transition={{
-            duration:.25,
-            ease:"easeOut",
+            duration: 0.25,
+            ease: "easeOut",
           }}
-
-
           style={{
+            maxWidth: "92vw",
 
-            maxWidth:"92vw",
+            maxHeight: "88vh",
 
-            maxHeight:"88vh",
+            objectFit: "contain",
 
-            objectFit:"contain",
+            borderRadius: "20px",
 
-            borderRadius:"20px",
+            userSelect: "none",
 
-            userSelect:"none",
-
-            boxShadow:
-              dark
-                ? "0 30px 80px rgba(0,0,0,.6)"
-                : "0 30px 80px rgba(0,0,0,.25)",
-
+            boxShadow: dark
+              ? "0 30px 80px rgba(0,0,0,.6)"
+              : "0 30px 80px rgba(0,0,0,.25)",
           }}
-
         />
-
-
       </Box>
-
-
     </AppDialog>
-
   );
 }
