@@ -18,13 +18,13 @@ export default function FeedPage() {
   const { token } = useAuth();
   const { requireAuth } = useRequireAuthAction();
 
-  const [tab, setTab] = useState<"following" | "explore">(() => {
-    if (typeof window === "undefined") {
-      return "explore";
-    }
+  const [tab, setTab] = useState<"following" | "explore">("explore");
 
-    return localStorage.getItem(STORAGE_KEYS.TOKEN) ? "following" : "explore";
-  });
+  useEffect(() => {
+    if (token) {
+      setTab("following");
+    }
+  }, [token]);
 
   useEffect(() => {
     if (!token && tab === "following") {
