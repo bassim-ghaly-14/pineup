@@ -11,9 +11,28 @@ import { EmptyState } from "@/components/common/empty-state";
 export function ExploreFeed() {
   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteFeed();
-  const { data: auth } = useAuth();
-  const isGuest = !auth?.user;
-  if (isGuest) {
+
+  const { isAuthenticated, token } = useAuth();
+
+  useUserIndexer({
+    posts: data?.posts ?? [],
+    source: "explore",
+  });
+
+  if (token && !isAuthenticated) {
+    return (
+      <Box
+        sx={{
+          py: 6,
+          display: "flex",
+          justifyContent: "center",
+        }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!token) {
     return (
       <EmptyState
         title="Welcome to PineUp"
@@ -21,10 +40,7 @@ export function ExploreFeed() {
       />
     );
   }
-  useUserIndexer({
-    posts: data?.posts ?? [],
-    source: "explore",
-  });
+
   if (isPending) {
     return (
       <Box
