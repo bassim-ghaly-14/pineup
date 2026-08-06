@@ -1,1196 +1,267 @@
-# PineUp
+# PineUp 🌲
 
-A modern social networking platform built with Next.js App Router, TypeScript, Material UI, Tailwind CSS, React Query, and a scalable feature-based architecture.
+**A modern social networking platform** built for meaningful connections, sharing moments, and growing communities.
 
----
-
-# Overview
-
-PineUp is a social platform that allows users to:
-
-- Create and manage posts
-- Follow users
-- Like, bookmark, and share content
-- Comment and reply
-- Receive notifications
-- Manage multiple accounts
-- Customize application theme
-
-The project is designed with scalability and maintainability in mind using a feature-driven architecture.
+> **Stack:** Next.js 16 · React 19 · TypeScript · MUI v9 · TanStack Query v5 · Tailwind CSS v4
 
 ---
 
-# Tech Stack
+## ✨ Features
 
-## Framework
+### 🔐 Authentication
 
-- Next.js 16
-- React 19
-- TypeScript
+- JWT-based login/registration with token persistence (localStorage + cookies)
+- Auth guard middleware protecting profile, bookmarks, notifications, settings, and suggestions
+- Password change with current password verification
+- Profile photo upload with progress tracking
+- Account switcher for multiple accounts
 
-## UI
+### 📝 Posts & Feed
 
-- Material UI
-- Tailwind CSS
-- Framer Motion
+- Create, edit, and delete posts with optional image uploads
+- Public/private/friends privacy controls
+- **Explore feed** (public posts) and **Following feed** (posts from followed users)
+- Infinite scroll pagination with feed ranking
+- Post sharing (repost) functionality
+- Like/unlike and bookmark/unbookmark posts
 
-## State Management
+### 💬 Comments & Replies
 
-- TanStack React Query
-- React Context
+- Nested comments with reply threads
+- Create, edit, delete comments
+- Like/unlike comments
+- Real-time reply counts
 
-## Forms & Validation
+### 🔔 Notifications
 
-- React Hook Form
-- Zod
+- Real-time notification bell with unread count badge
+- Notification types: post likes, comments, replies, follows, shares
+- Mark individual notifications as read or mark all as read
+- Dropdown quick-view and full-page notification list
 
-## Networking
+### 👤 User Profiles
 
-- Axios
-- Custom API service layer
+- Profile pages with cover photo, avatar, bio, and stats
+- Followers / following lists
+- User posts feed on profile
+- Profile actions (follow/unfollow)
 
-## Utilities
+### 🔍 Search
 
-- Day.js
-- Sonner Notifications
-- Fuse.js Search
+- Client-side fuzzy search powered by **Fuse.js**
+- Searchable user index with name and username matching
+- Offline-first local user index with scoring
 
----
+### 👥 Social Graph
 
-# Project Structure
+- Follow/unfollow users
+- Suggested accounts for discovery
+- Verified user badges for designated accounts
+- User indexer that builds a local search cache
 
-pineup
+### 🎨 Theme & Design
 
-├── app
-│ ├── (protected)
-│ ├── (public)
-│ ├── api
-│ └── layouts
+- **Full light/dark mode** with MUI theming
+- Gold primary palette (`#D4A63A`) with glassmorphism aesthetics
+- Custom design tokens: radius (sm 10px → xl 20px), motion (fast 0.2s → slow 0.3s), elevation (subtle → modal)
+- Responsive 3-column layout: sidebar | content | right sidebar
+- Mobile bottom navigation bar
+- Framer Motion animations
+- Custom scrollbar gutter for layout stability
 
-├── src
+### 🌍 Campaign
 
-│ ├── components
-│ │
-│ ├── features
-│ │
-│ ├── services
-│ │
-│ ├── constants
-│ │
-│ ├── hooks
-│ │
-│ ├── lib
-│ │
-│ ├── types
-│ │
-│ └── utils
+- Palestine awareness banner on the feed page
+- Informational dialog with campaign details
 
-├── public
+### ⚡ Performance & UX
 
-## └── middleware.ts
-
-# Architecture Philosophy
-
-PineUp follows a feature-based architecture.
-
-Each feature owns:
-
-- Components
-- Hooks
-- Services
-- Types
-- Business logic
-
-Example:
-features/posts
-
-├── components
-├── hooks
-├── services
-├── types
-└── utils
-This prevents the project from becoming a large collection of unrelated files.
+- TanStack React Query with optimized stale/garbage-collection times
+- Request deduplication and debounced search
+- Optimistic updates for likes, bookmarks, follows
+- Loader, empty state, error state, and skeleton components
+- Sonner toast notifications for feedback
 
 ---
 
-# Installation
+## 🗂️ Project Structure
 
-## Requirements
-
-Node:
-Node >= 20
-Package manager:
+```
+pineup/
+├── app/                          # Next.js App Router pages
+│   ├── (public)/                 # Public routes (login, register)
+│   │   ├── login/
+│   │   └── register/
+│   ├── (protected)/              # Authenticated routes
+│   │   ├── feed/
+│   │   ├── profile/
+│   │   │   └── [id]/
+│   │   │       ├── followers/
+│   │   │       └── following/
+│   │   ├── posts/[id]/
+│   │   ├── bookmarks/
+│   │   ├── notifications/
+│   │   ├── settings/
+│   │   ├── suggestions/
+│   │   └── search/
+│   ├── api/
+│   │   └── download-image/       # Image proxy API route
+│   ├── layout.tsx
+│   ├── page.tsx                  # Redirects to /feed
+│   └── globals.css
+│
+├── src/
+│   ├── components/
+│   │   ├── common/               # Shared UI components
+│   │   │   ├── app-dialog.tsx
+│   │   │   ├── app-logo.tsx
+│   │   │   ├── app-state.tsx
+│   │   │   ├── confirm-dialog.tsx
+│   │   │   ├── empty-state.tsx
+│   │   │   ├── error-state.tsx
+│   │   │   ├── glass-card.tsx
+│   │   │   ├── icon-button.tsx
+│   │   │   ├── image-preview.tsx
+│   │   │   ├── image-preview-modal.tsx
+│   │   │   ├── linkify-text.tsx
+│   │   │   ├── loader.tsx
+│   │   │   ├── page-container.tsx
+│   │   │   ├── page-header.tsx
+│   │   │   ├── search-input.tsx
+│   │   │   ├── section-card.tsx
+│   │   │   ├── user-avatar.tsx
+│   │   │   └── verified-badge.tsx
+│   │   └── layout/               # Shell layout components
+│   │       ├── app-shell.tsx
+│   │       ├── mobile-nav/
+│   │       ├── navbar/
+│   │       ├── right-sidebar/
+│   │       ├── sidebar/
+│   │       └── user-menu/
+│   │
+│   ├── features/                 # Feature-based modules
+│   │   ├── auth/                 # Authentication (login, register, profile, password, upload)
+│   │   ├── posts/                # Posts CRUD, feed, likes, bookmarks, sharing
+│   │   ├── comments/             # Comments & replies with likes
+│   │   ├── notifications/        # Real-time notifications
+│   │   ├── profile/              # Profile display, stats, tabs
+│   │   ├── search/               # Search results display
+│   │   ├── social/               # User index, search, social graph
+│   │   ├── users/                # User cards, follow/unfollow, bookmarks, suggestions
+│   │   └── campaign/             # Palestine awareness campaign
+│   │
+│   ├── constants/                # Routes, query keys, storage keys, theme, verified users
+│   ├── lib/                      # Core utilities (query client, WebSocket, analytics, event bus)
+│   ├── services/                 # API layer (Axios instance, endpoints, interceptors, normalizer)
+│   ├── types/                    # Shared TypeScript types (API, common, pagination)
+│   └── utils/                    # Utility functions (error handling, formatting, debounce, etc.)
+│
+├── public/                       # Static assets (favicon, OG image, logos, icons)
+├── middleware.ts                 # Auth middleware (cookie-based JWT check)
+├── next.config.ts                # Next.js configuration
+├── tailwind.config.ts
+└── tsconfig.json
+```
 
 ---
 
-## Install dependencies
+## 🚀 Getting Started
 
-````bash
+### Prerequisites
+
+- **Node.js** >= 18
+- **npm** or **pnpm**
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/bassim-ghaly-14/pineup.git
+cd pineup
+
+# Install dependencies
 npm install
-Environment Variables
 
-Create:
-.env.local
-Example:
+# Set up environment variables
+# Create a .env.local file with:
 NEXT_PUBLIC_API_URL=https://your-api-url.com
 
-Development
-Run:
+# Start the development server
 npm run dev
+```
 
-Application:
-http://localhost:3000
+The app will be available at `http://localhost:3000`.
 
-Production Build
-Build:
+### Build for Production
+
+```bash
 npm run build
-Start:
 npm start
-Main Features
-
-Authentication
-
-Includes:
-
-* Login
-* Register
-* Profile fetching
-* Password change
-* Profile image upload
-* Multiple accounts switching
-
-⸻
-
-Posts
-
-Supports:
-
-* Create posts
-* Edit posts
-* Delete posts
-* Feed loading
-* Likes
-* Bookmarks
-* Sharing
-
-Current limitation:
-
-Posts support one image only.
-
-The current API contract uses:
-image?: string
-Multi-image posts require backend changes.
-
-⸻
-
-Comments
-
-Supports:
-
-* Comments
-* Replies
-* Likes
-* Editing
-* Deleting
-
-⸻
-
-Notifications
-
-Supports:
-
-* Notification list
-* Read status
-* Unread counter
-
-⸻
-
-Authentication Storage
-
-PineUp uses:
-
-Local Storage
-Stores:
-pineup_token
-pineup_user
-
-Cookie
-Stores:
-pineup_token
-
-Used by:
-middleware.ts
-for route protection.
-
-State Management Strategy
-
-Server state:
-React Query
-Examples:
-
-* Posts
-* Users
-* Notifications
-* Profile
-
-Client state:
-React Context
-Examples:
-
-* Theme
-* Socket provider
-Code Standards
-
-Imports:
-Always prefer:
-import { something } from "@/path"
-instead of:
-import { something } from "src/path"
-
-Naming
-Components:
-PascalCase
-Example:
-PostCard.tsx
-
-Hooks:
-use-feature-name.ts
-Example:
-use-login.ts
-
-Services:
-feature.service.ts
-Example:
-posts.service.ts
-
-Future Roadmap
-
-Planned improvements:
-
-* Infinite scrolling feed
-* Optimistic updates
-* Multi-image posts
-* Better caching strategy
-* Server-side authentication
-* Real websocket notifications
-* Advanced search
-* Media optimization
-
-⸻
-
-Maintainers
-
-PineUp Development Team
----
-
-# 📄 docs/ARCHITECTURE.md
-
-```md
-# PineUp Architecture
+```
 
 ---
 
-# Overview
+## 📦 Key Dependencies
 
-PineUp uses a modular architecture based on:
-
-- Next.js App Router
-- Feature-driven organization
-- Service abstraction
-- React Query data management
-
-The goal is separation between:
-
-UI
-
-↓
-
-Business Logic
-
-↓
-
-API Communication
-
-↓
-
-Backend
+| Package                         | Purpose                           |
+| ------------------------------- | --------------------------------- |
+| `next` 16.2.9                   | React framework with App Router   |
+| `react` 19.2.4                  | UI library                        |
+| `@mui/material` 9.1.2           | Material Design component library |
+| `@mui/icons-material` 9.1.1     | Material Design icons             |
+| `@tanstack/react-query` 5.101.1 | Server state management           |
+| `axios` 1.18.1                  | HTTP client                       |
+| `zod` 4.4.3                     | Schema validation                 |
+| `react-hook-form` 7.80.0        | Form management                   |
+| `framer-motion` 12.42.0         | Animations                        |
+| `fuse.js` 7.4.2                 | Client-side fuzzy search          |
+| `dayjs` 1.11.21                 | Date formatting                   |
+| `sonner` 2.0.7                  | Toast notifications               |
+| `react-dropzone` 15.0.0         | File uploads                      |
+| `jwt-decode` 4.0.0              | JWT token decoding                |
+| `tailwindcss` 4                 | Utility CSS                       |
 
 ---
 
-# High Level Architecture
-Browser
+## 🔌 API Endpoints
 
-↓
+The app communicates with a REST API via Axios. Key endpoint groups:
 
-Next.js App Router
-
-↓
-
-Pages / Layouts
-
-↓
-
-Feature Components
-
-↓
-
-Custom Hooks
-
-↓
-
-Services
-
-↓
-
-Axios API Layer
-
-↓
-
-Backend API
----
-
-# Folder Responsibilities
-
-
-## app/
-
-Responsible for:
-
-- Routing
-- Layouts
-- Middleware integration
-- Server components
-
-
-Example:
-app/(protected)/feed/page.tsx
-Only handles page composition.
-
-Business logic should stay inside features.
-
+| Group             | Endpoints                                                                                 |
+| ----------------- | ----------------------------------------------------------------------------------------- |
+| **Auth**          | Signup, Signin, Change Password, Upload Photo, Profile                                    |
+| **Users**         | Bookmarks, Suggestions, Profile by ID, Follow, Posts by User                              |
+| **Posts**         | Create, GetAll, Feed, Get/Update/Delete by ID, Likes, Toggle Like, Toggle Bookmark, Share |
+| **Comments**      | List, Create, Update, Delete, Toggle Like, Replies, Create Reply                          |
+| **Notifications** | GetAll, Unread Count, Mark Read, Mark All Read                                            |
 
 ---
 
-# src/features
+## 🧠 Architecture Highlights
 
-Main application modules.
-
-Each feature is isolated.
-
-Example:
-features/posts
-Contains:
-components
-hooks
-services
-types
-utils
----
-
-# Components Layer
-
-Location:
-src/components
-Contains reusable UI.
-
-Examples:
-Button
-Modal
-Avatar
-Loader
-Layout
-Components here should not contain business logic.
+- **Feature-based modular structure** — Each feature (auth, posts, comments, etc.) is self-contained with its own components, hooks, services, types, and validation.
+- **TanStack Query** — Centralized query client with 30s stale time, 10min GC, retry logic, and optimistic updates.
+- **WebSocket** — `PineSocket` class for real-time connections (notifications, live updates).
+- **Social Index** — Local client-side user index stored in localStorage, populated from API responses, enabling offline-first search via Fuse.js.
+- **Image Proxy** — A Next.js API route (`/api/download-image`) proxies image downloads from allowed hosts (route-posts.routemisr.com, \*.r2.dev) for CORS-safe client downloads.
+- **Auth** — Token stored in both `localStorage` and a cookie (`pineup_token`). Middleware checks cookie for protected routes. `useAuth` hook listens to `auth-change` events for cross-tab sync.
 
 ---
 
-# Services Layer
-
-Location:
-src/services
-Responsible for:
-
-- Axios instance
-- API endpoints
-- Network communication
-
-
-Example:
-authService.login()
-
-postsService.getFeed()
----
-
-# Hooks Layer
-
-Custom hooks connect:
-
-UI
-
-↓
-
-React Query
-
-↓
-
-Services
-
-
-Example:
-useFeed()
-
-↓
-
-postsService.getFeed()
----
-
-# Data Flow Example
-
-## Login
-LoginForm
-
-↓
-
-useLogin()
-
-↓
-
-authService.login()
-
-↓
-
-Axios
-
-↓
-
-Backend
-
-↓
-
-Save Token
-
-↓
-
-Update Query Cache
-
-↓
-
-Redirect Feed
----
-
-# Posts Flow
-Feed Page
-
-↓
-
-FeedList
-
-↓
-
-useFeed()
-
-↓
-
-postsService.getFeed()
-
-↓
-
-API
-
-↓
-
-React Query Cache
-
-↓
-
-Render Posts
----
-
-# Providers Architecture
-
-
-Root providers:
-ApiProvider
-
-QueryProvider
-
-ThemeProvider
-
-ToastProvider
-
-SocketProvider
-Responsibilities:
-
-## ApiProvider
-
-Initializes Axios interceptors.
-
-
-## QueryProvider
-
-Provides React Query.
-
-
-## ThemeProvider
-
-Controls:
-
-- Light mode
-- Dark mode
-
-
-## ToastProvider
-
-Global notifications.
-
+## 🔐 Environment Variables
+
+| Variable              | Description                  |
+| --------------------- | ---------------------------- |
+| `NEXT_PUBLIC_API_URL` | Base URL for the backend API |
 
 ---
 
-# Authentication Architecture
+## 📄 License
 
-
-Authentication has two protection layers:
-
-
-## Middleware
-
-Server-side protection:
-Cookie check
-
-↓
-
-Allow
-
-or
-
-Redirect login
-## Client Guard
-
-Client-side verification:
-Token
-
-↓
-
-Profile
-
-↓
-
-Authenticated User
----
-
-# Important Architecture Decisions
-
-
-## Feature Isolation
-
-Features own their logic.
-
-Avoid:
-global components with business logic
----
-
-## API Separation
-
-Components never call Axios directly.
-
-Wrong:
-
-```ts
-api.get()
-inside component.
-Correct:
-Component
-
-↓
-
-Hook
-
-↓
-
-Service
-
-↓
-
-API
-Known Improvements
-
-Axios Interceptors
-
-Current architecture has interceptor initialization in:
-axios.ts
-
-and
-
-ApiProvider
-This should be unified to prevent duplicate interceptors.
-
-Recommended:
-axios.ts
-
-only create instance
-
-
-interceptors.ts
-
-only setup interceptors
-Authentication Security
-
-Current:
-localStorage + cookie
-Future production improvement:
-HttpOnly Secure Cookie
-Conclusion
-
-PineUp architecture is ready for scaling.
-
-The current structure supports adding:
-
-* New features
-* More API modules
-* Advanced caching
-* Real-time functionality
-
-without major restructuring.
-````
-
-# PineUp API Layer
-
-## Overview
-
-PineUp uses a centralized Axios-based API layer.
-
-Architecture:
-Feature Hook
-
-↓
-
-Service Layer
-
-↓
-
-Axios Instance
-
-↓
-
-Backend API
-Components never communicate with the API directly.
+This project is private.
 
 ---
 
-# Axios Instance
+## 👤 Author
 
-Location:
-src/services/api/axios.ts
-Responsibilities:
-
-- Create Axios instance
-- Define base URL
-- Configure timeout
-- Provide shared HTTP client
-
-Example:
-
-````ts
-axios.create({
- baseURL,
- timeout:15000
-})
-API Endpoints
-
-Location:
-src/services/api/endpoints.ts
-All API routes are centralized.
-
-Example:
-API_ENDPOINTS.POSTS.FEED
-Benefits:
-
-* No duplicated strings
-* Easier backend changes
-* Better maintainability
-
-⸻
-
-Services
-
-Each feature owns its API logic.
-
-Example:
-features/posts/services/posts.service.ts
-Contains:
-
-* Fetch posts
-* Create post
-* Update post
-* Delete post
-* Like
-* Bookmark
-* Share
-
-⸻
-
-Response Normalization
-
-Backend responses are normalized before reaching UI.
-
-Example:
-
-Backend:
-{
- data:{
-   posts:[]
- }
-}
-Frontend receives:
-{
- posts:[]
-}
-This keeps components independent from API structure.
-
-⸻
-
-Interceptors
-
-Current flow:
-Request
-
-↓
-
-Attach Token
-
-↓
-
-API
-
-↓
-
-Response
-Token source:
-localStorage
-Key:
-pineup_token
-
-Important Improvement
-
-Current project has interceptor initialization in two places:
-axios.ts
-
-+
-
-ApiProvider
-Recommended:
-axios.ts
-
-Create instance only
-
-
-interceptors.ts
-
-Setup interceptors once
-File Uploads
-
-Multipart requests are used for:
-
-* Profile photo
-* Post images
-
-Example:
-FormData
-Current Media Limitation
-
-Posts currently support:
-image?: string
-Only one image.
-
-Multiple images require:
-images?: string[]
-and backend support.
-
-⸻
-
-API Rules
-
-Never:
-api.get()
-inside components.
-
-Correct:
-Component
-
-↓
-
-Hook
-
-↓
-
-Service
-
-↓
-
-API
----
-
-# 📄 docs/AUTH_FLOW.md
-
-```md
-# Authentication Flow
-
-## Overview
-
-PineUp authentication is based on:
-
-- JWT Token
-- Local Storage
-- Cookie Session
-- React Query Cache
-
-
----
-
-# Login Flow
-Login Form
-
-↓
-
-useLogin()
-
-↓
-
-authService.login()
-
-↓
-
-POST /users/signin
-
-↓
-
-Receive Token + User
-
-↓
-
-Save Session
-
-↓
-
-Update Cache
-
-↓
-
-Redirect Feed
----
-
-# Storage
-
-## Local Storage
-
-Stores:
-pineup_token
-pineup_user
----
-
-## Cookie
-
-Stores:
-pineup_token
-Used by:
-middleware.ts
-for route protection.
-
----
-
-# Auth Hook
-
-Location:
-features/auth/hooks/use-auth.ts
-Responsibilities:
-
-- Read token
-- Fetch profile
-- Handle unauthorized users
-- Sync authentication state
-
-
----
-
-# Authentication Events
-
-The project uses:
-
-```ts
-window.dispatchEvent(
- new Event("auth-change")
-)
-to synchronize:
-
-* Login
-* Logout
-* Account switching
-
-⸻
-
-Route Protection
-
-Two layers:
-
-Server Protection
-
-Middleware:
-Request
-
-↓
-
-Check Cookie
-
-↓
-
-Allow / Redirect
-Client Protection
-
-useAuthGuard:
-Token
-
-↓
-
-Profile
-
-↓
-
-Authenticated User
-Multiple Accounts
-
-Supported through:
-account-storage.ts
-Stores:
-token
-+
-user
-Allows:
-
-* Switch account
-* Keep multiple sessions
-
-⸻
-
-Security Improvements
-
-Future:
-
-Replace:
-localStorage JWT
-with:
-HttpOnly Secure Cookie
----
-
-# 📄 docs/REACT_QUERY.md
-
-```md
-# React Query Strategy
-
-## Overview
-
-PineUp uses TanStack React Query for server state management.
-
-
-Responsibilities:
-
-- API caching
-- Loading states
-- Error handling
-- Data synchronization
-
-
----
-
-# Query Keys
-
-Location:
-src/constants/query-keys.ts
-All cache keys are centralized.
-
-
-Example:
-
-```ts
-queryKeys.posts.feed()
-returns:
-[
- "posts",
- "feed"
-]
-Queries
-
-Used for reading data:
-
-Examples:
-
-* Feed
-* Profile
-* Notifications
-* Bookmarks
-
-Example:
-useQuery({
- queryKey,
- queryFn
-})
-Mutations
-
-Used for:
-
-* Create post
-* Like
-* Bookmark
-* Comment
-* Follow
-
-Flow:
-Mutation
-
-↓
-
-API
-
-↓
-
-Invalidate Query
-
-↓
-
-Refresh UICache Strategy
-
-Example:
-
-Feed:
-posts.feed()
-Profile:
-auth.profile()
-Single Post:
-posts.single(id)
-Recommended Improvements
-
-Optimistic Updates
-
-Current:
-Click Like
-
-↓
-
-API
-
-↓
-
-Update UI
-Future:
-Click Like
-
-↓
-
-Update UI instantly
-
-↓
-
-API
-
-↓
-
-Rollback if failed
-Infinite Feed
-
-Current:
-useQuery
-Future:
-useInfiniteQuery
-For social-media scale.
-# PineUp Documentation Summary
-
-## Features
-
-Project modules:
-
-- Auth
-- Posts
-- Comments
-- Notifications
-- Profiles
-- Search
-- Users
-- Social
-
-
-## Folder Rules
-
-app/
-→ Routing only
-
-src/features/
-→ Business logic
-
-src/components/
-→ Shared UI
-
-src/services/
-→ API communication
-
-src/hooks/
-→ React state logic
-
-
-## Coding Rules
-
-- Components do not call APIs directly.
-- Every feature owns its hooks/services/types.
-- Shared components stay in components/common.
-- All routes stay centralized.
-- All query keys stay centralized.
-
-
-## Assets
-
-Current location:
-
-src/assets
-
-Recommended:
-
-Keep imported static assets here.
-
-Example:
-
-import logo from "@/assets/primarylogo.png"
-
-
-Use public/ only for files accessed by URL:
-
-/favicon.png
-
-
-## Current Risks
-
-1. JWT stored in localStorage.
-Future:
-Use HttpOnly cookies.
-
-2. Axios interceptor duplicated.
-Keep setup in one place.
-
-3. Posts support one image only.
-Backend change required for gallery.
-
-
-## Production Checklist
-
-✓ TypeScript strict mode
-✓ Feature-based architecture
-✓ React Query caching
-✓ Protected routes
-✓ Central API layer
-✓ Shared UI system
-✓ Environment variables
-
-Next improvements:
-
-- Infinite feed
-- Optimistic updates
-- Better error boundary
-- Image optimization
-- Backend multiple images
-````
+**CHEF-BELLY** — Creator & Developer
