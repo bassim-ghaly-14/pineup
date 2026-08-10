@@ -14,6 +14,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
@@ -93,6 +94,9 @@ export function RegisterForm() {
     [mutation],
   );
 
+  const theme = useTheme();
+  const dark = theme.palette.mode === "dark";
+
   return (
     <Stack
       component="form"
@@ -107,15 +111,23 @@ export function RegisterForm() {
           p: 2.5,
           borderRadius: 1,
           background:
-            "linear-gradient(135deg, rgba(212,166,58,.12), rgba(212,166,58,.03))",
-          border: "1px solid rgba(212,166,58,.18)",
-          boxShadow: "0 10px 30px rgba(212,166,58,.08)",
+            dark
+              ? "linear-gradient(135deg, rgba(212,166,58,.12), rgba(212,166,58,.03))"
+              : "linear-gradient(135deg, rgba(212,166,58,.10), rgba(212,166,58,.02))",
+          border: dark
+            ? "1px solid rgba(212,166,58,.18)"
+            : "1px solid rgba(212,166,58,.25)",
+          boxShadow: dark
+            ? "0 10px 30px rgba(212,166,58,.08)"
+            : "0 12px 30px rgba(15,23,42,.06)",
           "&::before": {
             content: '""',
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent)",
+              dark
+                ? "linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent)"
+                : "linear-gradient(90deg, transparent, rgba(0,0,0,.02), transparent)",
             pointerEvents: "none",
           },
         }}>

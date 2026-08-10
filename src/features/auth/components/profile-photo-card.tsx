@@ -8,6 +8,7 @@ import {
   IconButton,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
@@ -34,6 +35,9 @@ export function ProfilePhotoCard() {
 
   const [preview, setPreview] =
     useState<string>();
+
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   const handleChoose = () => {
     inputRef.current?.click();
@@ -129,8 +133,8 @@ export function ProfilePhotoCard() {
         alignItems: "center",
         justifyContent: "center",
 
-        bgcolor: "rgba(0,0,0,.55)",
-        color: "#fff",
+        bgcolor: isDark ? "rgba(0,0,0,.55)" : "rgba(255,255,255,.85)",
+        color: isDark ? "#fff" : "text.primary",
 
         opacity: 0,
         transition: ".25s",
@@ -159,7 +163,7 @@ export function ProfilePhotoCard() {
           alignItems: "center",
           justifyContent: "center",
 
-          bgcolor: "rgba(0,0,0,.45)",
+          bgcolor: isDark ? "rgba(0,0,0,.45)" : "rgba(255,255,255,.6)",
           backdropFilter: "blur(3px)",
         }}
       >
@@ -181,7 +185,7 @@ export function ProfilePhotoCard() {
       height: 42,
 
       bgcolor: "primary.main",
-      color: "#fff",
+      color: "primary.contrastText",
 
       border: "3px solid",
       borderColor: "background.paper",

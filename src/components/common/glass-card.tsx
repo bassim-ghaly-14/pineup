@@ -18,7 +18,10 @@ export function GlassCard(props: CardProps) {
               : "rgba(255,255,255,.75)",
 
           border: "1px solid",
-          borderColor: "rgba(255,255,255,.06)",
+          borderColor:
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,.06)"
+              : "rgba(0,0,0,.06)",
 
           transition: "all .25s ease",
 

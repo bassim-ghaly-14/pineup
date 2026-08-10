@@ -95,7 +95,10 @@ export function MobileNav() {
           WebkitBackdropFilter: "blur(24px)",
           border: "1px solid",
           borderColor: "divider",
-          boxShadow: "0 12px 40px rgba(0,0,0,.25)",
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? "0 12px 40px rgba(0,0,0,.25)"
+              : "0 12px 40px rgba(0,0,0,.08)",
         })}>
         {items.map((item) => {
           const Icon = item.icon;
@@ -166,7 +169,9 @@ export function MobileNav() {
                         ? "rgba(212,166,58,.12)"
                         : "rgba(212,166,58,.08)"
                       : "transparent",
-                  color: item.primary ? "#14171D" : "inherit",
+                  color: item.primary
+                    ? theme.palette.primary.contrastText
+                    : "inherit",
                   transition:
                     "background-color .25s, color .25s, transform .25s",
                 })}>

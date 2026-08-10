@@ -3,6 +3,7 @@
 import {
   Box,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { VerifiedBadge } from "src/components/common/verified-badge";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
@@ -28,6 +29,8 @@ const joinedDate = new Intl.DateTimeFormat(
     year: "numeric",
   }
 ).format(new Date(createdAt));
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
   return (
     <Box
       sx={{
@@ -45,7 +48,7 @@ const joinedDate = new Intl.DateTimeFormat(
         <Typography
           variant="h4"
           sx={{
-            color: "#fff",
+            color: isDark ? "#fff" : "text.primary",
             fontWeight: 800,
             lineHeight: 1,
           }}
@@ -62,7 +65,7 @@ const joinedDate = new Intl.DateTimeFormat(
       <Typography
         sx={{
           mb: 1,
-          color: "rgba(255,255,255,.75)",
+          color: isDark ? "rgba(255,255,255,.75)" : "text.secondary",
         }}
       >
         @{username}

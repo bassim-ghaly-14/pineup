@@ -30,6 +30,7 @@ export function pineUpTheme(
 ): ThemeOptions {
   const dark = mode === "dark";
 const radius = {
+  xs: 6,
   sm: 10,
   md: 14,
   lg: 16,

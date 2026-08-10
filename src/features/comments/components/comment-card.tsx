@@ -108,7 +108,7 @@ export function CommentCard({
             : undefined,
           transition:
             "transform .25s ease, box-shadow .35s ease, outline-color .35s ease",
-          borderRadius: 4,
+          borderRadius: { xs: 2, sm: 3 },
           border: "1px solid",
           borderColor: "divider",
           background:
@@ -226,7 +226,7 @@ export function CommentCard({
                     width: "100%",
                     maxHeight: 300,
                     objectFit: "cover",
-                    borderRadius: 3,
+                    borderRadius: { xs: 1.5, sm: 2 },
                     border: "1px solid",
                     borderColor: "divider",
                   }}

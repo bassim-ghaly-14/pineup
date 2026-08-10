@@ -35,11 +35,15 @@ export function ImagePreviewModal({
 
     color: dark ? "#FFFFFF" : theme.palette.text.primary,
 
-    bgcolor: dark ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.85)",
+    bgcolor: dark
+      ? "rgba(255,255,255,.12)"
+      : "rgba(255,255,255,.85)",
 
     border: "1px solid",
 
-    borderColor: dark ? "rgba(255,255,255,.15)" : "rgba(0,0,0,.08)",
+    borderColor: dark
+      ? "rgba(255,255,255,.15)"
+      : "rgba(0,0,0,.08)",
 
     backdropFilter: "blur(14px)",
 
@@ -63,7 +67,8 @@ export function ImagePreviewModal({
       slotProps={{
         backdrop: {
           sx: {
-            bgcolor: dark ? "rgba(0,0,0,.88)" : "rgba(15,17,21,.65)",
+            bgcolor:
+              dark ? "rgba(0,0,0,.88)" : "rgba(15,17,21,.65)",
 
             backdropFilter: "blur(14px)",
           },
@@ -160,7 +165,7 @@ export function ImagePreviewModal({
 
             objectFit: "contain",
 
-            borderRadius: "20px",
+            borderRadius: "xl",
 
             userSelect: "none",
 

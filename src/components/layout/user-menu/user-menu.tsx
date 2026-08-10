@@ -187,7 +187,7 @@ const handleLogout = () => {
     my: 1,
     borderRadius: 3,
     bgcolor: "primary.main",
-    color: "#111",
+    color: "primary.contrastText",
     fontWeight: 700,
     transition: ".25s",
 
@@ -199,7 +199,7 @@ const handleLogout = () => {
 >
   <ListItemIcon
     sx={{
-      color: "#111",
+      color: "primary.contrastText",
       minWidth: 38,
     }}
   >

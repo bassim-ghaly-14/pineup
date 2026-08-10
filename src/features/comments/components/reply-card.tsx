@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Box,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, CardContent, Stack, Typography } from "@mui/material";
 
 import { Comment } from "../types/comment.types";
 
@@ -20,153 +15,120 @@ type Props = {
   reply: Comment;
 };
 
-export function ReplyCard({
-  reply,
-}: Props) {
+export function ReplyCard({ reply }: Props) {
   return (
     <GlassCard
       elevation={0}
       sx={(theme) => ({
-  borderRadius: 3,
-  border: "1px solid",
-  borderColor: "divider",
+        borderRadius: { xs: 1.5, sm: 2.5 },
+        border: "1px solid",
+        borderColor: "divider",
 
-  background:
-    theme.palette.mode === "dark"
-      ? "linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))"
-      : "linear-gradient(180deg,#ffffff,#fcfcfc)",
+        background:
+          theme.palette.mode === "dark"
+            ? "linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01))"
+            : "linear-gradient(180deg,#ffffff,#fcfcfc)",
 
-  transition: "all .25s ease",
+        transition: "all .25s ease",
 
-  "&:hover": {
-    borderColor: "primary.main",
+        "&:hover": {
+          borderColor: "primary.main",
 
-    boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 12px 28px rgba(0,0,0,.28)"
-        : "0 12px 28px rgba(0,0,0,.06)",
-  },
-})}
-    >
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? "0 12px 28px rgba(0,0,0,.28)"
+              : "0 12px 28px rgba(0,0,0,.06)",
+        },
+      })}>
       <CardContent
-  sx={{
-    p: 2.5,
-    "&:last-child": {
-      pb: 2.5,
-    },
-  }}
->
-        <Stack
-  direction="row"
-  spacing={2}
-  sx={{
-    alignItems: "flex-start",
-  }}
->
-
-        <UserAvatar
         sx={{
-  width: 44,
-  height: 44,
+          p: 2.5,
+          "&:last-child": {
+            pb: 2.5,
+          },
+        }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: "flex-start",
+          }}>
+          <UserAvatar
+            sx={{
+              width: 44,
+              height: 44,
 
-  border: "2px solid",
-  borderColor: "primary.main",
+              border: "2px solid",
+              borderColor: "primary.main",
 
-  boxShadow:
-    "0 0 0 4px rgba(212,166,58,.08)",
-}}
-          userId={
-            reply.commentCreator._id
-          }
-          src={
-            reply.commentCreator.photo
-          }
-        >
-          {
-            reply.commentCreator.name?.[0]
-          }
-        </UserAvatar>
+              boxShadow: "0 0 0 4px rgba(212,166,58,.08)",
+            }}
+            userId={reply.commentCreator._id}
+            src={reply.commentCreator.photo}>
+            {reply.commentCreator.name?.[0]}
+          </UserAvatar>
 
           <Box
-  sx={{
-    flex: 1,
-    minWidth: 0,
-  }}
->
+            sx={{
+              flex: 1,
+              minWidth: 0,
+            }}>
+            <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
+              <Typography
+                sx={{
+                  fontWeight: 800,
+                  fontSize: 14.5,
+                }}>
+                {reply.commentCreator.name}
+              </Typography>
 
-<Stack
-  direction="row"
-  spacing={0.5}
-  sx={{ alignItems: "center" }}
->
-  <Typography
-    sx={{
-      fontWeight: 800,
-      fontSize: 14.5,
-    }}
-  >
-    {reply.commentCreator.name}
-  </Typography>
-
-  {isVerified(reply.commentCreator._id) && (
-    <VerifiedBadge size={16} />
-  )}
-</Stack>
+              {isVerified(reply.commentCreator._id) && (
+                <VerifiedBadge size={16} />
+              )}
+            </Stack>
 
             <Typography
-  variant="caption"
-  sx={{
-    color: "text.disabled",
-    fontWeight: 500,
-  }}
->
-              {
-  formatRelativeDate(
-    reply.createdAt
-  )
-}
+              variant="caption"
+              sx={{
+                color: "text.disabled",
+                fontWeight: 500,
+              }}>
+              {formatRelativeDate(reply.createdAt)}
             </Typography>
-
 
             <Typography
               sx={{
-  mt: 1.25,
-  whiteSpace: "pre-wrap",
-  lineHeight: 1.75,
-  fontSize: 14.5,
-}}
-            >
+                mt: 1.25,
+                whiteSpace: "pre-wrap",
+                lineHeight: 1.75,
+                fontSize: 14.5,
+              }}>
               <LinkifyText text={reply.content} />
             </Typography>
 
+            {reply.image && (
+              <Box
+                component="img"
+                src={reply.image}
+                alt="reply"
+                sx={{
+                  mt: 1.75,
 
-            {
-              reply.image && (
-                <Box
-                  component="img"
-                  src={reply.image}
-                  alt="reply"
-                  sx={{
-  mt: 1.75,
+                  width: "100%",
 
-  width: "100%",
+                  maxHeight: 260,
 
-  maxHeight: 260,
+                  objectFit: "cover",
 
-  objectFit: "cover",
+                  borderRadius: { xs: 1.5, sm: 2 },
 
-  borderRadius: 3,
+                  border: "1px solid",
 
-  border: "1px solid",
-
-  borderColor: "divider",
-}}
-                />
-              )
-            }
-
+                  borderColor: "divider",
+                }}
+              />
+            )}
           </Box>
-
         </Stack>
       </CardContent>
     </GlassCard>

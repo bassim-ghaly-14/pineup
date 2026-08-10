@@ -70,7 +70,9 @@ export function LoginForm() {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent)",
+              dark
+                ? "linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent)"
+                : "linear-gradient(90deg, transparent, rgba(0,0,0,.03), transparent)",
             pointerEvents: "none",
           },
         }}>

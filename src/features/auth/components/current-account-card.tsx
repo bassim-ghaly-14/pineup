@@ -5,6 +5,7 @@ import {
   Chip,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
@@ -62,6 +63,9 @@ export function CurrentAccountCard({
 
   };
 
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   return (
 
     <Box
@@ -76,11 +80,13 @@ export function CurrentAccountCard({
         borderRadius: 3,
 
         cursor: "pointer",
-        background:
-          "linear-gradient(135deg, rgba(212,166,58,.18) 0%, rgba(212,166,58,.05) 45%, rgba(255,255,255,.02) 100%)",
+        background: isDark
+          ? "linear-gradient(135deg, rgba(212,166,58,.18) 0%, rgba(212,166,58,.05) 45%, rgba(255,255,255,.02) 100%)"
+          : "linear-gradient(135deg, rgba(212,166,58,.12) 0%, rgba(212,166,58,.03) 45%, rgba(0,0,0,.01) 100%)",
 
-        border:
-          "1px solid rgba(212,166,58,.22)",
+        border: isDark
+          ? "1px solid rgba(212,166,58,.22)"
+          : "1px solid rgba(212,166,58,.30)",
 
         transition:
           ".25s ease",

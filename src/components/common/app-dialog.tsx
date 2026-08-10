@@ -17,7 +17,7 @@ export function AppDialog({
       slotProps={{
         paper: {
           sx: {
-            borderRadius: 1,
+            borderRadius: "lg",
 
             bgcolor: "background.paper",
 
