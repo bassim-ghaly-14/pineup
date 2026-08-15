@@ -57,22 +57,22 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         sizes: "512x512",
         type: "image/png",
       },
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         sizes: "16x16",
         type: "image/png",
       },
@@ -80,14 +80,14 @@ export const metadata: Metadata = {
 
     shortcut: [
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         type: "image/png",
       },
     ],
 
     apple: [
       {
-        url: "/fav-icon.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813286/fav-icon_udsg3g.png",
         sizes: "180x180",
         type: "image/png",
       },
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/og-image.png",
+        url: "https://res.cloudinary.com/paihc5qx/image/upload/v1786813289/og-img_wtfu8g.png",
         width: 1200,
         height: 630,
         alt: "PineUp",
@@ -122,7 +122,9 @@ export const metadata: Metadata = {
 
     description: "Connect. Share. Grow. A modern social networking platform.",
 
-    images: ["/og-image.png"],
+    images: [
+      "https://res.cloudinary.com/paihc5qx/image/upload/v1786813289/og-img_wtfu8g.png",
+    ],
   },
 
   robots: {

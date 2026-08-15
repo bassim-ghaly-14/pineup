@@ -1,10 +1,6 @@
 "use client";
 
 import { Box } from "@mui/material";
-
-import DefaultCover from "@/assets/pineup-cover.png";
-import DefaultAvatar from "@/assets/default-avatar.png";
-
 import { ImagePreview } from "src/components/common/image-preview";
 
 type Props = {
@@ -13,8 +9,10 @@ type Props = {
   name: string;
 };
 
-const DEFAULT_COVER = DefaultCover.src;
-const DEFAULT_AVATAR = DefaultAvatar.src;
+const DEFAULT_COVER =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813312/pineup-cover_qtbdyx.png";
+const DEFAULT_AVATAR =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813308/default-avatar_zebtda.png";
 
 export function ProfileCover({ cover, avatar, name }: Props) {
   const coverImage = cover?.trim() || DEFAULT_COVER;

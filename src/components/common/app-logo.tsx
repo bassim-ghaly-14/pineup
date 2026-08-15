@@ -6,23 +6,17 @@ import Image from "next/image";
 import { Box } from "@mui/material";
 import { useAppTheme } from "../providers/theme-provider";
 
-import mobileLogo from "@/assets/appicon.png"
-import desktopLightLogo from "@/assets/primarylogo.png";
-import desktopDarkLogo from "@/assets/toggle-logo.png";
-
 type Props = {
   clickable?: boolean;
 };
 
-export function AppLogo({
-  clickable = true,
-}: Props) {
+export function AppLogo({ clickable = true }: Props) {
   const { mode } = useAppTheme();
 
   const desktopLogo =
     mode === "dark"
-      ? desktopDarkLogo
-      : desktopLightLogo;
+      ? "https://res.cloudinary.com/paihc5qx/image/upload/v1786813314/toggle-logo_fyh97e.png"
+      : "https://res.cloudinary.com/paihc5qx/image/upload/v1786813311/primarylogo_pnwfos.png";
 
   const content = (
     <>
@@ -34,10 +28,9 @@ export function AppLogo({
             md: "none",
           },
           lineHeight: 0,
-        }}
-      >
+        }}>
         <Image
-          src={mobileLogo}
+          src="https://res.cloudinary.com/paihc5qx/image/upload/v1786813308/appicon_ci15m7.png"
           alt="PineUp"
           priority
           height={110}
@@ -56,8 +49,7 @@ export function AppLogo({
             md: "block",
           },
           lineHeight: 0,
-        }}
-      >
+        }}>
         <Image
           src={desktopLogo}
           alt="PineUp"
@@ -84,8 +76,7 @@ export function AppLogo({
         alignItems: "center",
         textDecoration: "none",
         color: "inherit",
-      }}
-    >
+      }}>
       {content}
     </Link>
   );

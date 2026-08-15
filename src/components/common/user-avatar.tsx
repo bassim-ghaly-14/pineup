@@ -1,27 +1,18 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarProps,
-} from "@mui/material";
+import { Avatar, AvatarProps } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 import { ROUTES } from "src/constants/routes";
-import DefaultAvatar from "@/assets/default-avatar.png";
 
 type Props = AvatarProps & {
   userId?: string;
 };
 
-const DEFAULT_AVATAR = DefaultAvatar.src;
+const DEFAULT_AVATAR =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813308/default-avatar_zebtda.png";
 
-export function UserAvatar({
-  userId,
-  onClick,
-  src,
-  ...props
-}: Props) {
-
+export function UserAvatar({ userId, onClick, src, ...props }: Props) {
   const router = useRouter();
 
   const avatarImage =
@@ -31,22 +22,18 @@ export function UserAvatar({
       ? src
       : DEFAULT_AVATAR;
 
-const handleClick = (
-  event: React.MouseEvent<HTMLDivElement>
-) => {
-  event.stopPropagation();
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
 
-  if (onClick) {
-    onClick(event);
-    return;
-  }
+    if (onClick) {
+      onClick(event);
+      return;
+    }
 
-  if (userId) {
-    router.push(
-      ROUTES.PROFILE_BY_ID(userId)
-    );
-  }
-};
+    if (userId) {
+      router.push(ROUTES.PROFILE_BY_ID(userId));
+    }
+  };
 
   return (
     <Avatar
@@ -61,26 +48,18 @@ const handleClick = (
           border: "2px solid",
           borderColor: "primary.main",
 
-          cursor:
-  userId || onClick
-    ? "pointer"
-    : "default",
+          cursor: userId || onClick ? "pointer" : "default",
 
-          transition:
-            "border-color .25s, transform .25s",
+          transition: "border-color .25s, transform .25s",
 
           "&:hover":
-  userId || onClick
-    ? {
-        transform: "scale(1.05)",
-      }
-    : {},
+            userId || onClick
+              ? {
+                  transform: "scale(1.05)",
+                }
+              : {},
         },
-        ...(Array.isArray(props.sx)
-          ? props.sx
-          : props.sx
-          ? [props.sx]
-          : []),
+        ...(Array.isArray(props.sx) ? props.sx : props.sx ? [props.sx] : []),
       ]}
     />
   );
