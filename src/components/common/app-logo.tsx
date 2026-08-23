@@ -10,13 +10,19 @@ type Props = {
   clickable?: boolean;
 };
 
+const MOBILE_LOGO =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813308/appicon_ci15m7.png";
+
+const LIGHT_DESKTOP_LOGO =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813311/primarylogo_pnwfos.png";
+
+const DARK_DESKTOP_LOGO =
+  "https://res.cloudinary.com/paihc5qx/image/upload/v1786813314/toggle-logo_fyh97e.png";
+
 export function AppLogo({ clickable = true }: Props) {
   const { mode } = useAppTheme();
 
-  const desktopLogo =
-    mode === "dark"
-      ? "https://res.cloudinary.com/paihc5qx/image/upload/v1786813314/toggle-logo_fyh97e.png"
-      : "https://res.cloudinary.com/paihc5qx/image/upload/v1786813311/primarylogo_pnwfos.png";
+  const desktopLogo = mode === "dark" ? DARK_DESKTOP_LOGO : LIGHT_DESKTOP_LOGO;
 
   const content = (
     <>
@@ -30,13 +36,16 @@ export function AppLogo({ clickable = true }: Props) {
           lineHeight: 0,
         }}>
         <Image
-          src="https://res.cloudinary.com/paihc5qx/image/upload/v1786813308/appicon_ci15m7.png"
+          src={MOBILE_LOGO}
           alt="PineUp"
-          priority
+          width={110}
           height={110}
+          priority
+          sizes="110px"
           style={{
-            width: "auto",
+            width: "110px",
             height: "110px",
+            objectFit: "contain",
           }}
         />
       </Box>
@@ -53,11 +62,14 @@ export function AppLogo({ clickable = true }: Props) {
         <Image
           src={desktopLogo}
           alt="PineUp"
-          priority
+          width={296}
           height={74}
+          priority
+          sizes="296px"
           style={{
             width: "auto",
             height: "74px",
+            objectFit: "contain",
           }}
         />
       </Box>
