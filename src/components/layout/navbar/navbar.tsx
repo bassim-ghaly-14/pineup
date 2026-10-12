@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -16,6 +16,8 @@ import {
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+
 import { AppLogo } from "src/components/common/app-logo";
 import { SearchInput } from "src/components/common/search-input";
 import { UserAvatar } from "src/components/common/user-avatar";
@@ -27,10 +29,8 @@ import { useAuth } from "src/features/auth/hooks/use-auth";
 import { useRequireAuthAction } from "src/features/auth/hooks/use-require-auth-action";
 import { CreatePostDialog } from "src/features/posts/components/create-post-dialog";
 import { useAppTheme } from "src/components/providers/theme-provider";
-import { useRouter } from "next/navigation";
 import { useUserSearch } from "src/features/social/hooks/use-user-search";
 import { ROUTES } from "src/constants/routes";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { isVerified } from "src/utils/is-verified";
 import { VerifiedBadge } from "src/components/common/verified-badge";
 
@@ -40,6 +40,7 @@ export function Navbar() {
   const { requireAuth, isAuthenticated } = useRequireAuthAction();
   const router = useRouter();
   const { mode, toggleTheme } = useAppTheme();
+
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [notificationAnchorEl, setNotificationAnchorEl] =
     useState<HTMLElement | null>(null);
@@ -48,9 +49,11 @@ export function Navbar() {
   const [search, setSearch] = useState("");
   const searchResults = useUserSearch(search);
   const [searchOpen, setSearchOpen] = useState(false);
+
   useEffect(() => {
     setSearchOpen(false);
   }, [pathname]);
+
   return (
     <>
       <AppBar
@@ -67,11 +70,17 @@ export function Navbar() {
         })}>
         <Toolbar
           sx={{
-            height: 72,
+            height: { xs: 60, sm: 68, md: 72 },
+            minHeight: {
+              xs: "60px !important",
+              sm: "68px !important",
+              md: "72px !important",
+            },
             maxWidth: 1440,
             width: "100%",
             mx: "auto",
-            gap: 3,
+            px: { xs: 1.5, sm: 2, md: 3 },
+            gap: { xs: 1, sm: 2, md: 3 },
           }}>
           <Box
             component={Link}
@@ -80,9 +89,17 @@ export function Navbar() {
               color: "inherit",
               textDecoration: "none",
               flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              minWidth: 0,
+              "& img": {
+                maxWidth: { xs: 100, sm: "none" },
+                height: "auto",
+              },
             }}>
             <AppLogo clickable={false} />
           </Box>
+
           <ClickAwayListener
             onClickAway={() => {
               setSearchOpen(false);
@@ -90,6 +107,7 @@ export function Navbar() {
             <Box
               sx={{
                 flex: 1,
+                minWidth: 0,
                 maxWidth: 560,
                 position: "relative",
                 display: {
@@ -104,6 +122,7 @@ export function Navbar() {
                 onChange={(e) => setSearch(e.target.value)}
                 onFocus={() => setSearchOpen(true)}
               />
+
               {searchOpen && search && searchResults.length > 0 && (
                 <Paper
                   sx={{
@@ -129,22 +148,18 @@ export function Navbar() {
                         gap: 2,
                         p: 1.5,
                         cursor: "pointer",
-
                         "&:hover": {
                           bgcolor: "action.hover",
                         },
                       }}>
                       <UserAvatar src={user.photo} alt={user.name} />
 
-                      <Box>
+                      <Box sx={{ minWidth: 0 }}>
                         <Stack
                           direction="row"
                           spacing={0.5}
                           sx={{ alignItems: "center" }}>
-                          <Typography
-                            sx={{
-                              fontWeight: 600,
-                            }}>
+                          <Typography sx={{ fontWeight: 600 }}>
                             {user.name}
                           </Typography>
 
@@ -161,12 +176,14 @@ export function Navbar() {
               )}
             </Box>
           </ClickAwayListener>
+
           <Stack
             direction="row"
-            spacing={1}
+            spacing={{ xs: 0.5, sm: 1 }}
             sx={{
               ml: "auto",
               alignItems: "center",
+              flexShrink: 0,
             }}>
             <Button
               variant="contained"
@@ -181,7 +198,18 @@ export function Navbar() {
               Create
             </Button>
 
-            <PremiumIconButton onClick={toggleTheme} aria-label="Toggle theme">
+            <PremiumIconButton
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              sx={{
+                width: { xs: 34, sm: 40 },
+                height: { xs: 34, sm: 40 },
+                minWidth: 0,
+                flexShrink: 0,
+                "& .MuiSvgIcon-root": {
+                  fontSize: { xs: 19, sm: 22 },
+                },
+              }}>
               {mode === "dark" ? (
                 <LightModeRoundedIcon />
               ) : (
@@ -206,14 +234,35 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <Button component={Link} href={ROUTES.LOGIN} color="inherit">
+                <Button
+                  component={Link}
+                  href={ROUTES.LOGIN}
+                  color="inherit"
+                  sx={{
+                    minWidth: 0,
+                    px: { xs: 1, sm: 1.5 },
+                    py: { xs: 0.75, sm: 1 },
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                    whiteSpace: "nowrap",
+                    lineHeight: 1.2,
+                    flexShrink: 0,
+                  }}>
                   Sign In
                 </Button>
 
                 <Button
                   component={Link}
                   href={ROUTES.REGISTER}
-                  variant="contained">
+                  variant="contained"
+                  sx={{
+                    minWidth: 0,
+                    px: { xs: 1.25, sm: 2 },
+                    py: { xs: 0.75, sm: 1 },
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                    whiteSpace: "nowrap",
+                    lineHeight: 1.2,
+                    flexShrink: 0,
+                  }}>
                   Sign Up
                 </Button>
               </>
@@ -228,6 +277,7 @@ export function Navbar() {
         anchorEl={notificationAnchorEl}
         onClose={() => setNotificationAnchorEl(null)}
       />
+
       <CreatePostDialog
         open={createOpen}
         onClose={() => setCreateOpen(false)}

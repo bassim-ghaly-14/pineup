@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarProps } from "@mui/material";
-
 import { useRouter } from "next/navigation";
 import { ROUTES } from "src/constants/routes";
 
@@ -44,6 +43,8 @@ export function UserAvatar({ userId, onClick, src, ...props }: Props) {
         {
           width: 42,
           height: 42,
+
+          backgroundColor: "#000",
 
           border: "2px solid",
           borderColor: "primary.main",
